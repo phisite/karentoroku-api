@@ -194,7 +194,7 @@ export const createEventType = (args: ICreateEventType) => {
 };
 
 export const getEventTypes = () => {
-  prisma.eventType.findMany({
+  return prisma.eventType.findMany({
     select: {
       name: true,
       timeDuration: true,

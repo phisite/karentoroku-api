@@ -1,11 +1,9 @@
-// import axios from "axios";
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import { AppRoutes } from "./routes";
 
 const app: Application = express();
 const corsOptions = {
-  // origin: ["http://localhost:3000", "https://karentoroku-api.vercel.app"],
   origin: true,
   optionsSuccessStatus: 200,
 };

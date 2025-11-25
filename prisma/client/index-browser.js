@@ -128,7 +128,7 @@ exports.Prisma.DateSlotScalarFieldEnum = makeEnum({
   id: 'id',
   availabilityScheduleId: 'availabilityScheduleId',
   name: 'name',
-  custormerId: 'custormerId',
+  customerId: 'customerId',
   eventId: 'eventId',
   dayName: 'dayName',
   createdAt: 'createdAt',
@@ -218,11 +218,6 @@ exports.Prisma.UserScalarFieldEnum = makeEnum({
   name: 'name',
   username: 'username',
   firebaseUid: 'firebaseUid',
-  subscription: 'subscription',
-  mobileNumber: 'mobileNumber',
-  userLink: 'userLink',
-  job: 'job',
-  education: 'education',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 });

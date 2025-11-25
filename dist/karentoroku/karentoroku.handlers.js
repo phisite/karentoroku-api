@@ -22,7 +22,7 @@ const createUserHandler = (req, res) => __awaiter(void 0, void 0, void 0, functi
     const args = req === null || req === void 0 ? void 0 : req.body;
     if (karentoroku_interfaces_1.CreateUserCodec.decode(args)._tag === "Right") {
         try {
-            const result = (0, karentoroku_resolvers_1.createUser)({
+            const result = yield (0, karentoroku_resolvers_1.createUser)({
                 name: args.name,
                 username: args.username,
                 idToken: args.idToken,

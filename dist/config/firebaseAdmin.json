@@ -1,12 +1,12 @@
 {
     "type": "service_account",
-    "project_id": "karentoroku",
-    "private_key_id": "d8993f8be04d8411a44a3250bedad5c86ac8bbab",
-    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDPVXWcqSYxY4Ie\nV14CbGrtG9j/oO3SF/5tkQ4dSKLJ6ldzfA/aqIvJgUM32zREAxAIvCutB0by/rWC\nd9TD5JOcrobdg4HMWpnOMgm0d6FJLBArBsRqVR8btBtuRDMoyZRxpM7KhkdAU66+\nHk4FJInh6DCfJbJCvCPTo9u69v76lJ5rr3T0mhCs1+8N4uk+7IM7B6nXKgIjSkvE\nTBfAcYX3WO4bgvgvQHASwIPF52t4p7jwUtfQgUChqggctpvldgNURjIii5iNT4nX\nfnDVLaDtAaG2oDmNoGNGBJnEzweB3ADem98vcapvTjJmV3xfjvRHSzkJooH6XGHX\nIq6T9EBZAgMBAAECggEAF8I9RgSEIei7QmrUlQaDgkRMq45vckHZoAidS3HFZcn6\n13sB/haOXjr3zvDJnnmTXszhXGSXFsVlW1wL/56z46KEReIJ/7bqJRzKy+lhjBcG\ni0etPloexHfxJMOf8S6YWiV+pOqaQ57TSWoDmsdDHaYT3EjfkpIosNn4Fgaz1Vb5\ngNwHth/hs6/4vJxVfiGfFIww6e75iXOC5+i7wXVsSkZcQSZAhfygyb9KCb5kYtWg\nuHzwEPbDMoPWAe1bku9XfYFqTF8pns5RgpHlU3Xt1jkWtmdxJNkI5nCC/Y5HHmlL\nWLRjk19hrdwR9SXV/JMVQD517OIcFpEgvP6YwQ8v4QKBgQD808QZGhDwdMvHTp7a\nV+UYujqBCX2TbtpjZdAYQzEqmWf6OBTs9H9IVcvxOkVXfmnBq1OPPwnNRbB7CMgw\nlLPiOLu2DeSR9peRiRzFq6BhFhCsWwS/LkvSJHjVJmnFTUR6YvguefWfiX6lKzrW\nV1JNICmowCXDxRA5vjOoZfawrQKBgQDR74qHngJqnQbkKkPrGCVNy510Z/WI8B+V\nn5rBtykeFlWhWCEnGvICxigNbl79GMjJc5KpG8RY7oR5uVjtP51vr3OVle6cTcXM\ngc5pmWKp2QXst4DEvgU4CxFpdya36+cGyi/Zn1zrJ1YRljOnPs8rKgEbLvc4w+E2\naP6lG+0H3QKBgBaoH42kUVpLDSvqNsAYWlZx8eY4ZIF+0KFRsWlLNC++GZxJxE5L\nxtBDqAgREb+6e124rb9LheRYV21fJxl7afde4Ct7aT1PXNvU7rgkHjY1FP9tFKrR\nSkglrpJjY90jhHx3PAhmM4W9e5Tvn9EveBejRzhxJ7E4irCyA80WfhntAoGBAMA8\nxXGiMzxFRkYwnbjth1tRlIE/oQsgNwvf9upkOnaepRL1jIYummYH5i1GYB0LUPGH\nr0jDcGyvHQgJvXCizBu1YfYcMT9XyESYqNbx6fL2FALLllKSXl0PZYZZ4U6R6h/B\njUeOMpvyjVHVZL9FOJeiAxlNTHzigZw9UNEIXWjRAoGBAJplMi4VDCGPHLbJGeG2\nX+M36mnXZD/lV/egJvkDu5eRxyZqQ3q77Hu1uBNhT5vipqGb/BSmngYtoxLAO2yt\nyfLydMOnwMnknW+yOMEZI/yRtmnM5fWHNzfxzfPROYtwGpBLDQNvJxeAwkOwwCMu\n1tpm2arLKXnZeSCVNm+tXN9W\n-----END PRIVATE KEY-----\n",
-    "client_email": "firebase-adminsdk-dfqah@karentoroku.iam.gserviceaccount.com",
-    "client_id": "101564347534274632065",
+    "project_id": "mock-project-id",
+    "private_key_id": "mock-private-key-id",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMOCK_PRIVATE_KEY\n-----END PRIVATE KEY-----\n",
+    "client_email": "mock-client-email@mock-project-id.iam.gserviceaccount.com",
+    "client_id": "mock-client-id",
     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
     "token_uri": "https://oauth2.googleapis.com/token",
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-dfqah%40karentoroku.iam.gserviceaccount.com"
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mock-client-email%40mock-project-id.iam.gserviceaccount.com"
 }

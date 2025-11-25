@@ -21,11 +21,6 @@ export type User = {
   name: string
   username: string
   firebaseUid: string
-  subscription: string | null
-  mobileNumber: string | null
-  userLink: string | null
-  job: string | null
-  education: string | null
   createdAt: Date
   updatedAt: Date
 }
@@ -100,7 +95,7 @@ export type DateSlot = {
   id: number
   availabilityScheduleId: number | null
   name: Date
-  custormerId: number | null
+  customerId: number | null
   eventId: number
   dayName: string
   createdAt: Date
@@ -1505,11 +1500,6 @@ export namespace Prisma {
     name: string | null
     username: string | null
     firebaseUid: string | null
-    subscription: string | null
-    mobileNumber: string | null
-    userLink: string | null
-    job: string | null
-    education: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1519,11 +1509,6 @@ export namespace Prisma {
     name: string | null
     username: string | null
     firebaseUid: string | null
-    subscription: string | null
-    mobileNumber: string | null
-    userLink: string | null
-    job: string | null
-    education: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1533,11 +1518,6 @@ export namespace Prisma {
     name: number
     username: number
     firebaseUid: number
-    subscription: number
-    mobileNumber: number
-    userLink: number
-    job: number
-    education: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1557,11 +1537,6 @@ export namespace Prisma {
     name?: true
     username?: true
     firebaseUid?: true
-    subscription?: true
-    mobileNumber?: true
-    userLink?: true
-    job?: true
-    education?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1571,11 +1546,6 @@ export namespace Prisma {
     name?: true
     username?: true
     firebaseUid?: true
-    subscription?: true
-    mobileNumber?: true
-    userLink?: true
-    job?: true
-    education?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1585,11 +1555,6 @@ export namespace Prisma {
     name?: true
     username?: true
     firebaseUid?: true
-    subscription?: true
-    mobileNumber?: true
-    userLink?: true
-    job?: true
-    education?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1687,11 +1652,6 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
-    subscription: string | null
-    mobileNumber: string | null
-    userLink: string | null
-    job: string | null
-    education: string | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -1720,11 +1680,6 @@ export namespace Prisma {
     name?: boolean
     username?: boolean
     firebaseUid?: boolean
-    subscription?: boolean
-    mobileNumber?: boolean
-    userLink?: boolean
-    job?: boolean
-    education?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     eventTypes?: boolean | User$eventTypesArgs
@@ -7678,14 +7633,14 @@ export namespace Prisma {
   export type DateSlotAvgAggregateOutputType = {
     id: number | null
     availabilityScheduleId: number | null
-    custormerId: number | null
+    customerId: number | null
     eventId: number | null
   }
 
   export type DateSlotSumAggregateOutputType = {
     id: number | null
     availabilityScheduleId: number | null
-    custormerId: number | null
+    customerId: number | null
     eventId: number | null
   }
 
@@ -7693,7 +7648,7 @@ export namespace Prisma {
     id: number | null
     availabilityScheduleId: number | null
     name: Date | null
-    custormerId: number | null
+    customerId: number | null
     eventId: number | null
     dayName: string | null
     createdAt: Date | null
@@ -7704,7 +7659,7 @@ export namespace Prisma {
     id: number | null
     availabilityScheduleId: number | null
     name: Date | null
-    custormerId: number | null
+    customerId: number | null
     eventId: number | null
     dayName: string | null
     createdAt: Date | null
@@ -7715,7 +7670,7 @@ export namespace Prisma {
     id: number
     availabilityScheduleId: number
     name: number
-    custormerId: number
+    customerId: number
     eventId: number
     dayName: number
     createdAt: number
@@ -7727,14 +7682,14 @@ export namespace Prisma {
   export type DateSlotAvgAggregateInputType = {
     id?: true
     availabilityScheduleId?: true
-    custormerId?: true
+    customerId?: true
     eventId?: true
   }
 
   export type DateSlotSumAggregateInputType = {
     id?: true
     availabilityScheduleId?: true
-    custormerId?: true
+    customerId?: true
     eventId?: true
   }
 
@@ -7742,7 +7697,7 @@ export namespace Prisma {
     id?: true
     availabilityScheduleId?: true
     name?: true
-    custormerId?: true
+    customerId?: true
     eventId?: true
     dayName?: true
     createdAt?: true
@@ -7753,7 +7708,7 @@ export namespace Prisma {
     id?: true
     availabilityScheduleId?: true
     name?: true
-    custormerId?: true
+    customerId?: true
     eventId?: true
     dayName?: true
     createdAt?: true
@@ -7764,7 +7719,7 @@ export namespace Prisma {
     id?: true
     availabilityScheduleId?: true
     name?: true
-    custormerId?: true
+    customerId?: true
     eventId?: true
     dayName?: true
     createdAt?: true
@@ -7863,7 +7818,7 @@ export namespace Prisma {
     id: number
     availabilityScheduleId: number | null
     name: Date
-    custormerId: number | null
+    customerId: number | null
     eventId: number
     dayName: string
     createdAt: Date
@@ -7893,13 +7848,13 @@ export namespace Prisma {
     id?: boolean
     availabilityScheduleId?: boolean
     name?: boolean
-    custormerId?: boolean
+    customerId?: boolean
     eventId?: boolean
     dayName?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     availabilitySchedule?: boolean | AvailabilityScheduleArgs
-    custormer?: boolean | CustomerArgs
+    customer?: boolean | CustomerArgs
     eventType?: boolean | EventTypeArgs
     daySlot?: boolean | DaySlotArgs
     dateOnTimeSlots?: boolean | DateSlot$dateOnTimeSlotsArgs
@@ -7909,7 +7864,7 @@ export namespace Prisma {
 
   export type DateSlotInclude = {
     availabilitySchedule?: boolean | AvailabilityScheduleArgs
-    custormer?: boolean | CustomerArgs
+    customer?: boolean | CustomerArgs
     eventType?: boolean | EventTypeArgs
     daySlot?: boolean | DaySlotArgs
     dateOnTimeSlots?: boolean | DateSlot$dateOnTimeSlotsArgs
@@ -7924,7 +7879,7 @@ export namespace Prisma {
     ? DateSlot  & {
     [P in TruthyKeys<S['include']>]:
         P extends 'availabilitySchedule' ? AvailabilityScheduleGetPayload<S['include'][P]> | null :
-        P extends 'custormer' ? CustomerGetPayload<S['include'][P]> | null :
+        P extends 'customer' ? CustomerGetPayload<S['include'][P]> | null :
         P extends 'eventType' ? EventTypeGetPayload<S['include'][P]> :
         P extends 'daySlot' ? DaySlotGetPayload<S['include'][P]> :
         P extends 'dateOnTimeSlots' ? Array < DateOnTimeSlotGetPayload<S['include'][P]>>  :
@@ -7934,7 +7889,7 @@ export namespace Prisma {
       ? {
     [P in TruthyKeys<S['select']>]:
         P extends 'availabilitySchedule' ? AvailabilityScheduleGetPayload<S['select'][P]> | null :
-        P extends 'custormer' ? CustomerGetPayload<S['select'][P]> | null :
+        P extends 'customer' ? CustomerGetPayload<S['select'][P]> | null :
         P extends 'eventType' ? EventTypeGetPayload<S['select'][P]> :
         P extends 'daySlot' ? DaySlotGetPayload<S['select'][P]> :
         P extends 'dateOnTimeSlots' ? Array < DateOnTimeSlotGetPayload<S['select'][P]>>  :
@@ -8312,7 +8267,7 @@ export namespace Prisma {
 
     availabilitySchedule<T extends AvailabilityScheduleArgs= {}>(args?: Subset<T, AvailabilityScheduleArgs>): Prisma__AvailabilityScheduleClient<AvailabilityScheduleGetPayload<T> | Null>;
 
-    custormer<T extends CustomerArgs= {}>(args?: Subset<T, CustomerArgs>): Prisma__CustomerClient<CustomerGetPayload<T> | Null>;
+    customer<T extends CustomerArgs= {}>(args?: Subset<T, CustomerArgs>): Prisma__CustomerClient<CustomerGetPayload<T> | Null>;
 
     eventType<T extends EventTypeArgs= {}>(args?: Subset<T, EventTypeArgs>): Prisma__EventTypeClient<EventTypeGetPayload<T> | Null>;
 
@@ -14792,7 +14747,7 @@ export namespace Prisma {
     id: 'id',
     availabilityScheduleId: 'availabilityScheduleId',
     name: 'name',
-    custormerId: 'custormerId',
+    customerId: 'customerId',
     eventId: 'eventId',
     dayName: 'dayName',
     createdAt: 'createdAt',
@@ -14915,11 +14870,6 @@ export namespace Prisma {
     name: 'name',
     username: 'username',
     firebaseUid: 'firebaseUid',
-    subscription: 'subscription',
-    mobileNumber: 'mobileNumber',
-    userLink: 'userLink',
-    job: 'job',
-    education: 'education',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -14940,11 +14890,6 @@ export namespace Prisma {
     name?: StringFilter | string
     username?: StringFilter | string
     firebaseUid?: StringFilter | string
-    subscription?: StringNullableFilter | string | null
-    mobileNumber?: StringNullableFilter | string | null
-    userLink?: StringNullableFilter | string | null
-    job?: StringNullableFilter | string | null
-    education?: StringNullableFilter | string | null
     createdAt?: DateTimeFilter | Date | string
     updatedAt?: DateTimeFilter | Date | string
     eventTypes?: EventTypeListRelationFilter
@@ -14957,11 +14902,6 @@ export namespace Prisma {
     name?: SortOrder
     username?: SortOrder
     firebaseUid?: SortOrder
-    subscription?: SortOrder
-    mobileNumber?: SortOrder
-    userLink?: SortOrder
-    job?: SortOrder
-    education?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     eventTypes?: EventTypeOrderByRelationAggregateInput
@@ -14973,8 +14913,6 @@ export namespace Prisma {
     id?: number
     username?: string
     firebaseUid?: string
-    mobileNumber?: string
-    userLink?: string
   }
 
   export type UserOrderByWithAggregationInput = {
@@ -14982,11 +14920,6 @@ export namespace Prisma {
     name?: SortOrder
     username?: SortOrder
     firebaseUid?: SortOrder
-    subscription?: SortOrder
-    mobileNumber?: SortOrder
-    userLink?: SortOrder
-    job?: SortOrder
-    education?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -15004,11 +14937,6 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter | string
     username?: StringWithAggregatesFilter | string
     firebaseUid?: StringWithAggregatesFilter | string
-    subscription?: StringNullableWithAggregatesFilter | string | null
-    mobileNumber?: StringNullableWithAggregatesFilter | string | null
-    userLink?: StringNullableWithAggregatesFilter | string | null
-    job?: StringNullableWithAggregatesFilter | string | null
-    education?: StringNullableWithAggregatesFilter | string | null
     createdAt?: DateTimeWithAggregatesFilter | Date | string
     updatedAt?: DateTimeWithAggregatesFilter | Date | string
   }
@@ -15291,13 +15219,13 @@ export namespace Prisma {
     id?: IntFilter | number
     availabilityScheduleId?: IntNullableFilter | number | null
     name?: DateTimeFilter | Date | string
-    custormerId?: IntNullableFilter | number | null
+    customerId?: IntNullableFilter | number | null
     eventId?: IntFilter | number
     dayName?: StringFilter | string
     createdAt?: DateTimeFilter | Date | string
     updatedAt?: DateTimeFilter | Date | string
     availabilitySchedule?: XOR<AvailabilityScheduleRelationFilter, AvailabilityScheduleWhereInput> | null
-    custormer?: XOR<CustomerRelationFilter, CustomerWhereInput> | null
+    customer?: XOR<CustomerRelationFilter, CustomerWhereInput> | null
     eventType?: XOR<EventTypeRelationFilter, EventTypeWhereInput>
     daySlot?: XOR<DaySlotRelationFilter, DaySlotWhereInput>
     dateOnTimeSlots?: DateOnTimeSlotListRelationFilter
@@ -15307,13 +15235,13 @@ export namespace Prisma {
     id?: SortOrder
     availabilityScheduleId?: SortOrder
     name?: SortOrder
-    custormerId?: SortOrder
+    customerId?: SortOrder
     eventId?: SortOrder
     dayName?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     availabilitySchedule?: AvailabilityScheduleOrderByWithRelationInput
-    custormer?: CustomerOrderByWithRelationInput
+    customer?: CustomerOrderByWithRelationInput
     eventType?: EventTypeOrderByWithRelationInput
     daySlot?: DaySlotOrderByWithRelationInput
     dateOnTimeSlots?: DateOnTimeSlotOrderByRelationAggregateInput
@@ -15327,7 +15255,7 @@ export namespace Prisma {
     id?: SortOrder
     availabilityScheduleId?: SortOrder
     name?: SortOrder
-    custormerId?: SortOrder
+    customerId?: SortOrder
     eventId?: SortOrder
     dayName?: SortOrder
     createdAt?: SortOrder
@@ -15346,7 +15274,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter | number
     availabilityScheduleId?: IntNullableWithAggregatesFilter | number | null
     name?: DateTimeWithAggregatesFilter | Date | string
-    custormerId?: IntNullableWithAggregatesFilter | number | null
+    customerId?: IntNullableWithAggregatesFilter | number | null
     eventId?: IntWithAggregatesFilter | number
     dayName?: StringWithAggregatesFilter | string
     createdAt?: DateTimeWithAggregatesFilter | Date | string
@@ -15689,11 +15617,6 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
-    subscription?: string | null
-    mobileNumber?: string | null
-    userLink?: string | null
-    job?: string | null
-    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     eventTypes?: EventTypeCreateNestedManyWithoutUserInput
@@ -15706,11 +15629,6 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
-    subscription?: string | null
-    mobileNumber?: string | null
-    userLink?: string | null
-    job?: string | null
-    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     eventTypes?: EventTypeUncheckedCreateNestedManyWithoutUserInput
@@ -15722,11 +15640,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
-    subscription?: NullableStringFieldUpdateOperationsInput | string | null
-    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    userLink?: NullableStringFieldUpdateOperationsInput | string | null
-    job?: NullableStringFieldUpdateOperationsInput | string | null
-    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventTypes?: EventTypeUpdateManyWithoutUserNestedInput
@@ -15739,11 +15652,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
-    subscription?: NullableStringFieldUpdateOperationsInput | string | null
-    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    userLink?: NullableStringFieldUpdateOperationsInput | string | null
-    job?: NullableStringFieldUpdateOperationsInput | string | null
-    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventTypes?: EventTypeUncheckedUpdateManyWithoutUserNestedInput
@@ -15756,11 +15664,6 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
-    subscription?: string | null
-    mobileNumber?: string | null
-    userLink?: string | null
-    job?: string | null
-    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15769,11 +15672,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
-    subscription?: NullableStringFieldUpdateOperationsInput | string | null
-    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    userLink?: NullableStringFieldUpdateOperationsInput | string | null
-    job?: NullableStringFieldUpdateOperationsInput | string | null
-    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15783,11 +15681,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
-    subscription?: NullableStringFieldUpdateOperationsInput | string | null
-    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    userLink?: NullableStringFieldUpdateOperationsInput | string | null
-    job?: NullableStringFieldUpdateOperationsInput | string | null
-    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16104,7 +15997,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     availabilitySchedule?: AvailabilityScheduleCreateNestedOneWithoutDateSlotsInput
-    custormer?: CustomerCreateNestedOneWithoutDateSlotsInput
+    customer?: CustomerCreateNestedOneWithoutDateSlotsInput
     eventType: EventTypeCreateNestedOneWithoutDateSlotsInput
     daySlot: DaySlotCreateNestedOneWithoutDateSlotsInput
     dateOnTimeSlots?: DateOnTimeSlotCreateNestedManyWithoutDateSlotInput
@@ -16114,7 +16007,7 @@ export namespace Prisma {
     id?: number
     availabilityScheduleId?: number | null
     name: Date | string
-    custormerId?: number | null
+    customerId?: number | null
     eventId: number
     dayName: string
     createdAt?: Date | string
@@ -16127,7 +16020,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     availabilitySchedule?: AvailabilityScheduleUpdateOneWithoutDateSlotsNestedInput
-    custormer?: CustomerUpdateOneWithoutDateSlotsNestedInput
+    customer?: CustomerUpdateOneWithoutDateSlotsNestedInput
     eventType?: EventTypeUpdateOneRequiredWithoutDateSlotsNestedInput
     daySlot?: DaySlotUpdateOneRequiredWithoutDateSlotsNestedInput
     dateOnTimeSlots?: DateOnTimeSlotUpdateManyWithoutDateSlotNestedInput
@@ -16137,7 +16030,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     availabilityScheduleId?: NullableIntFieldUpdateOperationsInput | number | null
     name?: DateTimeFieldUpdateOperationsInput | Date | string
-    custormerId?: NullableIntFieldUpdateOperationsInput | number | null
+    customerId?: NullableIntFieldUpdateOperationsInput | number | null
     eventId?: IntFieldUpdateOperationsInput | number
     dayName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16149,7 +16042,7 @@ export namespace Prisma {
     id?: number
     availabilityScheduleId?: number | null
     name: Date | string
-    custormerId?: number | null
+    customerId?: number | null
     eventId: number
     dayName: string
     createdAt?: Date | string
@@ -16166,7 +16059,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     availabilityScheduleId?: NullableIntFieldUpdateOperationsInput | number | null
     name?: DateTimeFieldUpdateOperationsInput | Date | string
-    custormerId?: NullableIntFieldUpdateOperationsInput | number | null
+    customerId?: NullableIntFieldUpdateOperationsInput | number | null
     eventId?: IntFieldUpdateOperationsInput | number
     dayName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16294,7 +16187,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     groupMeetings?: GroupMeetingCreateNestedManyWithoutCustomerInput
-    dateSlots?: DateSlotCreateNestedManyWithoutCustormerInput
+    dateSlots?: DateSlotCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerUncheckedCreateInput = {
@@ -16304,7 +16197,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     groupMeetings?: GroupMeetingUncheckedCreateNestedManyWithoutCustomerInput
-    dateSlots?: DateSlotUncheckedCreateNestedManyWithoutCustormerInput
+    dateSlots?: DateSlotUncheckedCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerUpdateInput = {
@@ -16313,7 +16206,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groupMeetings?: GroupMeetingUpdateManyWithoutCustomerNestedInput
-    dateSlots?: DateSlotUpdateManyWithoutCustormerNestedInput
+    dateSlots?: DateSlotUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerUncheckedUpdateInput = {
@@ -16323,7 +16216,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groupMeetings?: GroupMeetingUncheckedUpdateManyWithoutCustomerNestedInput
-    dateSlots?: DateSlotUncheckedUpdateManyWithoutCustormerNestedInput
+    dateSlots?: DateSlotUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerCreateManyInput = {
@@ -16567,21 +16460,6 @@ export namespace Prisma {
     not?: NestedStringFilter | string
   }
 
-  export type StringNullableFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | null
-    notIn?: Enumerable<string> | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    mode?: QueryMode
-    not?: NestedStringNullableFilter | string | null
-  }
-
   export type DateTimeFilter = {
     equals?: Date | string
     in?: Enumerable<Date> | Enumerable<string>
@@ -16628,11 +16506,6 @@ export namespace Prisma {
     name?: SortOrder
     username?: SortOrder
     firebaseUid?: SortOrder
-    subscription?: SortOrder
-    mobileNumber?: SortOrder
-    userLink?: SortOrder
-    job?: SortOrder
-    education?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16646,11 +16519,6 @@ export namespace Prisma {
     name?: SortOrder
     username?: SortOrder
     firebaseUid?: SortOrder
-    subscription?: SortOrder
-    mobileNumber?: SortOrder
-    userLink?: SortOrder
-    job?: SortOrder
-    education?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16660,11 +16528,6 @@ export namespace Prisma {
     name?: SortOrder
     username?: SortOrder
     firebaseUid?: SortOrder
-    subscription?: SortOrder
-    mobileNumber?: SortOrder
-    userLink?: SortOrder
-    job?: SortOrder
-    education?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16705,24 +16568,6 @@ export namespace Prisma {
     _count?: NestedIntFilter
     _min?: NestedStringFilter
     _max?: NestedStringFilter
-  }
-
-  export type StringNullableWithAggregatesFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | null
-    notIn?: Enumerable<string> | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter | string | null
-    _count?: NestedIntNullableFilter
-    _min?: NestedStringNullableFilter
-    _max?: NestedStringNullableFilter
   }
 
   export type DateTimeWithAggregatesFilter = {
@@ -17023,7 +16868,7 @@ export namespace Prisma {
     id?: SortOrder
     availabilityScheduleId?: SortOrder
     name?: SortOrder
-    custormerId?: SortOrder
+    customerId?: SortOrder
     eventId?: SortOrder
     dayName?: SortOrder
     createdAt?: SortOrder
@@ -17033,7 +16878,7 @@ export namespace Prisma {
   export type DateSlotAvgOrderByAggregateInput = {
     id?: SortOrder
     availabilityScheduleId?: SortOrder
-    custormerId?: SortOrder
+    customerId?: SortOrder
     eventId?: SortOrder
   }
 
@@ -17041,7 +16886,7 @@ export namespace Prisma {
     id?: SortOrder
     availabilityScheduleId?: SortOrder
     name?: SortOrder
-    custormerId?: SortOrder
+    customerId?: SortOrder
     eventId?: SortOrder
     dayName?: SortOrder
     createdAt?: SortOrder
@@ -17052,7 +16897,7 @@ export namespace Prisma {
     id?: SortOrder
     availabilityScheduleId?: SortOrder
     name?: SortOrder
-    custormerId?: SortOrder
+    customerId?: SortOrder
     eventId?: SortOrder
     dayName?: SortOrder
     createdAt?: SortOrder
@@ -17062,7 +16907,7 @@ export namespace Prisma {
   export type DateSlotSumOrderByAggregateInput = {
     id?: SortOrder
     availabilityScheduleId?: SortOrder
-    custormerId?: SortOrder
+    customerId?: SortOrder
     eventId?: SortOrder
   }
 
@@ -17366,10 +17211,6 @@ export namespace Prisma {
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
-  }
-
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -18049,10 +17890,10 @@ export namespace Prisma {
     connect?: Enumerable<GroupMeetingWhereUniqueInput>
   }
 
-  export type DateSlotCreateNestedManyWithoutCustormerInput = {
-    create?: XOR<Enumerable<DateSlotCreateWithoutCustormerInput>, Enumerable<DateSlotUncheckedCreateWithoutCustormerInput>>
-    connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutCustormerInput>
-    createMany?: DateSlotCreateManyCustormerInputEnvelope
+  export type DateSlotCreateNestedManyWithoutCustomerInput = {
+    create?: XOR<Enumerable<DateSlotCreateWithoutCustomerInput>, Enumerable<DateSlotUncheckedCreateWithoutCustomerInput>>
+    connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutCustomerInput>
+    createMany?: DateSlotCreateManyCustomerInputEnvelope
     connect?: Enumerable<DateSlotWhereUniqueInput>
   }
 
@@ -18063,10 +17904,10 @@ export namespace Prisma {
     connect?: Enumerable<GroupMeetingWhereUniqueInput>
   }
 
-  export type DateSlotUncheckedCreateNestedManyWithoutCustormerInput = {
-    create?: XOR<Enumerable<DateSlotCreateWithoutCustormerInput>, Enumerable<DateSlotUncheckedCreateWithoutCustormerInput>>
-    connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutCustormerInput>
-    createMany?: DateSlotCreateManyCustormerInputEnvelope
+  export type DateSlotUncheckedCreateNestedManyWithoutCustomerInput = {
+    create?: XOR<Enumerable<DateSlotCreateWithoutCustomerInput>, Enumerable<DateSlotUncheckedCreateWithoutCustomerInput>>
+    connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutCustomerInput>
+    createMany?: DateSlotCreateManyCustomerInputEnvelope
     connect?: Enumerable<DateSlotWhereUniqueInput>
   }
 
@@ -18084,17 +17925,17 @@ export namespace Prisma {
     deleteMany?: Enumerable<GroupMeetingScalarWhereInput>
   }
 
-  export type DateSlotUpdateManyWithoutCustormerNestedInput = {
-    create?: XOR<Enumerable<DateSlotCreateWithoutCustormerInput>, Enumerable<DateSlotUncheckedCreateWithoutCustormerInput>>
-    connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutCustormerInput>
-    upsert?: Enumerable<DateSlotUpsertWithWhereUniqueWithoutCustormerInput>
-    createMany?: DateSlotCreateManyCustormerInputEnvelope
+  export type DateSlotUpdateManyWithoutCustomerNestedInput = {
+    create?: XOR<Enumerable<DateSlotCreateWithoutCustomerInput>, Enumerable<DateSlotUncheckedCreateWithoutCustomerInput>>
+    connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutCustomerInput>
+    upsert?: Enumerable<DateSlotUpsertWithWhereUniqueWithoutCustomerInput>
+    createMany?: DateSlotCreateManyCustomerInputEnvelope
     set?: Enumerable<DateSlotWhereUniqueInput>
     disconnect?: Enumerable<DateSlotWhereUniqueInput>
     delete?: Enumerable<DateSlotWhereUniqueInput>
     connect?: Enumerable<DateSlotWhereUniqueInput>
-    update?: Enumerable<DateSlotUpdateWithWhereUniqueWithoutCustormerInput>
-    updateMany?: Enumerable<DateSlotUpdateManyWithWhereWithoutCustormerInput>
+    update?: Enumerable<DateSlotUpdateWithWhereUniqueWithoutCustomerInput>
+    updateMany?: Enumerable<DateSlotUpdateManyWithWhereWithoutCustomerInput>
     deleteMany?: Enumerable<DateSlotScalarWhereInput>
   }
 
@@ -18112,17 +17953,17 @@ export namespace Prisma {
     deleteMany?: Enumerable<GroupMeetingScalarWhereInput>
   }
 
-  export type DateSlotUncheckedUpdateManyWithoutCustormerNestedInput = {
-    create?: XOR<Enumerable<DateSlotCreateWithoutCustormerInput>, Enumerable<DateSlotUncheckedCreateWithoutCustormerInput>>
-    connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutCustormerInput>
-    upsert?: Enumerable<DateSlotUpsertWithWhereUniqueWithoutCustormerInput>
-    createMany?: DateSlotCreateManyCustormerInputEnvelope
+  export type DateSlotUncheckedUpdateManyWithoutCustomerNestedInput = {
+    create?: XOR<Enumerable<DateSlotCreateWithoutCustomerInput>, Enumerable<DateSlotUncheckedCreateWithoutCustomerInput>>
+    connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutCustomerInput>
+    upsert?: Enumerable<DateSlotUpsertWithWhereUniqueWithoutCustomerInput>
+    createMany?: DateSlotCreateManyCustomerInputEnvelope
     set?: Enumerable<DateSlotWhereUniqueInput>
     disconnect?: Enumerable<DateSlotWhereUniqueInput>
     delete?: Enumerable<DateSlotWhereUniqueInput>
     connect?: Enumerable<DateSlotWhereUniqueInput>
-    update?: Enumerable<DateSlotUpdateWithWhereUniqueWithoutCustormerInput>
-    updateMany?: Enumerable<DateSlotUpdateManyWithWhereWithoutCustormerInput>
+    update?: Enumerable<DateSlotUpdateWithWhereUniqueWithoutCustomerInput>
+    updateMany?: Enumerable<DateSlotUpdateManyWithWhereWithoutCustomerInput>
     deleteMany?: Enumerable<DateSlotScalarWhereInput>
   }
 
@@ -18277,20 +18118,6 @@ export namespace Prisma {
     not?: NestedStringFilter | string
   }
 
-  export type NestedStringNullableFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | null
-    notIn?: Enumerable<string> | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    not?: NestedStringNullableFilter | string | null
-  }
-
   export type NestedDateTimeFilter = {
     equals?: Date | string
     in?: Enumerable<Date> | Enumerable<string>
@@ -18346,34 +18173,6 @@ export namespace Prisma {
     _max?: NestedStringFilter
   }
 
-  export type NestedStringNullableWithAggregatesFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | null
-    notIn?: Enumerable<string> | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    not?: NestedStringNullableWithAggregatesFilter | string | null
-    _count?: NestedIntNullableFilter
-    _min?: NestedStringNullableFilter
-    _max?: NestedStringNullableFilter
-  }
-
-  export type NestedIntNullableFilter = {
-    equals?: number | null
-    in?: Enumerable<number> | null
-    notIn?: Enumerable<number> | null
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntNullableFilter | number | null
-  }
-
   export type NestedDateTimeWithAggregatesFilter = {
     equals?: Date | string
     in?: Enumerable<Date> | Enumerable<string>
@@ -18386,6 +18185,17 @@ export namespace Prisma {
     _count?: NestedIntFilter
     _min?: NestedDateTimeFilter
     _max?: NestedDateTimeFilter
+  }
+
+  export type NestedIntNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableFilter | number | null
   }
 
   export type NestedIntNullableWithAggregatesFilter = {
@@ -18593,11 +18403,6 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
-    subscription?: string | null
-    mobileNumber?: string | null
-    userLink?: string | null
-    job?: string | null
-    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     billings?: BillingCreateNestedManyWithoutUserInput
@@ -18609,11 +18414,6 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
-    subscription?: string | null
-    mobileNumber?: string | null
-    userLink?: string | null
-    job?: string | null
-    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     billings?: BillingUncheckedCreateNestedManyWithoutUserInput
@@ -18675,7 +18475,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     availabilitySchedule?: AvailabilityScheduleCreateNestedOneWithoutDateSlotsInput
-    custormer?: CustomerCreateNestedOneWithoutDateSlotsInput
+    customer?: CustomerCreateNestedOneWithoutDateSlotsInput
     daySlot: DaySlotCreateNestedOneWithoutDateSlotsInput
     dateOnTimeSlots?: DateOnTimeSlotCreateNestedManyWithoutDateSlotInput
   }
@@ -18684,7 +18484,7 @@ export namespace Prisma {
     id?: number
     availabilityScheduleId?: number | null
     name: Date | string
-    custormerId?: number | null
+    customerId?: number | null
     dayName: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18741,11 +18541,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
-    subscription?: NullableStringFieldUpdateOperationsInput | string | null
-    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    userLink?: NullableStringFieldUpdateOperationsInput | string | null
-    job?: NullableStringFieldUpdateOperationsInput | string | null
-    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     billings?: BillingUpdateManyWithoutUserNestedInput
@@ -18757,11 +18552,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
-    subscription?: NullableStringFieldUpdateOperationsInput | string | null
-    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    userLink?: NullableStringFieldUpdateOperationsInput | string | null
-    job?: NullableStringFieldUpdateOperationsInput | string | null
-    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     billings?: BillingUncheckedUpdateManyWithoutUserNestedInput
@@ -18840,7 +18630,7 @@ export namespace Prisma {
     id?: IntFilter | number
     availabilityScheduleId?: IntNullableFilter | number | null
     name?: DateTimeFilter | Date | string
-    custormerId?: IntNullableFilter | number | null
+    customerId?: IntNullableFilter | number | null
     eventId?: IntFilter | number
     dayName?: StringFilter | string
     createdAt?: DateTimeFilter | Date | string
@@ -19108,7 +18898,7 @@ export namespace Prisma {
     name: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    custormer?: CustomerCreateNestedOneWithoutDateSlotsInput
+    customer?: CustomerCreateNestedOneWithoutDateSlotsInput
     eventType: EventTypeCreateNestedOneWithoutDateSlotsInput
     daySlot: DaySlotCreateNestedOneWithoutDateSlotsInput
     dateOnTimeSlots?: DateOnTimeSlotCreateNestedManyWithoutDateSlotInput
@@ -19117,7 +18907,7 @@ export namespace Prisma {
   export type DateSlotUncheckedCreateWithoutAvailabilityScheduleInput = {
     id?: number
     name: Date | string
-    custormerId?: number | null
+    customerId?: number | null
     eventId: number
     dayName: string
     createdAt?: Date | string
@@ -19172,7 +18962,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     availabilitySchedule?: AvailabilityScheduleCreateNestedOneWithoutDateSlotsInput
-    custormer?: CustomerCreateNestedOneWithoutDateSlotsInput
+    customer?: CustomerCreateNestedOneWithoutDateSlotsInput
     eventType: EventTypeCreateNestedOneWithoutDateSlotsInput
     dateOnTimeSlots?: DateOnTimeSlotCreateNestedManyWithoutDateSlotInput
   }
@@ -19181,7 +18971,7 @@ export namespace Prisma {
     id?: number
     availabilityScheduleId?: number | null
     name: Date | string
-    custormerId?: number | null
+    customerId?: number | null
     eventId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19480,7 +19270,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     availabilitySchedule?: AvailabilityScheduleCreateNestedOneWithoutDateSlotsInput
-    custormer?: CustomerCreateNestedOneWithoutDateSlotsInput
+    customer?: CustomerCreateNestedOneWithoutDateSlotsInput
     eventType: EventTypeCreateNestedOneWithoutDateSlotsInput
     daySlot: DaySlotCreateNestedOneWithoutDateSlotsInput
   }
@@ -19489,7 +19279,7 @@ export namespace Prisma {
     id?: number
     availabilityScheduleId?: number | null
     name: Date | string
-    custormerId?: number | null
+    customerId?: number | null
     eventId: number
     dayName: string
     createdAt?: Date | string
@@ -19531,7 +19321,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     availabilitySchedule?: AvailabilityScheduleUpdateOneWithoutDateSlotsNestedInput
-    custormer?: CustomerUpdateOneWithoutDateSlotsNestedInput
+    customer?: CustomerUpdateOneWithoutDateSlotsNestedInput
     eventType?: EventTypeUpdateOneRequiredWithoutDateSlotsNestedInput
     daySlot?: DaySlotUpdateOneRequiredWithoutDateSlotsNestedInput
   }
@@ -19540,7 +19330,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     availabilityScheduleId?: NullableIntFieldUpdateOperationsInput | number | null
     name?: DateTimeFieldUpdateOperationsInput | Date | string
-    custormerId?: NullableIntFieldUpdateOperationsInput | number | null
+    customerId?: NullableIntFieldUpdateOperationsInput | number | null
     eventId?: IntFieldUpdateOperationsInput | number
     dayName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19619,7 +19409,7 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type DateSlotCreateWithoutCustormerInput = {
+  export type DateSlotCreateWithoutCustomerInput = {
     name: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19629,7 +19419,7 @@ export namespace Prisma {
     dateOnTimeSlots?: DateOnTimeSlotCreateNestedManyWithoutDateSlotInput
   }
 
-  export type DateSlotUncheckedCreateWithoutCustormerInput = {
+  export type DateSlotUncheckedCreateWithoutCustomerInput = {
     id?: number
     availabilityScheduleId?: number | null
     name: Date | string
@@ -19640,13 +19430,13 @@ export namespace Prisma {
     dateOnTimeSlots?: DateOnTimeSlotUncheckedCreateNestedManyWithoutDateSlotInput
   }
 
-  export type DateSlotCreateOrConnectWithoutCustormerInput = {
+  export type DateSlotCreateOrConnectWithoutCustomerInput = {
     where: DateSlotWhereUniqueInput
-    create: XOR<DateSlotCreateWithoutCustormerInput, DateSlotUncheckedCreateWithoutCustormerInput>
+    create: XOR<DateSlotCreateWithoutCustomerInput, DateSlotUncheckedCreateWithoutCustomerInput>
   }
 
-  export type DateSlotCreateManyCustormerInputEnvelope = {
-    data: Enumerable<DateSlotCreateManyCustormerInput>
+  export type DateSlotCreateManyCustomerInputEnvelope = {
+    data: Enumerable<DateSlotCreateManyCustomerInput>
     skipDuplicates?: boolean
   }
 
@@ -19666,18 +19456,18 @@ export namespace Prisma {
     data: XOR<GroupMeetingUpdateManyMutationInput, GroupMeetingUncheckedUpdateManyWithoutGroupMeetingsInput>
   }
 
-  export type DateSlotUpsertWithWhereUniqueWithoutCustormerInput = {
+  export type DateSlotUpsertWithWhereUniqueWithoutCustomerInput = {
     where: DateSlotWhereUniqueInput
-    update: XOR<DateSlotUpdateWithoutCustormerInput, DateSlotUncheckedUpdateWithoutCustormerInput>
-    create: XOR<DateSlotCreateWithoutCustormerInput, DateSlotUncheckedCreateWithoutCustormerInput>
+    update: XOR<DateSlotUpdateWithoutCustomerInput, DateSlotUncheckedUpdateWithoutCustomerInput>
+    create: XOR<DateSlotCreateWithoutCustomerInput, DateSlotUncheckedCreateWithoutCustomerInput>
   }
 
-  export type DateSlotUpdateWithWhereUniqueWithoutCustormerInput = {
+  export type DateSlotUpdateWithWhereUniqueWithoutCustomerInput = {
     where: DateSlotWhereUniqueInput
-    data: XOR<DateSlotUpdateWithoutCustormerInput, DateSlotUncheckedUpdateWithoutCustormerInput>
+    data: XOR<DateSlotUpdateWithoutCustomerInput, DateSlotUncheckedUpdateWithoutCustomerInput>
   }
 
-  export type DateSlotUpdateManyWithWhereWithoutCustormerInput = {
+  export type DateSlotUpdateManyWithWhereWithoutCustomerInput = {
     where: DateSlotScalarWhereInput
     data: XOR<DateSlotUpdateManyMutationInput, DateSlotUncheckedUpdateManyWithoutDateSlotsInput>
   }
@@ -19686,11 +19476,6 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
-    subscription?: string | null
-    mobileNumber?: string | null
-    userLink?: string | null
-    job?: string | null
-    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     eventTypes?: EventTypeCreateNestedManyWithoutUserInput
@@ -19702,11 +19487,6 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
-    subscription?: string | null
-    mobileNumber?: string | null
-    userLink?: string | null
-    job?: string | null
-    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     eventTypes?: EventTypeUncheckedCreateNestedManyWithoutUserInput
@@ -19727,11 +19507,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
-    subscription?: NullableStringFieldUpdateOperationsInput | string | null
-    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    userLink?: NullableStringFieldUpdateOperationsInput | string | null
-    job?: NullableStringFieldUpdateOperationsInput | string | null
-    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventTypes?: EventTypeUpdateManyWithoutUserNestedInput
@@ -19743,11 +19518,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
-    subscription?: NullableStringFieldUpdateOperationsInput | string | null
-    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    userLink?: NullableStringFieldUpdateOperationsInput | string | null
-    job?: NullableStringFieldUpdateOperationsInput | string | null
-    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventTypes?: EventTypeUncheckedUpdateManyWithoutUserNestedInput
@@ -19779,7 +19549,7 @@ export namespace Prisma {
     email: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    dateSlots?: DateSlotCreateNestedManyWithoutCustormerInput
+    dateSlots?: DateSlotCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerUncheckedCreateWithoutGroupMeetingsInput = {
@@ -19788,7 +19558,7 @@ export namespace Prisma {
     email: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    dateSlots?: DateSlotUncheckedCreateNestedManyWithoutCustormerInput
+    dateSlots?: DateSlotUncheckedCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerCreateOrConnectWithoutGroupMeetingsInput = {
@@ -19881,7 +19651,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dateSlots?: DateSlotUpdateManyWithoutCustormerNestedInput
+    dateSlots?: DateSlotUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerUncheckedUpdateWithoutGroupMeetingsInput = {
@@ -19890,7 +19660,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dateSlots?: DateSlotUncheckedUpdateManyWithoutCustormerNestedInput
+    dateSlots?: DateSlotUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
   export type EventTypeUpsertWithoutGroupMeetingsInput = {
@@ -19945,11 +19715,6 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
-    subscription?: string | null
-    mobileNumber?: string | null
-    userLink?: string | null
-    job?: string | null
-    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     eventTypes?: EventTypeCreateNestedManyWithoutUserInput
@@ -19961,11 +19726,6 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
-    subscription?: string | null
-    mobileNumber?: string | null
-    userLink?: string | null
-    job?: string | null
-    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     eventTypes?: EventTypeUncheckedCreateNestedManyWithoutUserInput
@@ -20012,11 +19772,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
-    subscription?: NullableStringFieldUpdateOperationsInput | string | null
-    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    userLink?: NullableStringFieldUpdateOperationsInput | string | null
-    job?: NullableStringFieldUpdateOperationsInput | string | null
-    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventTypes?: EventTypeUpdateManyWithoutUserNestedInput
@@ -20028,11 +19783,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
-    subscription?: NullableStringFieldUpdateOperationsInput | string | null
-    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    userLink?: NullableStringFieldUpdateOperationsInput | string | null
-    job?: NullableStringFieldUpdateOperationsInput | string | null
-    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventTypes?: EventTypeUncheckedUpdateManyWithoutUserNestedInput
@@ -20187,7 +19937,7 @@ export namespace Prisma {
     id?: number
     availabilityScheduleId?: number | null
     name: Date | string
-    custormerId?: number | null
+    customerId?: number | null
     dayName: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20228,7 +19978,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     availabilitySchedule?: AvailabilityScheduleUpdateOneWithoutDateSlotsNestedInput
-    custormer?: CustomerUpdateOneWithoutDateSlotsNestedInput
+    customer?: CustomerUpdateOneWithoutDateSlotsNestedInput
     daySlot?: DaySlotUpdateOneRequiredWithoutDateSlotsNestedInput
     dateOnTimeSlots?: DateOnTimeSlotUpdateManyWithoutDateSlotNestedInput
   }
@@ -20237,7 +19987,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     availabilityScheduleId?: NullableIntFieldUpdateOperationsInput | number | null
     name?: DateTimeFieldUpdateOperationsInput | Date | string
-    custormerId?: NullableIntFieldUpdateOperationsInput | number | null
+    customerId?: NullableIntFieldUpdateOperationsInput | number | null
     dayName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20248,7 +19998,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     availabilityScheduleId?: NullableIntFieldUpdateOperationsInput | number | null
     name?: DateTimeFieldUpdateOperationsInput | Date | string
-    custormerId?: NullableIntFieldUpdateOperationsInput | number | null
+    customerId?: NullableIntFieldUpdateOperationsInput | number | null
     dayName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20350,7 +20100,7 @@ export namespace Prisma {
   export type DateSlotCreateManyAvailabilityScheduleInput = {
     id?: number
     name: Date | string
-    custormerId?: number | null
+    customerId?: number | null
     eventId: number
     dayName: string
     createdAt?: Date | string
@@ -20388,7 +20138,7 @@ export namespace Prisma {
     name?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    custormer?: CustomerUpdateOneWithoutDateSlotsNestedInput
+    customer?: CustomerUpdateOneWithoutDateSlotsNestedInput
     eventType?: EventTypeUpdateOneRequiredWithoutDateSlotsNestedInput
     daySlot?: DaySlotUpdateOneRequiredWithoutDateSlotsNestedInput
     dateOnTimeSlots?: DateOnTimeSlotUpdateManyWithoutDateSlotNestedInput
@@ -20397,7 +20147,7 @@ export namespace Prisma {
   export type DateSlotUncheckedUpdateWithoutAvailabilityScheduleInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: DateTimeFieldUpdateOperationsInput | Date | string
-    custormerId?: NullableIntFieldUpdateOperationsInput | number | null
+    customerId?: NullableIntFieldUpdateOperationsInput | number | null
     eventId?: IntFieldUpdateOperationsInput | number
     dayName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20409,7 +20159,7 @@ export namespace Prisma {
     id?: number
     availabilityScheduleId?: number | null
     name: Date | string
-    custormerId?: number | null
+    customerId?: number | null
     eventId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20420,7 +20170,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     availabilitySchedule?: AvailabilityScheduleUpdateOneWithoutDateSlotsNestedInput
-    custormer?: CustomerUpdateOneWithoutDateSlotsNestedInput
+    customer?: CustomerUpdateOneWithoutDateSlotsNestedInput
     eventType?: EventTypeUpdateOneRequiredWithoutDateSlotsNestedInput
     dateOnTimeSlots?: DateOnTimeSlotUpdateManyWithoutDateSlotNestedInput
   }
@@ -20429,7 +20179,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     availabilityScheduleId?: NullableIntFieldUpdateOperationsInput | number | null
     name?: DateTimeFieldUpdateOperationsInput | Date | string
-    custormerId?: NullableIntFieldUpdateOperationsInput | number | null
+    customerId?: NullableIntFieldUpdateOperationsInput | number | null
     eventId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20500,7 +20250,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type DateSlotCreateManyCustormerInput = {
+  export type DateSlotCreateManyCustomerInput = {
     id?: number
     availabilityScheduleId?: number | null
     name: Date | string
@@ -20531,7 +20281,7 @@ export namespace Prisma {
     userOnGroupMeetings?: UserOnGroupMeetingUncheckedUpdateManyWithoutGroupMeetingNestedInput
   }
 
-  export type DateSlotUpdateWithoutCustormerInput = {
+  export type DateSlotUpdateWithoutCustomerInput = {
     name?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20541,7 +20291,7 @@ export namespace Prisma {
     dateOnTimeSlots?: DateOnTimeSlotUpdateManyWithoutDateSlotNestedInput
   }
 
-  export type DateSlotUncheckedUpdateWithoutCustormerInput = {
+  export type DateSlotUncheckedUpdateWithoutCustomerInput = {
     id?: IntFieldUpdateOperationsInput | number
     availabilityScheduleId?: NullableIntFieldUpdateOperationsInput | number | null
     name?: DateTimeFieldUpdateOperationsInput | Date | string

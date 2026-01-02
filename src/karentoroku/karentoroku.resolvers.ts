@@ -3,13 +3,14 @@ import { ICreateEventType, ICreateUser } from "./karentoroku.interfaces";
 import { credential } from "firebase-admin";
 import { initializeApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
-import serviceAccount from "../config/firebaseAdmin.json";
+
+
 
 const firebaseApp = initializeApp({
   credential: credential.cert({
-    privateKey: serviceAccount.private_key,
-    clientEmail: serviceAccount.client_email,
-    projectId: serviceAccount.project_id,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    projectId: process.env.FIREBASE_PROJECT_ID,
   }),
 });
 

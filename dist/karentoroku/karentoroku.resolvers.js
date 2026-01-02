@@ -8,21 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getEventTypes = exports.createEventType = exports.createLocation = exports.getUserByIdToken = exports.getUserById = exports.getUsers = exports.createUser = exports.prisma = void 0;
 const client_1 = require("../../prisma/client");
 const firebase_admin_1 = require("firebase-admin");
 const app_1 = require("firebase-admin/app");
 const auth_1 = require("firebase-admin/auth");
-const firebaseAdmin_json_1 = __importDefault(require("../config/firebaseAdmin.json"));
 const firebaseApp = (0, app_1.initializeApp)({
     credential: firebase_admin_1.credential.cert({
-        privateKey: firebaseAdmin_json_1.default.private_key,
-        clientEmail: firebaseAdmin_json_1.default.client_email,
-        projectId: firebaseAdmin_json_1.default.project_id,
+        privateKey: (_a = process.env.FIREBASE_PRIVATE_KEY) === null || _a === void 0 ? void 0 : _a.replace(/\\n/g, "\n"),
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        projectId: process.env.FIREBASE_PROJECT_ID,
     }),
 });
 exports.prisma = new client_1.PrismaClient();

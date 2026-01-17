@@ -11,19 +11,59 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "darwin-arm64", "debian-openssl-1.1.x", "rhel-openssl-1.0.x"]
+  output        = "../prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "darwin-arm64", "debian-openssl-1.1.x", "rhel-openssl-1.0.x"]
+  output        = "../prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
 model User {
   id                  Int                  @id @default(autoincrement())
   name                String
   username            String               @unique
-
+  // password_hash String   @unique
+  // sessions      Session[]
   firebaseUid         String               @unique
   eventTypes          EventType[]
+  subscription        String?
+  mobileNumber        String?              @unique
+  userLink            String?              @unique
   billings            Billing[]
+  job                 String?
+  education           String?
   userOnGroupMeetings UserOnGroupMeeting[]
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
 }
+
+// model Session {
+//   id        Int      @id @default(autoincrement())
+//   token     String   @unique
+//   user      User     @relation(fields: [userId], references: [id])
+//   userId    Int
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
 
 model EventType {
   id                     Int                   @id @default(autoincrement())
@@ -86,8 +126,8 @@ model DateSlot {
   availabilitySchedule   AvailabilitySchedule? @relation(fields: [availabilityScheduleId], references: [id])
   availabilityScheduleId Int?
   name                   DateTime
-  customer               Customer?             @relation(fields: [customerId], references: [id])
-  customerId             Int?
+  custormer              Customer?             @relation(fields: [custormerId], references: [id])
+  custormerId            Int?
   eventType              EventType             @relation(fields: [eventId], references: [id])
   eventId                Int
   daySlot                DaySlot               @relation(fields: [dayName], references: [name])
@@ -98,14 +138,14 @@ model DateSlot {
 }
 
 model DateOnTimeSlot {
-  id         Int      @id @default(autoincrement())
-  timeSlot   TimeSlot @relation(fields: [timeSlotId], references: [id])
-  timeSlotId Int
-  dateSlot   DateSlot @relation(fields: [dateSlotId], references: [id])
-  dateSlotId Int
-  status     String   @default("available")
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          Int       @id @default(autoincrement())
+  timeSlot    TimeSlot  @relation(fields: [timeSlotId], references: [id])
+  timeSlotId  Int
+  dateSlot    DateSlot  @relation(fields: [dateSlotId], references: [id])
+  dateSlotId  Int
+  status      String    @default("available")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model TimeSlot {

@@ -6,13 +6,17 @@ import { getAuth } from "firebase-admin/auth";
 
 
 
-const firebaseApp = initializeApp({
-  credential: credential.cert({
-    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    projectId: process.env.FIREBASE_PROJECT_ID,
-  }),
-});
+const firebaseApp = initializeApp(
+  process.env.FIREBASE_AUTH_EMULATOR_HOST
+    ? { projectId: process.env.FIREBASE_PROJECT_ID }
+    : {
+      credential: credential.cert({
+        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        projectId: process.env.FIREBASE_PROJECT_ID,
+      }),
+    }
+);
 
 export const prisma = new PrismaClient();
 

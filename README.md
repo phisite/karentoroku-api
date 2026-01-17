@@ -5,8 +5,7 @@ A scheduling API built with Express, Prisma, and Firebase.
 ## Prerequisites
 
 - Node.js (v18 or later)
-- PostgreSQL
-- Firebase Project (for authentication)
+- Yarn
 
 ## Installation
 
@@ -21,17 +20,49 @@ A scheduling API built with Express, Prisma, and Firebase.
     yarn install
     ```
 
-## Configuration
+## Development Environment (Local)
 
-1.  **Environment Variables**: Create a `.env` file in the root directory and add your database URL:
+The API supports a fully local development environment using SQLite and the Firebase Auth Emulator.
+
+1.  **Configure `.env`**:
     ```env
-    DATABASE_URL="postgresql://user:password@localhost:5432/karentoroku?schema=public"
+    # Database
+    DATABASE_URL="file:./dev.db"
+
+    # Firebase
+    FIREBASE_PROJECT_ID="your-project-id"
+    FIREBASE_AUTH_EMULATOR_HOST="127.0.0.1:9099"
     ```
 
-2.  **Firebase Admin SDK**:
-    - Download your Firebase Admin SDK service account key.
-    - Save it as `src/config/firebaseAdmin.json`.
-    - **Note**: This file is gitignored for security.
+2.  **Initialize Database**:
+    ```bash
+    yarn prisma:setup-sqlite
+    ```
+
+3.  **Run Dev Server**:
+    ```bash
+    yarn dev
+    ```
+
+## Production Environment
+
+1.  **Prerequisites**:
+    - PostgreSQL
+    - Firebase Project with Service Account Key
+
+2.  **Configure `.env`**:
+    ```env
+    DATABASE_URL="postgresql://user:password@localhost:5432/karentoroku?schema=public"
+    FIREBASE_PRIVATE_KEY="YOUR_PRIVATE_KEY"
+    FIREBASE_CLIENT_EMAIL="YOUR_CLIENT_EMAIL"
+    FIREBASE_PROJECT_ID="YOUR_PROJECT_ID"
+    ```
+
+3.  **Database Migration**:
+    ```bash
+    yarn prisma:use-postgres
+    yarn prisma:migrate
+    ```
 
 ## Scripts
 

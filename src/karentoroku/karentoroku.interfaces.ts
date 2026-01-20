@@ -9,15 +9,20 @@ export const CreateUserCodec = t.type({
 
 export interface ICreateUser extends t.TypeOf<typeof CreateUserCodec> {}
 
+// Frontend sends days and dates separately, we combine them in the handler
 export const CreateEventTypeCodec = t.type({
   name: t.string,
   description: t.string,
   price: t.number,
   timeDuration: t.number,
   userId: t.number,
-  dateDaySlots: t.array(
+  days: t.array(
     t.type({
       dayName: t.string,
+    })
+  ),
+  dates: t.array(
+    t.type({
       date: t.string,
     })
   ),
@@ -33,6 +38,18 @@ export const CreateEventTypeCodec = t.type({
     })
   ),
 });
+
+// Internal interface with combined dateDaySlots for the resolver
+export interface ICreateEventTypeInternal {
+  name: string;
+  description: string;
+  price: number;
+  timeDuration: number;
+  userId: number;
+  dateDaySlots: { dayName: string; date: string }[];
+  timeSlots: { startTime: number; endTime: number }[];
+  locations: { locationName: string }[];
+}
 
 export interface ICreateEventType
   extends t.TypeOf<typeof CreateEventTypeCodec> {}

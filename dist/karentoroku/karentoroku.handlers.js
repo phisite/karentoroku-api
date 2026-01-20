@@ -99,7 +99,31 @@ const createEventTypeHandler = (req, res) => {
     console.log(body);
     console.log(karentoroku_interfaces_1.CreateEventTypeCodec.decode(body));
     if (karentoroku_interfaces_1.CreateEventTypeCodec.decode(body)._tag === "Right") {
-        return (0, karentoroku_resolvers_1.createEventType)(body)
+        // Transform frontend format (days + dates) to internal format (dateDaySlots)
+        const frontendData = body;
+        // Combine days with their corresponding dates
+        // Each day entry gets all dates from the dates array that match that day
+        const dateDaySlots = frontendData.dates.map((dateEntry) => {
+            var _a;
+            // For each date, we use the day from the days array (assuming 1:1 mapping from frontend)
+            // The frontend sends one day per request, so we use the first day's name
+            const dayName = ((_a = frontendData.days[0]) === null || _a === void 0 ? void 0 : _a.dayName) || "";
+            return {
+                dayName,
+                date: dateEntry.date,
+            };
+        });
+        const internalData = {
+            name: frontendData.name,
+            description: frontendData.description,
+            price: frontendData.price,
+            timeDuration: frontendData.timeDuration,
+            userId: frontendData.userId,
+            dateDaySlots,
+            timeSlots: frontendData.timeSlots,
+            locations: frontendData.locations,
+        };
+        return (0, karentoroku_resolvers_1.createEventType)(internalData)
             .then((response) => res.status(200).send(response))
             .catch((error) => res.status(500).send(error));
     }

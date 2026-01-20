@@ -30,14 +30,17 @@ exports.CreateUserCodec = t.type({
     username: t.string,
     idToken: t.string,
 });
+// Frontend sends days and dates separately, we combine them in the handler
 exports.CreateEventTypeCodec = t.type({
     name: t.string,
     description: t.string,
     price: t.number,
     timeDuration: t.number,
     userId: t.number,
-    dateDaySlots: t.array(t.type({
+    days: t.array(t.type({
         dayName: t.string,
+    })),
+    dates: t.array(t.type({
         date: t.string,
     })),
     timeSlots: t.array(t.type({

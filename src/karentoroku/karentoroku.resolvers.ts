@@ -1,5 +1,5 @@
 import { PrismaClient } from "../../prisma/client";
-import { ICreateEventType, ICreateUser } from "./karentoroku.interfaces";
+import { ICreateEventTypeInternal, ICreateUser } from "./karentoroku.interfaces";
 import { credential } from "firebase-admin";
 import { initializeApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
@@ -89,7 +89,7 @@ export const createLocation = (args: { name: string }) => {
   });
 };
 
-export const createEventType = (args: ICreateEventType) => {
+export const createEventType = (args: ICreateEventTypeInternal) => {
   return prisma.eventType.upsert({
     where: {
       userId_name: {

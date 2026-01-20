@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import {
   CreateEventTypeCodec,
   CreateUserCodec,
+  ICreateEventType,
+  ICreateEventTypeInternal,
 } from "./karentoroku.interfaces";
 import {
   createEventType,
@@ -96,7 +98,33 @@ export const createEventTypeHandler = (req: Request, res: Response) => {
   console.log(body);
   console.log(CreateEventTypeCodec.decode(body));
   if (CreateEventTypeCodec.decode(body)._tag === "Right") {
-    return createEventType(body)
+    // Transform frontend format (days + dates) to internal format (dateDaySlots)
+    const frontendData = body as ICreateEventType;
+    
+    // Combine days with their corresponding dates
+    // Each day entry gets all dates from the dates array that match that day
+    const dateDaySlots = frontendData.dates.map((dateEntry) => {
+      // For each date, we use the day from the days array (assuming 1:1 mapping from frontend)
+      // The frontend sends one day per request, so we use the first day's name
+      const dayName = frontendData.days[0]?.dayName || "";
+      return {
+        dayName,
+        date: dateEntry.date,
+      };
+    });
+
+    const internalData: ICreateEventTypeInternal = {
+      name: frontendData.name,
+      description: frontendData.description,
+      price: frontendData.price,
+      timeDuration: frontendData.timeDuration,
+      userId: frontendData.userId,
+      dateDaySlots,
+      timeSlots: frontendData.timeSlots,
+      locations: frontendData.locations,
+    };
+
+    return createEventType(internalData)
       .then((response) => res.status(200).send(response))
       .catch((error) => res.status(500).send(error));
   } else {

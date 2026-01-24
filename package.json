@@ -23,10 +23,12 @@
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.0",
     "@types/node": "^18.15.3",
+    "@types/supertest": "^6.0.3",
     "jest": "^29.5.0",
     "pre-commit": "^1.2.2",
     "prisma": "^4.12.0",
     "rimraf": "^4.4.1",
+    "supertest": "^7.2.2",
     "ts-jest": "^29.0.5",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.2"
@@ -46,7 +48,10 @@
     "prisma:migrate": "npx prisma migrate dev --name init --schema prisma/schema.prisma",
     "prisma:generate": "yarn pnpify prisma generate --schema=prisma/schema.prisma",
     "test": "jest --verbose",
-    "test:karentoroku": "jest -- src/karentoroku"
+    "test:karentoroku": "jest -- src/karentoroku",
+    "prisma:dev": "prisma migrate dev --name init && prisma generate",
+    "db:seed": "ts-node prisma/seed.ts",
+    "emulators": "firebase emulators:start --only auth"
   },
   "pre-commit": [
     "ts-check",

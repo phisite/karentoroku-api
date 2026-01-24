@@ -4,6 +4,8 @@ import {
   CreateUserCodec,
   ICreateEventType,
   ICreateEventTypeInternal,
+  CreateAppointmentCodec,
+  GetAppointmentsCodec,
 } from "./karentoroku.interfaces";
 import {
   createEventType,
@@ -12,6 +14,8 @@ import {
   getUserById,
   getUserByIdToken,
   getUsers,
+  createAppointment,
+  getAppointments,
 } from "./karentoroku.resolvers";
 
 export const getIndexHandler = (req: Request, res: Response) => {
@@ -100,7 +104,7 @@ export const createEventTypeHandler = (req: Request, res: Response) => {
   if (CreateEventTypeCodec.decode(body)._tag === "Right") {
     // Transform frontend format (days + dates) to internal format (dateDaySlots)
     const frontendData = body as ICreateEventType;
-    
+
     // Combine days with their corresponding dates
     // Each day entry gets all dates from the dates array that match that day
     const dateDaySlots = frontendData.dates.map((dateEntry) => {
@@ -154,5 +158,33 @@ export const getEventTypeHandler = async (req: Request, res: Response) => {
     res.status(500).json({
       error: String(e),
     });
+  }
+};
+
+export const createAppointmentHandler = async (req: Request, res: Response) => {
+  const args = req.body;
+  if (CreateAppointmentCodec.decode(args)._tag === "Right") {
+    try {
+      const result = await createAppointment(args);
+      res.status(200).json(result);
+    } catch (e) {
+      res.status(500).json({ error: String(e) });
+    }
+  } else {
+    res.status(500).json({ error: "Invalid request (CreateAppointmentCodec)" });
+  }
+};
+
+export const getAppointmentsHandler = async (req: Request, res: Response) => {
+  const args = req.body;
+  if (GetAppointmentsCodec.decode(args)._tag === "Right") {
+    try {
+      const result = await getAppointments(args);
+      res.status(200).json(result);
+    } catch (e) {
+      res.status(500).json({ error: String(e) });
+    }
+  } else {
+    res.status(500).json({ error: "Invalid request (GetAppointmentsCodec)" });
   }
 };

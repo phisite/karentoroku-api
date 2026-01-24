@@ -42,10 +42,10 @@ const config: Config = {
     "/.yarn/",
     "/entity/",
     "/prisma",
-    "/tests/",
     "/coverage/",
     "\\.pnp\\.[^\\/]+$",
   ],
+  setupFilesAfterEnv: ["<rootDir>/tests/setup.ts"],
   testRegex: "(/__test__/.*|\\.(test|spec))\\.(ts|js)$",
 };
 

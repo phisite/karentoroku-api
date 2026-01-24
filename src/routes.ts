@@ -1,5 +1,7 @@
 import {
   createEventTypeHandler,
+  createAppointmentHandler,
+  getAppointmentsHandler,
   createUserHandler,
   getEventTypeHandler,
   getIndexHandler,
@@ -33,6 +35,16 @@ export const AppRoutes = [
     path: "/getUserByIdToken",
     method: "post",
     action: getUserByIdTokenHandler,
+  },
+  {
+    path: "/createAppointment",
+    method: "post",
+    action: createAppointmentHandler,
+  },
+  {
+    path: "/getAppointments",
+    method: "post",
+    action: getAppointmentsHandler,
   },
   {
     path: "/createEventType",

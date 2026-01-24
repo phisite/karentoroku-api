@@ -7,7 +7,7 @@ export const CreateUserCodec = t.type({
   idToken: t.string,
 });
 
-export interface ICreateUser extends t.TypeOf<typeof CreateUserCodec> {}
+export interface ICreateUser extends t.TypeOf<typeof CreateUserCodec> { }
 
 // Frontend sends days and dates separately, we combine them in the handler
 export const CreateEventTypeCodec = t.type({
@@ -52,4 +52,22 @@ export interface ICreateEventTypeInternal {
 }
 
 export interface ICreateEventType
-  extends t.TypeOf<typeof CreateEventTypeCodec> {}
+  extends t.TypeOf<typeof CreateEventTypeCodec> { }
+
+export const CreateAppointmentCodec = t.type({
+  organizerId: t.number,
+  attendeeId: t.number,
+  eventTypeId: t.number,
+  startTime: t.string, // ISO string
+  endTime: t.string,   // ISO string
+});
+
+export interface ICreateAppointment extends t.TypeOf<typeof CreateAppointmentCodec> { }
+
+export const GetAppointmentsCodec = t.type({
+  userId: t.number,
+  role: t.union([t.literal("organizer"), t.literal("attendee"), t.literal("all")]),
+});
+
+export interface IGetAppointments extends t.TypeOf<typeof GetAppointmentsCodec> { }
+

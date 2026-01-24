@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEventTypeHandler = exports.createEventTypeHandler = exports.getUserByIdTokenHandler = exports.getUserByIdHandler = exports.getUsersHandler = exports.createUserHandler = exports.getIndexHandler = void 0;
+exports.getAppointmentsHandler = exports.createAppointmentHandler = exports.getEventTypeHandler = exports.createEventTypeHandler = exports.getUserByIdTokenHandler = exports.getUserByIdHandler = exports.getUsersHandler = exports.createUserHandler = exports.getIndexHandler = void 0;
 const karentoroku_interfaces_1 = require("./karentoroku.interfaces");
 const karentoroku_resolvers_1 = require("./karentoroku.resolvers");
 const getIndexHandler = (req, res) => {
@@ -157,3 +157,35 @@ const getEventTypeHandler = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.getEventTypeHandler = getEventTypeHandler;
+const createAppointmentHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const args = req.body;
+    if (karentoroku_interfaces_1.CreateAppointmentCodec.decode(args)._tag === "Right") {
+        try {
+            const result = yield (0, karentoroku_resolvers_1.createAppointment)(args);
+            res.status(200).json(result);
+        }
+        catch (e) {
+            res.status(500).json({ error: String(e) });
+        }
+    }
+    else {
+        res.status(500).json({ error: "Invalid request (CreateAppointmentCodec)" });
+    }
+});
+exports.createAppointmentHandler = createAppointmentHandler;
+const getAppointmentsHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const args = req.body;
+    if (karentoroku_interfaces_1.GetAppointmentsCodec.decode(args)._tag === "Right") {
+        try {
+            const result = yield (0, karentoroku_resolvers_1.getAppointments)(args);
+            res.status(200).json(result);
+        }
+        catch (e) {
+            res.status(500).json({ error: String(e) });
+        }
+    }
+    else {
+        res.status(500).json({ error: "Invalid request (GetAppointmentsCodec)" });
+    }
+});
+exports.getAppointmentsHandler = getAppointmentsHandler;

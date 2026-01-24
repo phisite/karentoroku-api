@@ -29,6 +29,16 @@ exports.AppRoutes = [
         action: karentoroku_handlers_1.getUserByIdTokenHandler,
     },
     {
+        path: "/createAppointment",
+        method: "post",
+        action: karentoroku_handlers_1.createAppointmentHandler,
+    },
+    {
+        path: "/getAppointments",
+        method: "post",
+        action: karentoroku_handlers_1.getAppointmentsHandler,
+    },
+    {
         path: "/createEventType",
         method: "post",
         action: karentoroku_handlers_1.createEventTypeHandler,

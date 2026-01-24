@@ -1,8 +1,13 @@
 import { PrismaClient } from "../../prisma/client";
-import { ICreateEventTypeInternal, ICreateUser } from "./karentoroku.interfaces";
 import { credential } from "firebase-admin";
-import { initializeApp } from "firebase-admin/app";
+import {
+  ICreateEventTypeInternal,
+  ICreateUser,
+  ICreateAppointment,
+  IGetAppointments,
+} from "./karentoroku.interfaces";
 import { getAuth } from "firebase-admin/auth";
+import { initializeApp } from "firebase-admin/app";
 
 
 
@@ -44,8 +49,10 @@ export const createUser = (args: ICreateUser) => {
 export const getUsers = () => {
   return prisma.user.findMany({
     select: {
+      id: true,
       name: true,
       username: true,
+      job: true,
     },
   });
 };
@@ -204,6 +211,41 @@ export const getEventTypes = () => {
       name: true,
       timeDuration: true,
       price: true,
+    },
+  });
+};
+
+export const createAppointment = (args: ICreateAppointment) => {
+  return prisma.appointment.create({
+    data: {
+      organizer: { connect: { id: args.organizerId } },
+      attendee: { connect: { id: args.attendeeId } },
+      eventType: { connect: { id: args.eventTypeId } },
+      startTime: args.startTime,
+      endTime: args.endTime,
+    },
+  });
+};
+
+export const getAppointments = (args: IGetAppointments) => {
+  const whereClause: any = {};
+  if (args.role === 'organizer') {
+    whereClause.organizerId = args.userId;
+  } else if (args.role === 'attendee') {
+    whereClause.attendeeId = args.userId;
+  } else {
+    whereClause.OR = [
+      { organizerId: args.userId },
+      { attendeeId: args.userId },
+    ];
+  }
+
+  return prisma.appointment.findMany({
+    where: whereClause,
+    include: {
+      organizer: { select: { username: true, name: true } },
+      attendee: { select: { username: true, name: true } },
+      eventType: { select: { name: true } },
     },
   });
 };

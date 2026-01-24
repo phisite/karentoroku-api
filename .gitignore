@@ -1,3 +1,9 @@
 node_modules
 .env
 src/config/firebaseAdmin.json
+dist
+coverage
+prisma/client
+*.db
+*.db-journal
+firebase-debug.log

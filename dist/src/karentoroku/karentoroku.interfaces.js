@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateEventTypeCodec = exports.CreateUserCodec = void 0;
+exports.GetAppointmentsCodec = exports.CreateAppointmentCodec = exports.CreateEventTypeCodec = exports.CreateUserCodec = void 0;
 const t = __importStar(require("io-ts"));
 exports.CreateUserCodec = t.type({
     name: t.string,
@@ -50,4 +50,15 @@ exports.CreateEventTypeCodec = t.type({
     locations: t.array(t.type({
         locationName: t.string,
     })),
+});
+exports.CreateAppointmentCodec = t.type({
+    organizerId: t.number,
+    attendeeId: t.number,
+    eventTypeId: t.number,
+    startTime: t.string,
+    endTime: t.string, // ISO string
+});
+exports.GetAppointmentsCodec = t.type({
+    userId: t.number,
+    role: t.union([t.literal("organizer"), t.literal("attendee"), t.literal("all")]),
 });

@@ -8,35 +8,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "darwin-arm64", "debian-openssl-1.1.x", "rhel-openssl-1.0.x"]
-  output        = "../prisma/client"
-}
-
-datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "darwin-arm64", "debian-openssl-1.1.x", "rhel-openssl-1.0.x"]
-  output        = "../prisma/client"
-}
-
-datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
-}
 model User {
   id                  Int                  @id @default(autoincrement())
   name                String
@@ -52,6 +27,8 @@ model User {
   job                 String?
   education           String?
   userOnGroupMeetings UserOnGroupMeeting[]
+  appointmentsOrganized Appointment[] @relation("Organizer")
+  appointmentsAttending Appointment[] @relation("Attendee")
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
 }
@@ -80,6 +57,7 @@ model EventType {
   groupMeetings          GroupMeeting[]
   createdAt              DateTime              @default(now())
   updatedAt              DateTime              @updatedAt
+  appointments           Appointment[]
 
   @@unique([userId, name])
 }
@@ -203,4 +181,19 @@ model UserOnGroupMeeting {
   groupMeetingId Int
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+}
+
+model Appointment {
+  id          Int       @id @default(autoincrement())
+  organizer   User      @relation("Organizer", fields: [organizerId], references: [id])
+  organizerId Int
+  attendee    User      @relation("Attendee", fields: [attendeeId], references: [id])
+  attendeeId  Int
+  eventType   EventType @relation(fields: [eventTypeId], references: [id])
+  eventTypeId Int
+  startTime   DateTime
+  endTime     DateTime
+  status      String    @default("CONFIRMED") // CONFIRMED, CANCELLED
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }

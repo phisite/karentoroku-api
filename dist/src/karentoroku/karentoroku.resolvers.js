@@ -10,11 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEventTypes = exports.createEventType = exports.createLocation = exports.getUserByIdToken = exports.getUserById = exports.getUsers = exports.createUser = exports.prisma = void 0;
+exports.getAppointments = exports.createAppointment = exports.getEventTypes = exports.createEventType = exports.createLocation = exports.getUserByIdToken = exports.getUserById = exports.getUsers = exports.createUser = exports.prisma = void 0;
 const client_1 = require("../../prisma/client");
 const firebase_admin_1 = require("firebase-admin");
-const app_1 = require("firebase-admin/app");
 const auth_1 = require("firebase-admin/auth");
+const app_1 = require("firebase-admin/app");
 const firebaseApp = (0, app_1.initializeApp)(process.env.FIREBASE_AUTH_EMULATOR_HOST
     ? { projectId: process.env.FIREBASE_PROJECT_ID }
     : {
@@ -49,8 +49,10 @@ exports.createUser = createUser;
 const getUsers = () => {
     return exports.prisma.user.findMany({
         select: {
+            id: true,
             name: true,
             username: true,
+            job: true,
         },
     });
 };
@@ -214,3 +216,39 @@ const getEventTypes = () => {
     });
 };
 exports.getEventTypes = getEventTypes;
+const createAppointment = (args) => {
+    return exports.prisma.appointment.create({
+        data: {
+            organizer: { connect: { id: args.organizerId } },
+            attendee: { connect: { id: args.attendeeId } },
+            eventType: { connect: { id: args.eventTypeId } },
+            startTime: args.startTime,
+            endTime: args.endTime,
+        },
+    });
+};
+exports.createAppointment = createAppointment;
+const getAppointments = (args) => {
+    const whereClause = {};
+    if (args.role === 'organizer') {
+        whereClause.organizerId = args.userId;
+    }
+    else if (args.role === 'attendee') {
+        whereClause.attendeeId = args.userId;
+    }
+    else {
+        whereClause.OR = [
+            { organizerId: args.userId },
+            { attendeeId: args.userId },
+        ];
+    }
+    return exports.prisma.appointment.findMany({
+        where: whereClause,
+        include: {
+            organizer: { select: { username: true, name: true } },
+            attendee: { select: { username: true, name: true } },
+            eventType: { select: { name: true } },
+        },
+    });
+};
+exports.getAppointments = getAppointments;

@@ -89,6 +89,18 @@ Prisma.NullTypes = {
 // https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
 function makeEnum(x) { return x; }
 
+exports.Prisma.AppointmentScalarFieldEnum = makeEnum({
+  id: 'id',
+  organizerId: 'organizerId',
+  attendeeId: 'attendeeId',
+  eventTypeId: 'eventTypeId',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+});
+
 exports.Prisma.AvailabilityScheduleScalarFieldEnum = makeEnum({
   id: 'id',
   name: 'name',
@@ -128,7 +140,7 @@ exports.Prisma.DateSlotScalarFieldEnum = makeEnum({
   id: 'id',
   availabilityScheduleId: 'availabilityScheduleId',
   name: 'name',
-  customerId: 'customerId',
+  custormerId: 'custormerId',
   eventId: 'eventId',
   dayName: 'dayName',
   createdAt: 'createdAt',
@@ -180,11 +192,6 @@ exports.Prisma.LocationScalarFieldEnum = makeEnum({
   updatedAt: 'updatedAt'
 });
 
-exports.Prisma.QueryMode = makeEnum({
-  default: 'default',
-  insensitive: 'insensitive'
-});
-
 exports.Prisma.SortOrder = makeEnum({
   asc: 'asc',
   desc: 'desc'
@@ -199,9 +206,6 @@ exports.Prisma.TimeSlotScalarFieldEnum = makeEnum({
 });
 
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
-  ReadUncommitted: 'ReadUncommitted',
-  ReadCommitted: 'ReadCommitted',
-  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -218,6 +222,11 @@ exports.Prisma.UserScalarFieldEnum = makeEnum({
   name: 'name',
   username: 'username',
   firebaseUid: 'firebaseUid',
+  subscription: 'subscription',
+  mobileNumber: 'mobileNumber',
+  userLink: 'userLink',
+  job: 'job',
+  education: 'education',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 });
@@ -236,7 +245,8 @@ exports.Prisma.ModelName = makeEnum({
   Customer: 'Customer',
   Billing: 'Billing',
   GroupMeeting: 'GroupMeeting',
-  UserOnGroupMeeting: 'UserOnGroupMeeting'
+  UserOnGroupMeeting: 'UserOnGroupMeeting',
+  Appointment: 'Appointment'
 });
 
 /**

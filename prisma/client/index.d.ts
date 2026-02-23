@@ -21,6 +21,11 @@ export type User = {
   name: string
   username: string
   firebaseUid: string
+  subscription: string | null
+  mobileNumber: string | null
+  userLink: string | null
+  job: string | null
+  education: string | null
   createdAt: Date
   updatedAt: Date
 }
@@ -95,7 +100,7 @@ export type DateSlot = {
   id: number
   availabilityScheduleId: number | null
   name: Date
-  customerId: number | null
+  custormerId: number | null
   eventId: number
   dayName: string
   createdAt: Date
@@ -176,6 +181,22 @@ export type UserOnGroupMeeting = {
   id: number
   userId: number
   groupMeetingId: number
+  createdAt: Date
+  updatedAt: Date
+}
+
+/**
+ * Model Appointment
+ * 
+ */
+export type Appointment = {
+  id: number
+  organizerId: number
+  attendeeId: number
+  eventTypeId: number
+  startTime: Date
+  endTime: Date
+  status: string
   createdAt: Date
   updatedAt: Date
 }
@@ -427,6 +448,16 @@ export class PrismaClient<
     * ```
     */
   get userOnGroupMeeting(): Prisma.UserOnGroupMeetingDelegate<GlobalReject>;
+
+  /**
+   * `prisma.appointment`: Exposes CRUD operations for the **Appointment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Appointments
+    * const appointments = await prisma.appointment.findMany()
+    * ```
+    */
+  get appointment(): Prisma.AppointmentDelegate<GlobalReject>;
 }
 
 export namespace Prisma {
@@ -908,7 +939,8 @@ export namespace Prisma {
     Customer: 'Customer',
     Billing: 'Billing',
     GroupMeeting: 'GroupMeeting',
-    UserOnGroupMeeting: 'UserOnGroupMeeting'
+    UserOnGroupMeeting: 'UserOnGroupMeeting',
+    Appointment: 'Appointment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1078,12 +1110,16 @@ export namespace Prisma {
     eventTypes: number
     billings: number
     userOnGroupMeetings: number
+    appointmentsOrganized: number
+    appointmentsAttending: number
   }
 
   export type UserCountOutputTypeSelect = {
     eventTypes?: boolean
     billings?: boolean
     userOnGroupMeetings?: boolean
+    appointmentsOrganized?: boolean
+    appointmentsAttending?: boolean
   }
 
   export type UserCountOutputTypeGetPayload<S extends boolean | null | undefined | UserCountOutputTypeArgs> =
@@ -1125,12 +1161,14 @@ export namespace Prisma {
     eventTypeOnLocations: number
     dateSlots: number
     groupMeetings: number
+    appointments: number
   }
 
   export type EventTypeCountOutputTypeSelect = {
     eventTypeOnLocations?: boolean
     dateSlots?: boolean
     groupMeetings?: boolean
+    appointments?: boolean
   }
 
   export type EventTypeCountOutputTypeGetPayload<S extends boolean | null | undefined | EventTypeCountOutputTypeArgs> =
@@ -1500,6 +1538,11 @@ export namespace Prisma {
     name: string | null
     username: string | null
     firebaseUid: string | null
+    subscription: string | null
+    mobileNumber: string | null
+    userLink: string | null
+    job: string | null
+    education: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1509,6 +1552,11 @@ export namespace Prisma {
     name: string | null
     username: string | null
     firebaseUid: string | null
+    subscription: string | null
+    mobileNumber: string | null
+    userLink: string | null
+    job: string | null
+    education: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1518,6 +1566,11 @@ export namespace Prisma {
     name: number
     username: number
     firebaseUid: number
+    subscription: number
+    mobileNumber: number
+    userLink: number
+    job: number
+    education: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1537,6 +1590,11 @@ export namespace Prisma {
     name?: true
     username?: true
     firebaseUid?: true
+    subscription?: true
+    mobileNumber?: true
+    userLink?: true
+    job?: true
+    education?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1546,6 +1604,11 @@ export namespace Prisma {
     name?: true
     username?: true
     firebaseUid?: true
+    subscription?: true
+    mobileNumber?: true
+    userLink?: true
+    job?: true
+    education?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1555,6 +1618,11 @@ export namespace Prisma {
     name?: true
     username?: true
     firebaseUid?: true
+    subscription?: true
+    mobileNumber?: true
+    userLink?: true
+    job?: true
+    education?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1652,6 +1720,11 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
+    subscription: string | null
+    mobileNumber: string | null
+    userLink: string | null
+    job: string | null
+    education: string | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -1680,11 +1753,18 @@ export namespace Prisma {
     name?: boolean
     username?: boolean
     firebaseUid?: boolean
+    subscription?: boolean
+    mobileNumber?: boolean
+    userLink?: boolean
+    job?: boolean
+    education?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     eventTypes?: boolean | User$eventTypesArgs
     billings?: boolean | User$billingsArgs
     userOnGroupMeetings?: boolean | User$userOnGroupMeetingsArgs
+    appointmentsOrganized?: boolean | User$appointmentsOrganizedArgs
+    appointmentsAttending?: boolean | User$appointmentsAttendingArgs
     _count?: boolean | UserCountOutputTypeArgs
   }
 
@@ -1693,6 +1773,8 @@ export namespace Prisma {
     eventTypes?: boolean | User$eventTypesArgs
     billings?: boolean | User$billingsArgs
     userOnGroupMeetings?: boolean | User$userOnGroupMeetingsArgs
+    appointmentsOrganized?: boolean | User$appointmentsOrganizedArgs
+    appointmentsAttending?: boolean | User$appointmentsAttendingArgs
     _count?: boolean | UserCountOutputTypeArgs
   }
 
@@ -1706,6 +1788,8 @@ export namespace Prisma {
         P extends 'eventTypes' ? Array < EventTypeGetPayload<S['include'][P]>>  :
         P extends 'billings' ? Array < BillingGetPayload<S['include'][P]>>  :
         P extends 'userOnGroupMeetings' ? Array < UserOnGroupMeetingGetPayload<S['include'][P]>>  :
+        P extends 'appointmentsOrganized' ? Array < AppointmentGetPayload<S['include'][P]>>  :
+        P extends 'appointmentsAttending' ? Array < AppointmentGetPayload<S['include'][P]>>  :
         P extends '_count' ? UserCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (UserArgs | UserFindManyArgs)
@@ -1714,6 +1798,8 @@ export namespace Prisma {
         P extends 'eventTypes' ? Array < EventTypeGetPayload<S['select'][P]>>  :
         P extends 'billings' ? Array < BillingGetPayload<S['select'][P]>>  :
         P extends 'userOnGroupMeetings' ? Array < UserOnGroupMeetingGetPayload<S['select'][P]>>  :
+        P extends 'appointmentsOrganized' ? Array < AppointmentGetPayload<S['select'][P]>>  :
+        P extends 'appointmentsAttending' ? Array < AppointmentGetPayload<S['select'][P]>>  :
         P extends '_count' ? UserCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof User ? User[P] : never
   } 
       : User
@@ -1827,22 +1913,6 @@ export namespace Prisma {
     create<T extends UserCreateArgs>(
       args: SelectSubset<T, UserCreateArgs>
     ): Prisma__UserClient<UserGetPayload<T>>
-
-    /**
-     * Create many Users.
-     *     @param {UserCreateManyArgs} args - Arguments to create many Users.
-     *     @example
-     *     // Create many Users
-     *     const user = await prisma.user.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends UserCreateManyArgs>(
-      args?: SelectSubset<T, UserCreateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a User.
@@ -2091,6 +2161,10 @@ export namespace Prisma {
     billings<T extends User$billingsArgs= {}>(args?: Subset<T, User$billingsArgs>): Prisma.PrismaPromise<Array<BillingGetPayload<T>>| Null>;
 
     userOnGroupMeetings<T extends User$userOnGroupMeetingsArgs= {}>(args?: Subset<T, User$userOnGroupMeetingsArgs>): Prisma.PrismaPromise<Array<UserOnGroupMeetingGetPayload<T>>| Null>;
+
+    appointmentsOrganized<T extends User$appointmentsOrganizedArgs= {}>(args?: Subset<T, User$appointmentsOrganizedArgs>): Prisma.PrismaPromise<Array<AppointmentGetPayload<T>>| Null>;
+
+    appointmentsAttending<T extends User$appointmentsAttendingArgs= {}>(args?: Subset<T, User$appointmentsAttendingArgs>): Prisma.PrismaPromise<Array<AppointmentGetPayload<T>>| Null>;
 
     private get _document();
     /**
@@ -2341,18 +2415,6 @@ export namespace Prisma {
 
 
   /**
-   * User createMany
-   */
-  export type UserCreateManyArgs = {
-    /**
-     * The data used to create many Users.
-     */
-    data: Enumerable<UserCreateManyInput>
-    skipDuplicates?: boolean
-  }
-
-
-  /**
    * User update
    */
   export type UserUpdateArgs = {
@@ -2507,6 +2569,48 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: Enumerable<UserOnGroupMeetingScalarFieldEnum>
+  }
+
+
+  /**
+   * User.appointmentsOrganized
+   */
+  export type User$appointmentsOrganizedArgs = {
+    /**
+     * Select specific fields to fetch from the Appointment
+     */
+    select?: AppointmentSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: AppointmentInclude | null
+    where?: AppointmentWhereInput
+    orderBy?: Enumerable<AppointmentOrderByWithRelationInput>
+    cursor?: AppointmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<AppointmentScalarFieldEnum>
+  }
+
+
+  /**
+   * User.appointmentsAttending
+   */
+  export type User$appointmentsAttendingArgs = {
+    /**
+     * Select specific fields to fetch from the Appointment
+     */
+    select?: AppointmentSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: AppointmentInclude | null
+    where?: AppointmentWhereInput
+    orderBy?: Enumerable<AppointmentOrderByWithRelationInput>
+    cursor?: AppointmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<AppointmentScalarFieldEnum>
   }
 
 
@@ -2779,6 +2883,7 @@ export namespace Prisma {
     availabilitySchedule?: boolean | AvailabilityScheduleArgs
     dateSlots?: boolean | EventType$dateSlotsArgs
     groupMeetings?: boolean | EventType$groupMeetingsArgs
+    appointments?: boolean | EventType$appointmentsArgs
     _count?: boolean | EventTypeCountOutputTypeArgs
   }
 
@@ -2789,6 +2894,7 @@ export namespace Prisma {
     availabilitySchedule?: boolean | AvailabilityScheduleArgs
     dateSlots?: boolean | EventType$dateSlotsArgs
     groupMeetings?: boolean | EventType$groupMeetingsArgs
+    appointments?: boolean | EventType$appointmentsArgs
     _count?: boolean | EventTypeCountOutputTypeArgs
   }
 
@@ -2804,6 +2910,7 @@ export namespace Prisma {
         P extends 'availabilitySchedule' ? AvailabilityScheduleGetPayload<S['include'][P]> | null :
         P extends 'dateSlots' ? Array < DateSlotGetPayload<S['include'][P]>>  :
         P extends 'groupMeetings' ? Array < GroupMeetingGetPayload<S['include'][P]>>  :
+        P extends 'appointments' ? Array < AppointmentGetPayload<S['include'][P]>>  :
         P extends '_count' ? EventTypeCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (EventTypeArgs | EventTypeFindManyArgs)
@@ -2814,6 +2921,7 @@ export namespace Prisma {
         P extends 'availabilitySchedule' ? AvailabilityScheduleGetPayload<S['select'][P]> | null :
         P extends 'dateSlots' ? Array < DateSlotGetPayload<S['select'][P]>>  :
         P extends 'groupMeetings' ? Array < GroupMeetingGetPayload<S['select'][P]>>  :
+        P extends 'appointments' ? Array < AppointmentGetPayload<S['select'][P]>>  :
         P extends '_count' ? EventTypeCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof EventType ? EventType[P] : never
   } 
       : EventType
@@ -2927,22 +3035,6 @@ export namespace Prisma {
     create<T extends EventTypeCreateArgs>(
       args: SelectSubset<T, EventTypeCreateArgs>
     ): Prisma__EventTypeClient<EventTypeGetPayload<T>>
-
-    /**
-     * Create many EventTypes.
-     *     @param {EventTypeCreateManyArgs} args - Arguments to create many EventTypes.
-     *     @example
-     *     // Create many EventTypes
-     *     const eventType = await prisma.eventType.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends EventTypeCreateManyArgs>(
-      args?: SelectSubset<T, EventTypeCreateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a EventType.
@@ -3196,6 +3288,8 @@ export namespace Prisma {
 
     groupMeetings<T extends EventType$groupMeetingsArgs= {}>(args?: Subset<T, EventType$groupMeetingsArgs>): Prisma.PrismaPromise<Array<GroupMeetingGetPayload<T>>| Null>;
 
+    appointments<T extends EventType$appointmentsArgs= {}>(args?: Subset<T, EventType$appointmentsArgs>): Prisma.PrismaPromise<Array<AppointmentGetPayload<T>>| Null>;
+
     private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3445,18 +3539,6 @@ export namespace Prisma {
 
 
   /**
-   * EventType createMany
-   */
-  export type EventTypeCreateManyArgs = {
-    /**
-     * The data used to create many EventTypes.
-     */
-    data: Enumerable<EventTypeCreateManyInput>
-    skipDuplicates?: boolean
-  }
-
-
-  /**
    * EventType update
    */
   export type EventTypeUpdateArgs = {
@@ -3611,6 +3693,27 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: Enumerable<GroupMeetingScalarFieldEnum>
+  }
+
+
+  /**
+   * EventType.appointments
+   */
+  export type EventType$appointmentsArgs = {
+    /**
+     * Select specific fields to fetch from the Appointment
+     */
+    select?: AppointmentSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: AppointmentInclude | null
+    where?: AppointmentWhereInput
+    orderBy?: Enumerable<AppointmentOrderByWithRelationInput>
+    cursor?: AppointmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<AppointmentScalarFieldEnum>
   }
 
 
@@ -3963,22 +4066,6 @@ export namespace Prisma {
     create<T extends LocationCreateArgs>(
       args: SelectSubset<T, LocationCreateArgs>
     ): Prisma__LocationClient<LocationGetPayload<T>>
-
-    /**
-     * Create many Locations.
-     *     @param {LocationCreateManyArgs} args - Arguments to create many Locations.
-     *     @example
-     *     // Create many Locations
-     *     const location = await prisma.location.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends LocationCreateManyArgs>(
-      args?: SelectSubset<T, LocationCreateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a Location.
@@ -4471,18 +4558,6 @@ export namespace Prisma {
      * The data needed to create a Location.
      */
     data: XOR<LocationCreateInput, LocationUncheckedCreateInput>
-  }
-
-
-  /**
-   * Location createMany
-   */
-  export type LocationCreateManyArgs = {
-    /**
-     * The data used to create many Locations.
-     */
-    data: Enumerable<LocationCreateManyInput>
-    skipDuplicates?: boolean
   }
 
 
@@ -4986,22 +5061,6 @@ export namespace Prisma {
     ): Prisma__EventTypeOnLocationClient<EventTypeOnLocationGetPayload<T>>
 
     /**
-     * Create many EventTypeOnLocations.
-     *     @param {EventTypeOnLocationCreateManyArgs} args - Arguments to create many EventTypeOnLocations.
-     *     @example
-     *     // Create many EventTypeOnLocations
-     *     const eventTypeOnLocation = await prisma.eventTypeOnLocation.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends EventTypeOnLocationCreateManyArgs>(
-      args?: SelectSubset<T, EventTypeOnLocationCreateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
      * Delete a EventTypeOnLocation.
      * @param {EventTypeOnLocationDeleteArgs} args - Arguments to delete one EventTypeOnLocation.
      * @example
@@ -5496,18 +5555,6 @@ export namespace Prisma {
 
 
   /**
-   * EventTypeOnLocation createMany
-   */
-  export type EventTypeOnLocationCreateManyArgs = {
-    /**
-     * The data used to create many EventTypeOnLocations.
-     */
-    data: Enumerable<EventTypeOnLocationCreateManyInput>
-    skipDuplicates?: boolean
-  }
-
-
-  /**
    * EventTypeOnLocation update
    */
   export type EventTypeOnLocationUpdateArgs = {
@@ -5959,22 +6006,6 @@ export namespace Prisma {
     create<T extends AvailabilityScheduleCreateArgs>(
       args: SelectSubset<T, AvailabilityScheduleCreateArgs>
     ): Prisma__AvailabilityScheduleClient<AvailabilityScheduleGetPayload<T>>
-
-    /**
-     * Create many AvailabilitySchedules.
-     *     @param {AvailabilityScheduleCreateManyArgs} args - Arguments to create many AvailabilitySchedules.
-     *     @example
-     *     // Create many AvailabilitySchedules
-     *     const availabilitySchedule = await prisma.availabilitySchedule.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends AvailabilityScheduleCreateManyArgs>(
-      args?: SelectSubset<T, AvailabilityScheduleCreateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a AvailabilitySchedule.
@@ -6471,18 +6502,6 @@ export namespace Prisma {
 
 
   /**
-   * AvailabilitySchedule createMany
-   */
-  export type AvailabilityScheduleCreateManyArgs = {
-    /**
-     * The data used to create many AvailabilitySchedules.
-     */
-    data: Enumerable<AvailabilityScheduleCreateManyInput>
-    skipDuplicates?: boolean
-  }
-
-
-  /**
    * AvailabilitySchedule update
    */
   export type AvailabilityScheduleUpdateArgs = {
@@ -6964,22 +6983,6 @@ export namespace Prisma {
     create<T extends DaySlotCreateArgs>(
       args: SelectSubset<T, DaySlotCreateArgs>
     ): Prisma__DaySlotClient<DaySlotGetPayload<T>>
-
-    /**
-     * Create many DaySlots.
-     *     @param {DaySlotCreateManyArgs} args - Arguments to create many DaySlots.
-     *     @example
-     *     // Create many DaySlots
-     *     const daySlot = await prisma.daySlot.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends DaySlotCreateManyArgs>(
-      args?: SelectSubset<T, DaySlotCreateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a DaySlot.
@@ -7474,18 +7477,6 @@ export namespace Prisma {
 
 
   /**
-   * DaySlot createMany
-   */
-  export type DaySlotCreateManyArgs = {
-    /**
-     * The data used to create many DaySlots.
-     */
-    data: Enumerable<DaySlotCreateManyInput>
-    skipDuplicates?: boolean
-  }
-
-
-  /**
    * DaySlot update
    */
   export type DaySlotUpdateArgs = {
@@ -7633,14 +7624,14 @@ export namespace Prisma {
   export type DateSlotAvgAggregateOutputType = {
     id: number | null
     availabilityScheduleId: number | null
-    customerId: number | null
+    custormerId: number | null
     eventId: number | null
   }
 
   export type DateSlotSumAggregateOutputType = {
     id: number | null
     availabilityScheduleId: number | null
-    customerId: number | null
+    custormerId: number | null
     eventId: number | null
   }
 
@@ -7648,7 +7639,7 @@ export namespace Prisma {
     id: number | null
     availabilityScheduleId: number | null
     name: Date | null
-    customerId: number | null
+    custormerId: number | null
     eventId: number | null
     dayName: string | null
     createdAt: Date | null
@@ -7659,7 +7650,7 @@ export namespace Prisma {
     id: number | null
     availabilityScheduleId: number | null
     name: Date | null
-    customerId: number | null
+    custormerId: number | null
     eventId: number | null
     dayName: string | null
     createdAt: Date | null
@@ -7670,7 +7661,7 @@ export namespace Prisma {
     id: number
     availabilityScheduleId: number
     name: number
-    customerId: number
+    custormerId: number
     eventId: number
     dayName: number
     createdAt: number
@@ -7682,14 +7673,14 @@ export namespace Prisma {
   export type DateSlotAvgAggregateInputType = {
     id?: true
     availabilityScheduleId?: true
-    customerId?: true
+    custormerId?: true
     eventId?: true
   }
 
   export type DateSlotSumAggregateInputType = {
     id?: true
     availabilityScheduleId?: true
-    customerId?: true
+    custormerId?: true
     eventId?: true
   }
 
@@ -7697,7 +7688,7 @@ export namespace Prisma {
     id?: true
     availabilityScheduleId?: true
     name?: true
-    customerId?: true
+    custormerId?: true
     eventId?: true
     dayName?: true
     createdAt?: true
@@ -7708,7 +7699,7 @@ export namespace Prisma {
     id?: true
     availabilityScheduleId?: true
     name?: true
-    customerId?: true
+    custormerId?: true
     eventId?: true
     dayName?: true
     createdAt?: true
@@ -7719,7 +7710,7 @@ export namespace Prisma {
     id?: true
     availabilityScheduleId?: true
     name?: true
-    customerId?: true
+    custormerId?: true
     eventId?: true
     dayName?: true
     createdAt?: true
@@ -7818,7 +7809,7 @@ export namespace Prisma {
     id: number
     availabilityScheduleId: number | null
     name: Date
-    customerId: number | null
+    custormerId: number | null
     eventId: number
     dayName: string
     createdAt: Date
@@ -7848,13 +7839,13 @@ export namespace Prisma {
     id?: boolean
     availabilityScheduleId?: boolean
     name?: boolean
-    customerId?: boolean
+    custormerId?: boolean
     eventId?: boolean
     dayName?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     availabilitySchedule?: boolean | AvailabilityScheduleArgs
-    customer?: boolean | CustomerArgs
+    custormer?: boolean | CustomerArgs
     eventType?: boolean | EventTypeArgs
     daySlot?: boolean | DaySlotArgs
     dateOnTimeSlots?: boolean | DateSlot$dateOnTimeSlotsArgs
@@ -7864,7 +7855,7 @@ export namespace Prisma {
 
   export type DateSlotInclude = {
     availabilitySchedule?: boolean | AvailabilityScheduleArgs
-    customer?: boolean | CustomerArgs
+    custormer?: boolean | CustomerArgs
     eventType?: boolean | EventTypeArgs
     daySlot?: boolean | DaySlotArgs
     dateOnTimeSlots?: boolean | DateSlot$dateOnTimeSlotsArgs
@@ -7879,7 +7870,7 @@ export namespace Prisma {
     ? DateSlot  & {
     [P in TruthyKeys<S['include']>]:
         P extends 'availabilitySchedule' ? AvailabilityScheduleGetPayload<S['include'][P]> | null :
-        P extends 'customer' ? CustomerGetPayload<S['include'][P]> | null :
+        P extends 'custormer' ? CustomerGetPayload<S['include'][P]> | null :
         P extends 'eventType' ? EventTypeGetPayload<S['include'][P]> :
         P extends 'daySlot' ? DaySlotGetPayload<S['include'][P]> :
         P extends 'dateOnTimeSlots' ? Array < DateOnTimeSlotGetPayload<S['include'][P]>>  :
@@ -7889,7 +7880,7 @@ export namespace Prisma {
       ? {
     [P in TruthyKeys<S['select']>]:
         P extends 'availabilitySchedule' ? AvailabilityScheduleGetPayload<S['select'][P]> | null :
-        P extends 'customer' ? CustomerGetPayload<S['select'][P]> | null :
+        P extends 'custormer' ? CustomerGetPayload<S['select'][P]> | null :
         P extends 'eventType' ? EventTypeGetPayload<S['select'][P]> :
         P extends 'daySlot' ? DaySlotGetPayload<S['select'][P]> :
         P extends 'dateOnTimeSlots' ? Array < DateOnTimeSlotGetPayload<S['select'][P]>>  :
@@ -8006,22 +7997,6 @@ export namespace Prisma {
     create<T extends DateSlotCreateArgs>(
       args: SelectSubset<T, DateSlotCreateArgs>
     ): Prisma__DateSlotClient<DateSlotGetPayload<T>>
-
-    /**
-     * Create many DateSlots.
-     *     @param {DateSlotCreateManyArgs} args - Arguments to create many DateSlots.
-     *     @example
-     *     // Create many DateSlots
-     *     const dateSlot = await prisma.dateSlot.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends DateSlotCreateManyArgs>(
-      args?: SelectSubset<T, DateSlotCreateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a DateSlot.
@@ -8267,7 +8242,7 @@ export namespace Prisma {
 
     availabilitySchedule<T extends AvailabilityScheduleArgs= {}>(args?: Subset<T, AvailabilityScheduleArgs>): Prisma__AvailabilityScheduleClient<AvailabilityScheduleGetPayload<T> | Null>;
 
-    customer<T extends CustomerArgs= {}>(args?: Subset<T, CustomerArgs>): Prisma__CustomerClient<CustomerGetPayload<T> | Null>;
+    custormer<T extends CustomerArgs= {}>(args?: Subset<T, CustomerArgs>): Prisma__CustomerClient<CustomerGetPayload<T> | Null>;
 
     eventType<T extends EventTypeArgs= {}>(args?: Subset<T, EventTypeArgs>): Prisma__EventTypeClient<EventTypeGetPayload<T> | Null>;
 
@@ -8520,18 +8495,6 @@ export namespace Prisma {
      * The data needed to create a DateSlot.
      */
     data: XOR<DateSlotCreateInput, DateSlotUncheckedCreateInput>
-  }
-
-
-  /**
-   * DateSlot createMany
-   */
-  export type DateSlotCreateManyArgs = {
-    /**
-     * The data used to create many DateSlots.
-     */
-    data: Enumerable<DateSlotCreateManyInput>
-    skipDuplicates?: boolean
   }
 
 
@@ -9020,22 +8983,6 @@ export namespace Prisma {
     create<T extends DateOnTimeSlotCreateArgs>(
       args: SelectSubset<T, DateOnTimeSlotCreateArgs>
     ): Prisma__DateOnTimeSlotClient<DateOnTimeSlotGetPayload<T>>
-
-    /**
-     * Create many DateOnTimeSlots.
-     *     @param {DateOnTimeSlotCreateManyArgs} args - Arguments to create many DateOnTimeSlots.
-     *     @example
-     *     // Create many DateOnTimeSlots
-     *     const dateOnTimeSlot = await prisma.dateOnTimeSlot.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends DateOnTimeSlotCreateManyArgs>(
-      args?: SelectSubset<T, DateOnTimeSlotCreateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a DateOnTimeSlot.
@@ -9532,18 +9479,6 @@ export namespace Prisma {
 
 
   /**
-   * DateOnTimeSlot createMany
-   */
-  export type DateOnTimeSlotCreateManyArgs = {
-    /**
-     * The data used to create many DateOnTimeSlots.
-     */
-    data: Enumerable<DateOnTimeSlotCreateManyInput>
-    skipDuplicates?: boolean
-  }
-
-
-  /**
    * DateOnTimeSlot update
    */
   export type DateOnTimeSlotUpdateArgs = {
@@ -9999,22 +9934,6 @@ export namespace Prisma {
     create<T extends TimeSlotCreateArgs>(
       args: SelectSubset<T, TimeSlotCreateArgs>
     ): Prisma__TimeSlotClient<TimeSlotGetPayload<T>>
-
-    /**
-     * Create many TimeSlots.
-     *     @param {TimeSlotCreateManyArgs} args - Arguments to create many TimeSlots.
-     *     @example
-     *     // Create many TimeSlots
-     *     const timeSlot = await prisma.timeSlot.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends TimeSlotCreateManyArgs>(
-      args?: SelectSubset<T, TimeSlotCreateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a TimeSlot.
@@ -10509,18 +10428,6 @@ export namespace Prisma {
 
 
   /**
-   * TimeSlot createMany
-   */
-  export type TimeSlotCreateManyArgs = {
-    /**
-     * The data used to create many TimeSlots.
-     */
-    data: Enumerable<TimeSlotCreateManyInput>
-    skipDuplicates?: boolean
-  }
-
-
-  /**
    * TimeSlot update
    */
   export type TimeSlotUpdateArgs = {
@@ -10993,22 +10900,6 @@ export namespace Prisma {
     create<T extends CustomerCreateArgs>(
       args: SelectSubset<T, CustomerCreateArgs>
     ): Prisma__CustomerClient<CustomerGetPayload<T>>
-
-    /**
-     * Create many Customers.
-     *     @param {CustomerCreateManyArgs} args - Arguments to create many Customers.
-     *     @example
-     *     // Create many Customers
-     *     const customer = await prisma.customer.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends CustomerCreateManyArgs>(
-      args?: SelectSubset<T, CustomerCreateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a Customer.
@@ -11501,18 +11392,6 @@ export namespace Prisma {
      * The data needed to create a Customer.
      */
     data: XOR<CustomerCreateInput, CustomerUncheckedCreateInput>
-  }
-
-
-  /**
-   * Customer createMany
-   */
-  export type CustomerCreateManyArgs = {
-    /**
-     * The data used to create many Customers.
-     */
-    data: Enumerable<CustomerCreateManyInput>
-    skipDuplicates?: boolean
   }
 
 
@@ -12032,22 +11911,6 @@ export namespace Prisma {
     ): Prisma__BillingClient<BillingGetPayload<T>>
 
     /**
-     * Create many Billings.
-     *     @param {BillingCreateManyArgs} args - Arguments to create many Billings.
-     *     @example
-     *     // Create many Billings
-     *     const billing = await prisma.billing.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends BillingCreateManyArgs>(
-      args?: SelectSubset<T, BillingCreateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
      * Delete a Billing.
      * @param {BillingDeleteArgs} args - Arguments to delete one Billing.
      * @example
@@ -12536,18 +12399,6 @@ export namespace Prisma {
      * The data needed to create a Billing.
      */
     data: XOR<BillingCreateInput, BillingUncheckedCreateInput>
-  }
-
-
-  /**
-   * Billing createMany
-   */
-  export type BillingCreateManyArgs = {
-    /**
-     * The data used to create many Billings.
-     */
-    data: Enumerable<BillingCreateManyInput>
-    skipDuplicates?: boolean
   }
 
 
@@ -13053,22 +12904,6 @@ export namespace Prisma {
     ): Prisma__GroupMeetingClient<GroupMeetingGetPayload<T>>
 
     /**
-     * Create many GroupMeetings.
-     *     @param {GroupMeetingCreateManyArgs} args - Arguments to create many GroupMeetings.
-     *     @example
-     *     // Create many GroupMeetings
-     *     const groupMeeting = await prisma.groupMeeting.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends GroupMeetingCreateManyArgs>(
-      args?: SelectSubset<T, GroupMeetingCreateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
      * Delete a GroupMeeting.
      * @param {GroupMeetingDeleteArgs} args - Arguments to delete one GroupMeeting.
      * @example
@@ -13567,18 +13402,6 @@ export namespace Prisma {
 
 
   /**
-   * GroupMeeting createMany
-   */
-  export type GroupMeetingCreateManyArgs = {
-    /**
-     * The data used to create many GroupMeetings.
-     */
-    data: Enumerable<GroupMeetingCreateManyInput>
-    skipDuplicates?: boolean
-  }
-
-
-  /**
    * GroupMeeting update
    */
   export type GroupMeetingUpdateArgs = {
@@ -14055,22 +13878,6 @@ export namespace Prisma {
     create<T extends UserOnGroupMeetingCreateArgs>(
       args: SelectSubset<T, UserOnGroupMeetingCreateArgs>
     ): Prisma__UserOnGroupMeetingClient<UserOnGroupMeetingGetPayload<T>>
-
-    /**
-     * Create many UserOnGroupMeetings.
-     *     @param {UserOnGroupMeetingCreateManyArgs} args - Arguments to create many UserOnGroupMeetings.
-     *     @example
-     *     // Create many UserOnGroupMeetings
-     *     const userOnGroupMeeting = await prisma.userOnGroupMeeting.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends UserOnGroupMeetingCreateManyArgs>(
-      args?: SelectSubset<T, UserOnGroupMeetingCreateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a UserOnGroupMeeting.
@@ -14567,18 +14374,6 @@ export namespace Prisma {
 
 
   /**
-   * UserOnGroupMeeting createMany
-   */
-  export type UserOnGroupMeetingCreateManyArgs = {
-    /**
-     * The data used to create many UserOnGroupMeetings.
-     */
-    data: Enumerable<UserOnGroupMeetingCreateManyInput>
-    skipDuplicates?: boolean
-  }
-
-
-  /**
    * UserOnGroupMeeting update
    */
   export type UserOnGroupMeetingUpdateArgs = {
@@ -14690,11 +14485,1019 @@ export namespace Prisma {
 
 
   /**
+   * Model Appointment
+   */
+
+
+  export type AggregateAppointment = {
+    _count: AppointmentCountAggregateOutputType | null
+    _avg: AppointmentAvgAggregateOutputType | null
+    _sum: AppointmentSumAggregateOutputType | null
+    _min: AppointmentMinAggregateOutputType | null
+    _max: AppointmentMaxAggregateOutputType | null
+  }
+
+  export type AppointmentAvgAggregateOutputType = {
+    id: number | null
+    organizerId: number | null
+    attendeeId: number | null
+    eventTypeId: number | null
+  }
+
+  export type AppointmentSumAggregateOutputType = {
+    id: number | null
+    organizerId: number | null
+    attendeeId: number | null
+    eventTypeId: number | null
+  }
+
+  export type AppointmentMinAggregateOutputType = {
+    id: number | null
+    organizerId: number | null
+    attendeeId: number | null
+    eventTypeId: number | null
+    startTime: Date | null
+    endTime: Date | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AppointmentMaxAggregateOutputType = {
+    id: number | null
+    organizerId: number | null
+    attendeeId: number | null
+    eventTypeId: number | null
+    startTime: Date | null
+    endTime: Date | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AppointmentCountAggregateOutputType = {
+    id: number
+    organizerId: number
+    attendeeId: number
+    eventTypeId: number
+    startTime: number
+    endTime: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AppointmentAvgAggregateInputType = {
+    id?: true
+    organizerId?: true
+    attendeeId?: true
+    eventTypeId?: true
+  }
+
+  export type AppointmentSumAggregateInputType = {
+    id?: true
+    organizerId?: true
+    attendeeId?: true
+    eventTypeId?: true
+  }
+
+  export type AppointmentMinAggregateInputType = {
+    id?: true
+    organizerId?: true
+    attendeeId?: true
+    eventTypeId?: true
+    startTime?: true
+    endTime?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AppointmentMaxAggregateInputType = {
+    id?: true
+    organizerId?: true
+    attendeeId?: true
+    eventTypeId?: true
+    startTime?: true
+    endTime?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AppointmentCountAggregateInputType = {
+    id?: true
+    organizerId?: true
+    attendeeId?: true
+    eventTypeId?: true
+    startTime?: true
+    endTime?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AppointmentAggregateArgs = {
+    /**
+     * Filter which Appointment to aggregate.
+     */
+    where?: AppointmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Appointments to fetch.
+     */
+    orderBy?: Enumerable<AppointmentOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AppointmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Appointments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Appointments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Appointments
+    **/
+    _count?: true | AppointmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AppointmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AppointmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AppointmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AppointmentMaxAggregateInputType
+  }
+
+  export type GetAppointmentAggregateType<T extends AppointmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateAppointment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAppointment[P]>
+      : GetScalarType<T[P], AggregateAppointment[P]>
+  }
+
+
+
+
+  export type AppointmentGroupByArgs = {
+    where?: AppointmentWhereInput
+    orderBy?: Enumerable<AppointmentOrderByWithAggregationInput>
+    by: AppointmentScalarFieldEnum[]
+    having?: AppointmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AppointmentCountAggregateInputType | true
+    _avg?: AppointmentAvgAggregateInputType
+    _sum?: AppointmentSumAggregateInputType
+    _min?: AppointmentMinAggregateInputType
+    _max?: AppointmentMaxAggregateInputType
+  }
+
+
+  export type AppointmentGroupByOutputType = {
+    id: number
+    organizerId: number
+    attendeeId: number
+    eventTypeId: number
+    startTime: Date
+    endTime: Date
+    status: string
+    createdAt: Date
+    updatedAt: Date
+    _count: AppointmentCountAggregateOutputType | null
+    _avg: AppointmentAvgAggregateOutputType | null
+    _sum: AppointmentSumAggregateOutputType | null
+    _min: AppointmentMinAggregateOutputType | null
+    _max: AppointmentMaxAggregateOutputType | null
+  }
+
+  type GetAppointmentGroupByPayload<T extends AppointmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickArray<AppointmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AppointmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AppointmentGroupByOutputType[P]>
+            : GetScalarType<T[P], AppointmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AppointmentSelect = {
+    id?: boolean
+    organizerId?: boolean
+    attendeeId?: boolean
+    eventTypeId?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organizer?: boolean | UserArgs
+    attendee?: boolean | UserArgs
+    eventType?: boolean | EventTypeArgs
+  }
+
+
+  export type AppointmentInclude = {
+    organizer?: boolean | UserArgs
+    attendee?: boolean | UserArgs
+    eventType?: boolean | EventTypeArgs
+  }
+
+  export type AppointmentGetPayload<S extends boolean | null | undefined | AppointmentArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? Appointment :
+    S extends undefined ? never :
+    S extends { include: any } & (AppointmentArgs | AppointmentFindManyArgs)
+    ? Appointment  & {
+    [P in TruthyKeys<S['include']>]:
+        P extends 'organizer' ? UserGetPayload<S['include'][P]> :
+        P extends 'attendee' ? UserGetPayload<S['include'][P]> :
+        P extends 'eventType' ? EventTypeGetPayload<S['include'][P]> :  never
+  } 
+    : S extends { select: any } & (AppointmentArgs | AppointmentFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+        P extends 'organizer' ? UserGetPayload<S['select'][P]> :
+        P extends 'attendee' ? UserGetPayload<S['select'][P]> :
+        P extends 'eventType' ? EventTypeGetPayload<S['select'][P]> :  P extends keyof Appointment ? Appointment[P] : never
+  } 
+      : Appointment
+
+
+  type AppointmentCountArgs = 
+    Omit<AppointmentFindManyArgs, 'select' | 'include'> & {
+      select?: AppointmentCountAggregateInputType | true
+    }
+
+  export interface AppointmentDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+
+    /**
+     * Find zero or one Appointment that matches the filter.
+     * @param {AppointmentFindUniqueArgs} args - Arguments to find a Appointment
+     * @example
+     * // Get one Appointment
+     * const appointment = await prisma.appointment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends AppointmentFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, AppointmentFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Appointment'> extends True ? Prisma__AppointmentClient<AppointmentGetPayload<T>> : Prisma__AppointmentClient<AppointmentGetPayload<T> | null, null>
+
+    /**
+     * Find one Appointment that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {AppointmentFindUniqueOrThrowArgs} args - Arguments to find a Appointment
+     * @example
+     * // Get one Appointment
+     * const appointment = await prisma.appointment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends AppointmentFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, AppointmentFindUniqueOrThrowArgs>
+    ): Prisma__AppointmentClient<AppointmentGetPayload<T>>
+
+    /**
+     * Find the first Appointment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentFindFirstArgs} args - Arguments to find a Appointment
+     * @example
+     * // Get one Appointment
+     * const appointment = await prisma.appointment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends AppointmentFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, AppointmentFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Appointment'> extends True ? Prisma__AppointmentClient<AppointmentGetPayload<T>> : Prisma__AppointmentClient<AppointmentGetPayload<T> | null, null>
+
+    /**
+     * Find the first Appointment that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentFindFirstOrThrowArgs} args - Arguments to find a Appointment
+     * @example
+     * // Get one Appointment
+     * const appointment = await prisma.appointment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends AppointmentFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, AppointmentFindFirstOrThrowArgs>
+    ): Prisma__AppointmentClient<AppointmentGetPayload<T>>
+
+    /**
+     * Find zero or more Appointments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Appointments
+     * const appointments = await prisma.appointment.findMany()
+     * 
+     * // Get first 10 Appointments
+     * const appointments = await prisma.appointment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const appointmentWithIdOnly = await prisma.appointment.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends AppointmentFindManyArgs>(
+      args?: SelectSubset<T, AppointmentFindManyArgs>
+    ): Prisma.PrismaPromise<Array<AppointmentGetPayload<T>>>
+
+    /**
+     * Create a Appointment.
+     * @param {AppointmentCreateArgs} args - Arguments to create a Appointment.
+     * @example
+     * // Create one Appointment
+     * const Appointment = await prisma.appointment.create({
+     *   data: {
+     *     // ... data to create a Appointment
+     *   }
+     * })
+     * 
+    **/
+    create<T extends AppointmentCreateArgs>(
+      args: SelectSubset<T, AppointmentCreateArgs>
+    ): Prisma__AppointmentClient<AppointmentGetPayload<T>>
+
+    /**
+     * Delete a Appointment.
+     * @param {AppointmentDeleteArgs} args - Arguments to delete one Appointment.
+     * @example
+     * // Delete one Appointment
+     * const Appointment = await prisma.appointment.delete({
+     *   where: {
+     *     // ... filter to delete one Appointment
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends AppointmentDeleteArgs>(
+      args: SelectSubset<T, AppointmentDeleteArgs>
+    ): Prisma__AppointmentClient<AppointmentGetPayload<T>>
+
+    /**
+     * Update one Appointment.
+     * @param {AppointmentUpdateArgs} args - Arguments to update one Appointment.
+     * @example
+     * // Update one Appointment
+     * const appointment = await prisma.appointment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends AppointmentUpdateArgs>(
+      args: SelectSubset<T, AppointmentUpdateArgs>
+    ): Prisma__AppointmentClient<AppointmentGetPayload<T>>
+
+    /**
+     * Delete zero or more Appointments.
+     * @param {AppointmentDeleteManyArgs} args - Arguments to filter Appointments to delete.
+     * @example
+     * // Delete a few Appointments
+     * const { count } = await prisma.appointment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends AppointmentDeleteManyArgs>(
+      args?: SelectSubset<T, AppointmentDeleteManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Appointments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Appointments
+     * const appointment = await prisma.appointment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends AppointmentUpdateManyArgs>(
+      args: SelectSubset<T, AppointmentUpdateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Appointment.
+     * @param {AppointmentUpsertArgs} args - Arguments to update or create a Appointment.
+     * @example
+     * // Update or create a Appointment
+     * const appointment = await prisma.appointment.upsert({
+     *   create: {
+     *     // ... data to create a Appointment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Appointment we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends AppointmentUpsertArgs>(
+      args: SelectSubset<T, AppointmentUpsertArgs>
+    ): Prisma__AppointmentClient<AppointmentGetPayload<T>>
+
+    /**
+     * Count the number of Appointments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentCountArgs} args - Arguments to filter Appointments to count.
+     * @example
+     * // Count the number of Appointments
+     * const count = await prisma.appointment.count({
+     *   where: {
+     *     // ... the filter for the Appointments we want to count
+     *   }
+     * })
+    **/
+    count<T extends AppointmentCountArgs>(
+      args?: Subset<T, AppointmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AppointmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Appointment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AppointmentAggregateArgs>(args: Subset<T, AppointmentAggregateArgs>): Prisma.PrismaPromise<GetAppointmentAggregateType<T>>
+
+    /**
+     * Group by Appointment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AppointmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AppointmentGroupByArgs['orderBy'] }
+        : { orderBy?: AppointmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AppointmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAppointmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Appointment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__AppointmentClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    organizer<T extends UserArgs= {}>(args?: Subset<T, UserArgs>): Prisma__UserClient<UserGetPayload<T> | Null>;
+
+    attendee<T extends UserArgs= {}>(args?: Subset<T, UserArgs>): Prisma__UserClient<UserGetPayload<T> | Null>;
+
+    eventType<T extends EventTypeArgs= {}>(args?: Subset<T, EventTypeArgs>): Prisma__EventTypeClient<EventTypeGetPayload<T> | Null>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * Appointment base type for findUnique actions
+   */
+  export type AppointmentFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the Appointment
+     */
+    select?: AppointmentSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: AppointmentInclude | null
+    /**
+     * Filter, which Appointment to fetch.
+     */
+    where: AppointmentWhereUniqueInput
+  }
+
+  /**
+   * Appointment findUnique
+   */
+  export interface AppointmentFindUniqueArgs extends AppointmentFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Appointment findUniqueOrThrow
+   */
+  export type AppointmentFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the Appointment
+     */
+    select?: AppointmentSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: AppointmentInclude | null
+    /**
+     * Filter, which Appointment to fetch.
+     */
+    where: AppointmentWhereUniqueInput
+  }
+
+
+  /**
+   * Appointment base type for findFirst actions
+   */
+  export type AppointmentFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the Appointment
+     */
+    select?: AppointmentSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: AppointmentInclude | null
+    /**
+     * Filter, which Appointment to fetch.
+     */
+    where?: AppointmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Appointments to fetch.
+     */
+    orderBy?: Enumerable<AppointmentOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Appointments.
+     */
+    cursor?: AppointmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Appointments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Appointments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Appointments.
+     */
+    distinct?: Enumerable<AppointmentScalarFieldEnum>
+  }
+
+  /**
+   * Appointment findFirst
+   */
+  export interface AppointmentFindFirstArgs extends AppointmentFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Appointment findFirstOrThrow
+   */
+  export type AppointmentFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the Appointment
+     */
+    select?: AppointmentSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: AppointmentInclude | null
+    /**
+     * Filter, which Appointment to fetch.
+     */
+    where?: AppointmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Appointments to fetch.
+     */
+    orderBy?: Enumerable<AppointmentOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Appointments.
+     */
+    cursor?: AppointmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Appointments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Appointments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Appointments.
+     */
+    distinct?: Enumerable<AppointmentScalarFieldEnum>
+  }
+
+
+  /**
+   * Appointment findMany
+   */
+  export type AppointmentFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the Appointment
+     */
+    select?: AppointmentSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: AppointmentInclude | null
+    /**
+     * Filter, which Appointments to fetch.
+     */
+    where?: AppointmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Appointments to fetch.
+     */
+    orderBy?: Enumerable<AppointmentOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Appointments.
+     */
+    cursor?: AppointmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Appointments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Appointments.
+     */
+    skip?: number
+    distinct?: Enumerable<AppointmentScalarFieldEnum>
+  }
+
+
+  /**
+   * Appointment create
+   */
+  export type AppointmentCreateArgs = {
+    /**
+     * Select specific fields to fetch from the Appointment
+     */
+    select?: AppointmentSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: AppointmentInclude | null
+    /**
+     * The data needed to create a Appointment.
+     */
+    data: XOR<AppointmentCreateInput, AppointmentUncheckedCreateInput>
+  }
+
+
+  /**
+   * Appointment update
+   */
+  export type AppointmentUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the Appointment
+     */
+    select?: AppointmentSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: AppointmentInclude | null
+    /**
+     * The data needed to update a Appointment.
+     */
+    data: XOR<AppointmentUpdateInput, AppointmentUncheckedUpdateInput>
+    /**
+     * Choose, which Appointment to update.
+     */
+    where: AppointmentWhereUniqueInput
+  }
+
+
+  /**
+   * Appointment updateMany
+   */
+  export type AppointmentUpdateManyArgs = {
+    /**
+     * The data used to update Appointments.
+     */
+    data: XOR<AppointmentUpdateManyMutationInput, AppointmentUncheckedUpdateManyInput>
+    /**
+     * Filter which Appointments to update
+     */
+    where?: AppointmentWhereInput
+  }
+
+
+  /**
+   * Appointment upsert
+   */
+  export type AppointmentUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the Appointment
+     */
+    select?: AppointmentSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: AppointmentInclude | null
+    /**
+     * The filter to search for the Appointment to update in case it exists.
+     */
+    where: AppointmentWhereUniqueInput
+    /**
+     * In case the Appointment found by the `where` argument doesn't exist, create a new Appointment with this data.
+     */
+    create: XOR<AppointmentCreateInput, AppointmentUncheckedCreateInput>
+    /**
+     * In case the Appointment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AppointmentUpdateInput, AppointmentUncheckedUpdateInput>
+  }
+
+
+  /**
+   * Appointment delete
+   */
+  export type AppointmentDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the Appointment
+     */
+    select?: AppointmentSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: AppointmentInclude | null
+    /**
+     * Filter which Appointment to delete.
+     */
+    where: AppointmentWhereUniqueInput
+  }
+
+
+  /**
+   * Appointment deleteMany
+   */
+  export type AppointmentDeleteManyArgs = {
+    /**
+     * Filter which Appointments to delete
+     */
+    where?: AppointmentWhereInput
+  }
+
+
+  /**
+   * Appointment without action
+   */
+  export type AppointmentArgs = {
+    /**
+     * Select specific fields to fetch from the Appointment
+     */
+    select?: AppointmentSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: AppointmentInclude | null
+  }
+
+
+
+  /**
    * Enums
    */
 
   // Based on
   // https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
+
+  export const AppointmentScalarFieldEnum: {
+    id: 'id',
+    organizerId: 'organizerId',
+    attendeeId: 'attendeeId',
+    eventTypeId: 'eventTypeId',
+    startTime: 'startTime',
+    endTime: 'endTime',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AppointmentScalarFieldEnum = (typeof AppointmentScalarFieldEnum)[keyof typeof AppointmentScalarFieldEnum]
+
 
   export const AvailabilityScheduleScalarFieldEnum: {
     id: 'id',
@@ -14747,7 +15550,7 @@ export namespace Prisma {
     id: 'id',
     availabilityScheduleId: 'availabilityScheduleId',
     name: 'name',
-    customerId: 'customerId',
+    custormerId: 'custormerId',
     eventId: 'eventId',
     dayName: 'dayName',
     createdAt: 'createdAt',
@@ -14817,14 +15620,6 @@ export namespace Prisma {
   export type LocationScalarFieldEnum = (typeof LocationScalarFieldEnum)[keyof typeof LocationScalarFieldEnum]
 
 
-  export const QueryMode: {
-    default: 'default',
-    insensitive: 'insensitive'
-  };
-
-  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -14845,9 +15640,6 @@ export namespace Prisma {
 
 
   export const TransactionIsolationLevel: {
-    ReadUncommitted: 'ReadUncommitted',
-    ReadCommitted: 'ReadCommitted',
-    RepeatableRead: 'RepeatableRead',
     Serializable: 'Serializable'
   };
 
@@ -14870,6 +15662,11 @@ export namespace Prisma {
     name: 'name',
     username: 'username',
     firebaseUid: 'firebaseUid',
+    subscription: 'subscription',
+    mobileNumber: 'mobileNumber',
+    userLink: 'userLink',
+    job: 'job',
+    education: 'education',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -14890,11 +15687,18 @@ export namespace Prisma {
     name?: StringFilter | string
     username?: StringFilter | string
     firebaseUid?: StringFilter | string
+    subscription?: StringNullableFilter | string | null
+    mobileNumber?: StringNullableFilter | string | null
+    userLink?: StringNullableFilter | string | null
+    job?: StringNullableFilter | string | null
+    education?: StringNullableFilter | string | null
     createdAt?: DateTimeFilter | Date | string
     updatedAt?: DateTimeFilter | Date | string
     eventTypes?: EventTypeListRelationFilter
     billings?: BillingListRelationFilter
     userOnGroupMeetings?: UserOnGroupMeetingListRelationFilter
+    appointmentsOrganized?: AppointmentListRelationFilter
+    appointmentsAttending?: AppointmentListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -14902,17 +15706,26 @@ export namespace Prisma {
     name?: SortOrder
     username?: SortOrder
     firebaseUid?: SortOrder
+    subscription?: SortOrder
+    mobileNumber?: SortOrder
+    userLink?: SortOrder
+    job?: SortOrder
+    education?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     eventTypes?: EventTypeOrderByRelationAggregateInput
     billings?: BillingOrderByRelationAggregateInput
     userOnGroupMeetings?: UserOnGroupMeetingOrderByRelationAggregateInput
+    appointmentsOrganized?: AppointmentOrderByRelationAggregateInput
+    appointmentsAttending?: AppointmentOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = {
     id?: number
     username?: string
     firebaseUid?: string
+    mobileNumber?: string
+    userLink?: string
   }
 
   export type UserOrderByWithAggregationInput = {
@@ -14920,6 +15733,11 @@ export namespace Prisma {
     name?: SortOrder
     username?: SortOrder
     firebaseUid?: SortOrder
+    subscription?: SortOrder
+    mobileNumber?: SortOrder
+    userLink?: SortOrder
+    job?: SortOrder
+    education?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -14937,6 +15755,11 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter | string
     username?: StringWithAggregatesFilter | string
     firebaseUid?: StringWithAggregatesFilter | string
+    subscription?: StringNullableWithAggregatesFilter | string | null
+    mobileNumber?: StringNullableWithAggregatesFilter | string | null
+    userLink?: StringNullableWithAggregatesFilter | string | null
+    job?: StringNullableWithAggregatesFilter | string | null
+    education?: StringNullableWithAggregatesFilter | string | null
     createdAt?: DateTimeWithAggregatesFilter | Date | string
     updatedAt?: DateTimeWithAggregatesFilter | Date | string
   }
@@ -14959,6 +15782,7 @@ export namespace Prisma {
     availabilitySchedule?: XOR<AvailabilityScheduleRelationFilter, AvailabilityScheduleWhereInput> | null
     dateSlots?: DateSlotListRelationFilter
     groupMeetings?: GroupMeetingListRelationFilter
+    appointments?: AppointmentListRelationFilter
   }
 
   export type EventTypeOrderByWithRelationInput = {
@@ -14976,6 +15800,7 @@ export namespace Prisma {
     availabilitySchedule?: AvailabilityScheduleOrderByWithRelationInput
     dateSlots?: DateSlotOrderByRelationAggregateInput
     groupMeetings?: GroupMeetingOrderByRelationAggregateInput
+    appointments?: AppointmentOrderByRelationAggregateInput
   }
 
   export type EventTypeWhereUniqueInput = {
@@ -15219,13 +16044,13 @@ export namespace Prisma {
     id?: IntFilter | number
     availabilityScheduleId?: IntNullableFilter | number | null
     name?: DateTimeFilter | Date | string
-    customerId?: IntNullableFilter | number | null
+    custormerId?: IntNullableFilter | number | null
     eventId?: IntFilter | number
     dayName?: StringFilter | string
     createdAt?: DateTimeFilter | Date | string
     updatedAt?: DateTimeFilter | Date | string
     availabilitySchedule?: XOR<AvailabilityScheduleRelationFilter, AvailabilityScheduleWhereInput> | null
-    customer?: XOR<CustomerRelationFilter, CustomerWhereInput> | null
+    custormer?: XOR<CustomerRelationFilter, CustomerWhereInput> | null
     eventType?: XOR<EventTypeRelationFilter, EventTypeWhereInput>
     daySlot?: XOR<DaySlotRelationFilter, DaySlotWhereInput>
     dateOnTimeSlots?: DateOnTimeSlotListRelationFilter
@@ -15235,13 +16060,13 @@ export namespace Prisma {
     id?: SortOrder
     availabilityScheduleId?: SortOrder
     name?: SortOrder
-    customerId?: SortOrder
+    custormerId?: SortOrder
     eventId?: SortOrder
     dayName?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     availabilitySchedule?: AvailabilityScheduleOrderByWithRelationInput
-    customer?: CustomerOrderByWithRelationInput
+    custormer?: CustomerOrderByWithRelationInput
     eventType?: EventTypeOrderByWithRelationInput
     daySlot?: DaySlotOrderByWithRelationInput
     dateOnTimeSlots?: DateOnTimeSlotOrderByRelationAggregateInput
@@ -15255,7 +16080,7 @@ export namespace Prisma {
     id?: SortOrder
     availabilityScheduleId?: SortOrder
     name?: SortOrder
-    customerId?: SortOrder
+    custormerId?: SortOrder
     eventId?: SortOrder
     dayName?: SortOrder
     createdAt?: SortOrder
@@ -15274,7 +16099,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter | number
     availabilityScheduleId?: IntNullableWithAggregatesFilter | number | null
     name?: DateTimeWithAggregatesFilter | Date | string
-    customerId?: IntNullableWithAggregatesFilter | number | null
+    custormerId?: IntNullableWithAggregatesFilter | number | null
     eventId?: IntWithAggregatesFilter | number
     dayName?: StringWithAggregatesFilter | string
     createdAt?: DateTimeWithAggregatesFilter | Date | string
@@ -15613,15 +16438,91 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter | Date | string
   }
 
+  export type AppointmentWhereInput = {
+    AND?: Enumerable<AppointmentWhereInput>
+    OR?: Enumerable<AppointmentWhereInput>
+    NOT?: Enumerable<AppointmentWhereInput>
+    id?: IntFilter | number
+    organizerId?: IntFilter | number
+    attendeeId?: IntFilter | number
+    eventTypeId?: IntFilter | number
+    startTime?: DateTimeFilter | Date | string
+    endTime?: DateTimeFilter | Date | string
+    status?: StringFilter | string
+    createdAt?: DateTimeFilter | Date | string
+    updatedAt?: DateTimeFilter | Date | string
+    organizer?: XOR<UserRelationFilter, UserWhereInput>
+    attendee?: XOR<UserRelationFilter, UserWhereInput>
+    eventType?: XOR<EventTypeRelationFilter, EventTypeWhereInput>
+  }
+
+  export type AppointmentOrderByWithRelationInput = {
+    id?: SortOrder
+    organizerId?: SortOrder
+    attendeeId?: SortOrder
+    eventTypeId?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    organizer?: UserOrderByWithRelationInput
+    attendee?: UserOrderByWithRelationInput
+    eventType?: EventTypeOrderByWithRelationInput
+  }
+
+  export type AppointmentWhereUniqueInput = {
+    id?: number
+  }
+
+  export type AppointmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    organizerId?: SortOrder
+    attendeeId?: SortOrder
+    eventTypeId?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AppointmentCountOrderByAggregateInput
+    _avg?: AppointmentAvgOrderByAggregateInput
+    _max?: AppointmentMaxOrderByAggregateInput
+    _min?: AppointmentMinOrderByAggregateInput
+    _sum?: AppointmentSumOrderByAggregateInput
+  }
+
+  export type AppointmentScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<AppointmentScalarWhereWithAggregatesInput>
+    OR?: Enumerable<AppointmentScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<AppointmentScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    organizerId?: IntWithAggregatesFilter | number
+    attendeeId?: IntWithAggregatesFilter | number
+    eventTypeId?: IntWithAggregatesFilter | number
+    startTime?: DateTimeWithAggregatesFilter | Date | string
+    endTime?: DateTimeWithAggregatesFilter | Date | string
+    status?: StringWithAggregatesFilter | string
+    createdAt?: DateTimeWithAggregatesFilter | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter | Date | string
+  }
+
   export type UserCreateInput = {
     name: string
     username: string
     firebaseUid: string
+    subscription?: string | null
+    mobileNumber?: string | null
+    userLink?: string | null
+    job?: string | null
+    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     eventTypes?: EventTypeCreateNestedManyWithoutUserInput
     billings?: BillingCreateNestedManyWithoutUserInput
     userOnGroupMeetings?: UserOnGroupMeetingCreateNestedManyWithoutUserInput
+    appointmentsOrganized?: AppointmentCreateNestedManyWithoutOrganizerInput
+    appointmentsAttending?: AppointmentCreateNestedManyWithoutAttendeeInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -15629,22 +16530,36 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
+    subscription?: string | null
+    mobileNumber?: string | null
+    userLink?: string | null
+    job?: string | null
+    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     eventTypes?: EventTypeUncheckedCreateNestedManyWithoutUserInput
     billings?: BillingUncheckedCreateNestedManyWithoutUserInput
     userOnGroupMeetings?: UserOnGroupMeetingUncheckedCreateNestedManyWithoutUserInput
+    appointmentsOrganized?: AppointmentUncheckedCreateNestedManyWithoutOrganizerInput
+    appointmentsAttending?: AppointmentUncheckedCreateNestedManyWithoutAttendeeInput
   }
 
   export type UserUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
+    subscription?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userLink?: NullableStringFieldUpdateOperationsInput | string | null
+    job?: NullableStringFieldUpdateOperationsInput | string | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventTypes?: EventTypeUpdateManyWithoutUserNestedInput
     billings?: BillingUpdateManyWithoutUserNestedInput
     userOnGroupMeetings?: UserOnGroupMeetingUpdateManyWithoutUserNestedInput
+    appointmentsOrganized?: AppointmentUpdateManyWithoutOrganizerNestedInput
+    appointmentsAttending?: AppointmentUpdateManyWithoutAttendeeNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -15652,26 +16567,29 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
+    subscription?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userLink?: NullableStringFieldUpdateOperationsInput | string | null
+    job?: NullableStringFieldUpdateOperationsInput | string | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventTypes?: EventTypeUncheckedUpdateManyWithoutUserNestedInput
     billings?: BillingUncheckedUpdateManyWithoutUserNestedInput
     userOnGroupMeetings?: UserOnGroupMeetingUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserCreateManyInput = {
-    id?: number
-    name: string
-    username: string
-    firebaseUid: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
+    appointmentsOrganized?: AppointmentUncheckedUpdateManyWithoutOrganizerNestedInput
+    appointmentsAttending?: AppointmentUncheckedUpdateManyWithoutAttendeeNestedInput
   }
 
   export type UserUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
+    subscription?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userLink?: NullableStringFieldUpdateOperationsInput | string | null
+    job?: NullableStringFieldUpdateOperationsInput | string | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15681,6 +16599,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
+    subscription?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userLink?: NullableStringFieldUpdateOperationsInput | string | null
+    job?: NullableStringFieldUpdateOperationsInput | string | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15697,6 +16620,7 @@ export namespace Prisma {
     availabilitySchedule?: AvailabilityScheduleCreateNestedOneWithoutEventTypesInput
     dateSlots?: DateSlotCreateNestedManyWithoutEventTypeInput
     groupMeetings?: GroupMeetingCreateNestedManyWithoutEventTypeInput
+    appointments?: AppointmentCreateNestedManyWithoutEventTypeInput
   }
 
   export type EventTypeUncheckedCreateInput = {
@@ -15712,6 +16636,7 @@ export namespace Prisma {
     eventTypeOnLocations?: EventTypeOnLocationUncheckedCreateNestedManyWithoutEventTypeInput
     dateSlots?: DateSlotUncheckedCreateNestedManyWithoutEventTypeInput
     groupMeetings?: GroupMeetingUncheckedCreateNestedManyWithoutEventTypeInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutEventTypeInput
   }
 
   export type EventTypeUpdateInput = {
@@ -15726,6 +16651,7 @@ export namespace Prisma {
     availabilitySchedule?: AvailabilityScheduleUpdateOneWithoutEventTypesNestedInput
     dateSlots?: DateSlotUpdateManyWithoutEventTypeNestedInput
     groupMeetings?: GroupMeetingUpdateManyWithoutEventTypeNestedInput
+    appointments?: AppointmentUpdateManyWithoutEventTypeNestedInput
   }
 
   export type EventTypeUncheckedUpdateInput = {
@@ -15741,18 +16667,7 @@ export namespace Prisma {
     eventTypeOnLocations?: EventTypeOnLocationUncheckedUpdateManyWithoutEventTypeNestedInput
     dateSlots?: DateSlotUncheckedUpdateManyWithoutEventTypeNestedInput
     groupMeetings?: GroupMeetingUncheckedUpdateManyWithoutEventTypeNestedInput
-  }
-
-  export type EventTypeCreateManyInput = {
-    id?: number
-    name: string
-    userId: number
-    description: string
-    price: number
-    timeDuration: number
-    availabilityScheduleId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
+    appointments?: AppointmentUncheckedUpdateManyWithoutEventTypeNestedInput
   }
 
   export type EventTypeUpdateManyMutationInput = {
@@ -15810,13 +16725,6 @@ export namespace Prisma {
     groupMeetings?: GroupMeetingUncheckedUpdateManyWithoutLocationNestedInput
   }
 
-  export type LocationCreateManyInput = {
-    id?: number
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type LocationUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15858,14 +16766,6 @@ export namespace Prisma {
     locationId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type EventTypeOnLocationCreateManyInput = {
-    id?: number
-    eventTypeId: number
-    locationId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type EventTypeOnLocationUpdateManyMutationInput = {
@@ -15919,14 +16819,6 @@ export namespace Prisma {
     dateSlots?: DateSlotUncheckedUpdateManyWithoutAvailabilityScheduleNestedInput
   }
 
-  export type AvailabilityScheduleCreateManyInput = {
-    id?: number
-    name: string
-    timezone: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type AvailabilityScheduleUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -15972,13 +16864,6 @@ export namespace Prisma {
     dateSlots?: DateSlotUncheckedUpdateManyWithoutDaySlotNestedInput
   }
 
-  export type DaySlotCreateManyInput = {
-    id?: number
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type DaySlotUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15997,7 +16882,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     availabilitySchedule?: AvailabilityScheduleCreateNestedOneWithoutDateSlotsInput
-    customer?: CustomerCreateNestedOneWithoutDateSlotsInput
+    custormer?: CustomerCreateNestedOneWithoutDateSlotsInput
     eventType: EventTypeCreateNestedOneWithoutDateSlotsInput
     daySlot: DaySlotCreateNestedOneWithoutDateSlotsInput
     dateOnTimeSlots?: DateOnTimeSlotCreateNestedManyWithoutDateSlotInput
@@ -16007,7 +16892,7 @@ export namespace Prisma {
     id?: number
     availabilityScheduleId?: number | null
     name: Date | string
-    customerId?: number | null
+    custormerId?: number | null
     eventId: number
     dayName: string
     createdAt?: Date | string
@@ -16020,7 +16905,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     availabilitySchedule?: AvailabilityScheduleUpdateOneWithoutDateSlotsNestedInput
-    customer?: CustomerUpdateOneWithoutDateSlotsNestedInput
+    custormer?: CustomerUpdateOneWithoutDateSlotsNestedInput
     eventType?: EventTypeUpdateOneRequiredWithoutDateSlotsNestedInput
     daySlot?: DaySlotUpdateOneRequiredWithoutDateSlotsNestedInput
     dateOnTimeSlots?: DateOnTimeSlotUpdateManyWithoutDateSlotNestedInput
@@ -16030,23 +16915,12 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     availabilityScheduleId?: NullableIntFieldUpdateOperationsInput | number | null
     name?: DateTimeFieldUpdateOperationsInput | Date | string
-    customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    custormerId?: NullableIntFieldUpdateOperationsInput | number | null
     eventId?: IntFieldUpdateOperationsInput | number
     dayName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateOnTimeSlots?: DateOnTimeSlotUncheckedUpdateManyWithoutDateSlotNestedInput
-  }
-
-  export type DateSlotCreateManyInput = {
-    id?: number
-    availabilityScheduleId?: number | null
-    name: Date | string
-    customerId?: number | null
-    eventId: number
-    dayName: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type DateSlotUpdateManyMutationInput = {
@@ -16059,7 +16933,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     availabilityScheduleId?: NullableIntFieldUpdateOperationsInput | number | null
     name?: DateTimeFieldUpdateOperationsInput | Date | string
-    customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    custormerId?: NullableIntFieldUpdateOperationsInput | number | null
     eventId?: IntFieldUpdateOperationsInput | number
     dayName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16098,15 +16972,6 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DateOnTimeSlotCreateManyInput = {
-    id?: number
-    timeSlotId: number
-    dateSlotId: number
-    status?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type DateOnTimeSlotUpdateManyMutationInput = {
@@ -16158,14 +17023,6 @@ export namespace Prisma {
     dateOnTimeSlots?: DateOnTimeSlotUncheckedUpdateManyWithoutTimeSlotNestedInput
   }
 
-  export type TimeSlotCreateManyInput = {
-    id?: number
-    startTime: number
-    endTime: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type TimeSlotUpdateManyMutationInput = {
     startTime?: IntFieldUpdateOperationsInput | number
     endTime?: IntFieldUpdateOperationsInput | number
@@ -16187,7 +17044,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     groupMeetings?: GroupMeetingCreateNestedManyWithoutCustomerInput
-    dateSlots?: DateSlotCreateNestedManyWithoutCustomerInput
+    dateSlots?: DateSlotCreateNestedManyWithoutCustormerInput
   }
 
   export type CustomerUncheckedCreateInput = {
@@ -16197,7 +17054,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     groupMeetings?: GroupMeetingUncheckedCreateNestedManyWithoutCustomerInput
-    dateSlots?: DateSlotUncheckedCreateNestedManyWithoutCustomerInput
+    dateSlots?: DateSlotUncheckedCreateNestedManyWithoutCustormerInput
   }
 
   export type CustomerUpdateInput = {
@@ -16206,7 +17063,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groupMeetings?: GroupMeetingUpdateManyWithoutCustomerNestedInput
-    dateSlots?: DateSlotUpdateManyWithoutCustomerNestedInput
+    dateSlots?: DateSlotUpdateManyWithoutCustormerNestedInput
   }
 
   export type CustomerUncheckedUpdateInput = {
@@ -16216,15 +17073,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groupMeetings?: GroupMeetingUncheckedUpdateManyWithoutCustomerNestedInput
-    dateSlots?: DateSlotUncheckedUpdateManyWithoutCustomerNestedInput
-  }
-
-  export type CustomerCreateManyInput = {
-    id?: number
-    name: string
-    email: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
+    dateSlots?: DateSlotUncheckedUpdateManyWithoutCustormerNestedInput
   }
 
   export type CustomerUpdateManyMutationInput = {
@@ -16278,16 +17127,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type BillingCreateManyInput = {
-    id?: number
-    subscriptionMonth: number
-    subscriptionPrice: number
-    userId: number
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type BillingUpdateManyMutationInput = {
@@ -16354,17 +17193,6 @@ export namespace Prisma {
     userOnGroupMeetings?: UserOnGroupMeetingUncheckedUpdateManyWithoutGroupMeetingNestedInput
   }
 
-  export type GroupMeetingCreateManyInput = {
-    id?: number
-    locationId: number
-    customerId: number
-    totalPrice: number
-    timezone: string
-    eventTypeId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type GroupMeetingUpdateManyMutationInput = {
     totalPrice?: IntFieldUpdateOperationsInput | number
     timezone?: StringFieldUpdateOperationsInput | string
@@ -16413,14 +17241,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserOnGroupMeetingCreateManyInput = {
-    id?: number
-    userId: number
-    groupMeetingId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type UserOnGroupMeetingUpdateManyMutationInput = {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16430,6 +17250,72 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
     groupMeetingId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppointmentCreateInput = {
+    startTime: Date | string
+    endTime: Date | string
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organizer: UserCreateNestedOneWithoutAppointmentsOrganizedInput
+    attendee: UserCreateNestedOneWithoutAppointmentsAttendingInput
+    eventType: EventTypeCreateNestedOneWithoutAppointmentsInput
+  }
+
+  export type AppointmentUncheckedCreateInput = {
+    id?: number
+    organizerId: number
+    attendeeId: number
+    eventTypeId: number
+    startTime: Date | string
+    endTime: Date | string
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AppointmentUpdateInput = {
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organizer?: UserUpdateOneRequiredWithoutAppointmentsOrganizedNestedInput
+    attendee?: UserUpdateOneRequiredWithoutAppointmentsAttendingNestedInput
+    eventType?: EventTypeUpdateOneRequiredWithoutAppointmentsNestedInput
+  }
+
+  export type AppointmentUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    organizerId?: IntFieldUpdateOperationsInput | number
+    attendeeId?: IntFieldUpdateOperationsInput | number
+    eventTypeId?: IntFieldUpdateOperationsInput | number
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppointmentUpdateManyMutationInput = {
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppointmentUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    organizerId?: IntFieldUpdateOperationsInput | number
+    attendeeId?: IntFieldUpdateOperationsInput | number
+    eventTypeId?: IntFieldUpdateOperationsInput | number
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16456,8 +17342,21 @@ export namespace Prisma {
     contains?: string
     startsWith?: string
     endsWith?: string
-    mode?: QueryMode
     not?: NestedStringFilter | string
+  }
+
+  export type StringNullableFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | null
+    notIn?: Enumerable<string> | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    not?: NestedStringNullableFilter | string | null
   }
 
   export type DateTimeFilter = {
@@ -16489,6 +17388,12 @@ export namespace Prisma {
     none?: UserOnGroupMeetingWhereInput
   }
 
+  export type AppointmentListRelationFilter = {
+    every?: AppointmentWhereInput
+    some?: AppointmentWhereInput
+    none?: AppointmentWhereInput
+  }
+
   export type EventTypeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -16501,11 +17406,20 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type AppointmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     username?: SortOrder
     firebaseUid?: SortOrder
+    subscription?: SortOrder
+    mobileNumber?: SortOrder
+    userLink?: SortOrder
+    job?: SortOrder
+    education?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16519,6 +17433,11 @@ export namespace Prisma {
     name?: SortOrder
     username?: SortOrder
     firebaseUid?: SortOrder
+    subscription?: SortOrder
+    mobileNumber?: SortOrder
+    userLink?: SortOrder
+    job?: SortOrder
+    education?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16528,6 +17447,11 @@ export namespace Prisma {
     name?: SortOrder
     username?: SortOrder
     firebaseUid?: SortOrder
+    subscription?: SortOrder
+    mobileNumber?: SortOrder
+    userLink?: SortOrder
+    job?: SortOrder
+    education?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16563,11 +17487,27 @@ export namespace Prisma {
     contains?: string
     startsWith?: string
     endsWith?: string
-    mode?: QueryMode
     not?: NestedStringWithAggregatesFilter | string
     _count?: NestedIntFilter
     _min?: NestedStringFilter
     _max?: NestedStringFilter
+  }
+
+  export type StringNullableWithAggregatesFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | null
+    notIn?: Enumerable<string> | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    not?: NestedStringNullableWithAggregatesFilter | string | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedStringNullableFilter
+    _max?: NestedStringNullableFilter
   }
 
   export type DateTimeWithAggregatesFilter = {
@@ -16868,7 +17808,7 @@ export namespace Prisma {
     id?: SortOrder
     availabilityScheduleId?: SortOrder
     name?: SortOrder
-    customerId?: SortOrder
+    custormerId?: SortOrder
     eventId?: SortOrder
     dayName?: SortOrder
     createdAt?: SortOrder
@@ -16878,7 +17818,7 @@ export namespace Prisma {
   export type DateSlotAvgOrderByAggregateInput = {
     id?: SortOrder
     availabilityScheduleId?: SortOrder
-    customerId?: SortOrder
+    custormerId?: SortOrder
     eventId?: SortOrder
   }
 
@@ -16886,7 +17826,7 @@ export namespace Prisma {
     id?: SortOrder
     availabilityScheduleId?: SortOrder
     name?: SortOrder
-    customerId?: SortOrder
+    custormerId?: SortOrder
     eventId?: SortOrder
     dayName?: SortOrder
     createdAt?: SortOrder
@@ -16897,7 +17837,7 @@ export namespace Prisma {
     id?: SortOrder
     availabilityScheduleId?: SortOrder
     name?: SortOrder
-    customerId?: SortOrder
+    custormerId?: SortOrder
     eventId?: SortOrder
     dayName?: SortOrder
     createdAt?: SortOrder
@@ -16907,7 +17847,7 @@ export namespace Prisma {
   export type DateSlotSumOrderByAggregateInput = {
     id?: SortOrder
     availabilityScheduleId?: SortOrder
-    customerId?: SortOrder
+    custormerId?: SortOrder
     eventId?: SortOrder
   }
 
@@ -17167,50 +18107,122 @@ export namespace Prisma {
     groupMeetingId?: SortOrder
   }
 
+  export type AppointmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    organizerId?: SortOrder
+    attendeeId?: SortOrder
+    eventTypeId?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppointmentAvgOrderByAggregateInput = {
+    id?: SortOrder
+    organizerId?: SortOrder
+    attendeeId?: SortOrder
+    eventTypeId?: SortOrder
+  }
+
+  export type AppointmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    organizerId?: SortOrder
+    attendeeId?: SortOrder
+    eventTypeId?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppointmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    organizerId?: SortOrder
+    attendeeId?: SortOrder
+    eventTypeId?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppointmentSumOrderByAggregateInput = {
+    id?: SortOrder
+    organizerId?: SortOrder
+    attendeeId?: SortOrder
+    eventTypeId?: SortOrder
+  }
+
   export type EventTypeCreateNestedManyWithoutUserInput = {
     create?: XOR<Enumerable<EventTypeCreateWithoutUserInput>, Enumerable<EventTypeUncheckedCreateWithoutUserInput>>
     connectOrCreate?: Enumerable<EventTypeCreateOrConnectWithoutUserInput>
-    createMany?: EventTypeCreateManyUserInputEnvelope
     connect?: Enumerable<EventTypeWhereUniqueInput>
   }
 
   export type BillingCreateNestedManyWithoutUserInput = {
     create?: XOR<Enumerable<BillingCreateWithoutUserInput>, Enumerable<BillingUncheckedCreateWithoutUserInput>>
     connectOrCreate?: Enumerable<BillingCreateOrConnectWithoutUserInput>
-    createMany?: BillingCreateManyUserInputEnvelope
     connect?: Enumerable<BillingWhereUniqueInput>
   }
 
   export type UserOnGroupMeetingCreateNestedManyWithoutUserInput = {
     create?: XOR<Enumerable<UserOnGroupMeetingCreateWithoutUserInput>, Enumerable<UserOnGroupMeetingUncheckedCreateWithoutUserInput>>
     connectOrCreate?: Enumerable<UserOnGroupMeetingCreateOrConnectWithoutUserInput>
-    createMany?: UserOnGroupMeetingCreateManyUserInputEnvelope
     connect?: Enumerable<UserOnGroupMeetingWhereUniqueInput>
+  }
+
+  export type AppointmentCreateNestedManyWithoutOrganizerInput = {
+    create?: XOR<Enumerable<AppointmentCreateWithoutOrganizerInput>, Enumerable<AppointmentUncheckedCreateWithoutOrganizerInput>>
+    connectOrCreate?: Enumerable<AppointmentCreateOrConnectWithoutOrganizerInput>
+    connect?: Enumerable<AppointmentWhereUniqueInput>
+  }
+
+  export type AppointmentCreateNestedManyWithoutAttendeeInput = {
+    create?: XOR<Enumerable<AppointmentCreateWithoutAttendeeInput>, Enumerable<AppointmentUncheckedCreateWithoutAttendeeInput>>
+    connectOrCreate?: Enumerable<AppointmentCreateOrConnectWithoutAttendeeInput>
+    connect?: Enumerable<AppointmentWhereUniqueInput>
   }
 
   export type EventTypeUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<Enumerable<EventTypeCreateWithoutUserInput>, Enumerable<EventTypeUncheckedCreateWithoutUserInput>>
     connectOrCreate?: Enumerable<EventTypeCreateOrConnectWithoutUserInput>
-    createMany?: EventTypeCreateManyUserInputEnvelope
     connect?: Enumerable<EventTypeWhereUniqueInput>
   }
 
   export type BillingUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<Enumerable<BillingCreateWithoutUserInput>, Enumerable<BillingUncheckedCreateWithoutUserInput>>
     connectOrCreate?: Enumerable<BillingCreateOrConnectWithoutUserInput>
-    createMany?: BillingCreateManyUserInputEnvelope
     connect?: Enumerable<BillingWhereUniqueInput>
   }
 
   export type UserOnGroupMeetingUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<Enumerable<UserOnGroupMeetingCreateWithoutUserInput>, Enumerable<UserOnGroupMeetingUncheckedCreateWithoutUserInput>>
     connectOrCreate?: Enumerable<UserOnGroupMeetingCreateOrConnectWithoutUserInput>
-    createMany?: UserOnGroupMeetingCreateManyUserInputEnvelope
     connect?: Enumerable<UserOnGroupMeetingWhereUniqueInput>
+  }
+
+  export type AppointmentUncheckedCreateNestedManyWithoutOrganizerInput = {
+    create?: XOR<Enumerable<AppointmentCreateWithoutOrganizerInput>, Enumerable<AppointmentUncheckedCreateWithoutOrganizerInput>>
+    connectOrCreate?: Enumerable<AppointmentCreateOrConnectWithoutOrganizerInput>
+    connect?: Enumerable<AppointmentWhereUniqueInput>
+  }
+
+  export type AppointmentUncheckedCreateNestedManyWithoutAttendeeInput = {
+    create?: XOR<Enumerable<AppointmentCreateWithoutAttendeeInput>, Enumerable<AppointmentUncheckedCreateWithoutAttendeeInput>>
+    connectOrCreate?: Enumerable<AppointmentCreateOrConnectWithoutAttendeeInput>
+    connect?: Enumerable<AppointmentWhereUniqueInput>
   }
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -17221,7 +18233,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<EventTypeCreateWithoutUserInput>, Enumerable<EventTypeUncheckedCreateWithoutUserInput>>
     connectOrCreate?: Enumerable<EventTypeCreateOrConnectWithoutUserInput>
     upsert?: Enumerable<EventTypeUpsertWithWhereUniqueWithoutUserInput>
-    createMany?: EventTypeCreateManyUserInputEnvelope
     set?: Enumerable<EventTypeWhereUniqueInput>
     disconnect?: Enumerable<EventTypeWhereUniqueInput>
     delete?: Enumerable<EventTypeWhereUniqueInput>
@@ -17235,7 +18246,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<BillingCreateWithoutUserInput>, Enumerable<BillingUncheckedCreateWithoutUserInput>>
     connectOrCreate?: Enumerable<BillingCreateOrConnectWithoutUserInput>
     upsert?: Enumerable<BillingUpsertWithWhereUniqueWithoutUserInput>
-    createMany?: BillingCreateManyUserInputEnvelope
     set?: Enumerable<BillingWhereUniqueInput>
     disconnect?: Enumerable<BillingWhereUniqueInput>
     delete?: Enumerable<BillingWhereUniqueInput>
@@ -17249,7 +18259,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<UserOnGroupMeetingCreateWithoutUserInput>, Enumerable<UserOnGroupMeetingUncheckedCreateWithoutUserInput>>
     connectOrCreate?: Enumerable<UserOnGroupMeetingCreateOrConnectWithoutUserInput>
     upsert?: Enumerable<UserOnGroupMeetingUpsertWithWhereUniqueWithoutUserInput>
-    createMany?: UserOnGroupMeetingCreateManyUserInputEnvelope
     set?: Enumerable<UserOnGroupMeetingWhereUniqueInput>
     disconnect?: Enumerable<UserOnGroupMeetingWhereUniqueInput>
     delete?: Enumerable<UserOnGroupMeetingWhereUniqueInput>
@@ -17257,6 +18266,32 @@ export namespace Prisma {
     update?: Enumerable<UserOnGroupMeetingUpdateWithWhereUniqueWithoutUserInput>
     updateMany?: Enumerable<UserOnGroupMeetingUpdateManyWithWhereWithoutUserInput>
     deleteMany?: Enumerable<UserOnGroupMeetingScalarWhereInput>
+  }
+
+  export type AppointmentUpdateManyWithoutOrganizerNestedInput = {
+    create?: XOR<Enumerable<AppointmentCreateWithoutOrganizerInput>, Enumerable<AppointmentUncheckedCreateWithoutOrganizerInput>>
+    connectOrCreate?: Enumerable<AppointmentCreateOrConnectWithoutOrganizerInput>
+    upsert?: Enumerable<AppointmentUpsertWithWhereUniqueWithoutOrganizerInput>
+    set?: Enumerable<AppointmentWhereUniqueInput>
+    disconnect?: Enumerable<AppointmentWhereUniqueInput>
+    delete?: Enumerable<AppointmentWhereUniqueInput>
+    connect?: Enumerable<AppointmentWhereUniqueInput>
+    update?: Enumerable<AppointmentUpdateWithWhereUniqueWithoutOrganizerInput>
+    updateMany?: Enumerable<AppointmentUpdateManyWithWhereWithoutOrganizerInput>
+    deleteMany?: Enumerable<AppointmentScalarWhereInput>
+  }
+
+  export type AppointmentUpdateManyWithoutAttendeeNestedInput = {
+    create?: XOR<Enumerable<AppointmentCreateWithoutAttendeeInput>, Enumerable<AppointmentUncheckedCreateWithoutAttendeeInput>>
+    connectOrCreate?: Enumerable<AppointmentCreateOrConnectWithoutAttendeeInput>
+    upsert?: Enumerable<AppointmentUpsertWithWhereUniqueWithoutAttendeeInput>
+    set?: Enumerable<AppointmentWhereUniqueInput>
+    disconnect?: Enumerable<AppointmentWhereUniqueInput>
+    delete?: Enumerable<AppointmentWhereUniqueInput>
+    connect?: Enumerable<AppointmentWhereUniqueInput>
+    update?: Enumerable<AppointmentUpdateWithWhereUniqueWithoutAttendeeInput>
+    updateMany?: Enumerable<AppointmentUpdateManyWithWhereWithoutAttendeeInput>
+    deleteMany?: Enumerable<AppointmentScalarWhereInput>
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -17271,7 +18306,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<EventTypeCreateWithoutUserInput>, Enumerable<EventTypeUncheckedCreateWithoutUserInput>>
     connectOrCreate?: Enumerable<EventTypeCreateOrConnectWithoutUserInput>
     upsert?: Enumerable<EventTypeUpsertWithWhereUniqueWithoutUserInput>
-    createMany?: EventTypeCreateManyUserInputEnvelope
     set?: Enumerable<EventTypeWhereUniqueInput>
     disconnect?: Enumerable<EventTypeWhereUniqueInput>
     delete?: Enumerable<EventTypeWhereUniqueInput>
@@ -17285,7 +18319,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<BillingCreateWithoutUserInput>, Enumerable<BillingUncheckedCreateWithoutUserInput>>
     connectOrCreate?: Enumerable<BillingCreateOrConnectWithoutUserInput>
     upsert?: Enumerable<BillingUpsertWithWhereUniqueWithoutUserInput>
-    createMany?: BillingCreateManyUserInputEnvelope
     set?: Enumerable<BillingWhereUniqueInput>
     disconnect?: Enumerable<BillingWhereUniqueInput>
     delete?: Enumerable<BillingWhereUniqueInput>
@@ -17299,7 +18332,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<UserOnGroupMeetingCreateWithoutUserInput>, Enumerable<UserOnGroupMeetingUncheckedCreateWithoutUserInput>>
     connectOrCreate?: Enumerable<UserOnGroupMeetingCreateOrConnectWithoutUserInput>
     upsert?: Enumerable<UserOnGroupMeetingUpsertWithWhereUniqueWithoutUserInput>
-    createMany?: UserOnGroupMeetingCreateManyUserInputEnvelope
     set?: Enumerable<UserOnGroupMeetingWhereUniqueInput>
     disconnect?: Enumerable<UserOnGroupMeetingWhereUniqueInput>
     delete?: Enumerable<UserOnGroupMeetingWhereUniqueInput>
@@ -17307,6 +18339,32 @@ export namespace Prisma {
     update?: Enumerable<UserOnGroupMeetingUpdateWithWhereUniqueWithoutUserInput>
     updateMany?: Enumerable<UserOnGroupMeetingUpdateManyWithWhereWithoutUserInput>
     deleteMany?: Enumerable<UserOnGroupMeetingScalarWhereInput>
+  }
+
+  export type AppointmentUncheckedUpdateManyWithoutOrganizerNestedInput = {
+    create?: XOR<Enumerable<AppointmentCreateWithoutOrganizerInput>, Enumerable<AppointmentUncheckedCreateWithoutOrganizerInput>>
+    connectOrCreate?: Enumerable<AppointmentCreateOrConnectWithoutOrganizerInput>
+    upsert?: Enumerable<AppointmentUpsertWithWhereUniqueWithoutOrganizerInput>
+    set?: Enumerable<AppointmentWhereUniqueInput>
+    disconnect?: Enumerable<AppointmentWhereUniqueInput>
+    delete?: Enumerable<AppointmentWhereUniqueInput>
+    connect?: Enumerable<AppointmentWhereUniqueInput>
+    update?: Enumerable<AppointmentUpdateWithWhereUniqueWithoutOrganizerInput>
+    updateMany?: Enumerable<AppointmentUpdateManyWithWhereWithoutOrganizerInput>
+    deleteMany?: Enumerable<AppointmentScalarWhereInput>
+  }
+
+  export type AppointmentUncheckedUpdateManyWithoutAttendeeNestedInput = {
+    create?: XOR<Enumerable<AppointmentCreateWithoutAttendeeInput>, Enumerable<AppointmentUncheckedCreateWithoutAttendeeInput>>
+    connectOrCreate?: Enumerable<AppointmentCreateOrConnectWithoutAttendeeInput>
+    upsert?: Enumerable<AppointmentUpsertWithWhereUniqueWithoutAttendeeInput>
+    set?: Enumerable<AppointmentWhereUniqueInput>
+    disconnect?: Enumerable<AppointmentWhereUniqueInput>
+    delete?: Enumerable<AppointmentWhereUniqueInput>
+    connect?: Enumerable<AppointmentWhereUniqueInput>
+    update?: Enumerable<AppointmentUpdateWithWhereUniqueWithoutAttendeeInput>
+    updateMany?: Enumerable<AppointmentUpdateManyWithWhereWithoutAttendeeInput>
+    deleteMany?: Enumerable<AppointmentScalarWhereInput>
   }
 
   export type UserCreateNestedOneWithoutEventTypesInput = {
@@ -17318,7 +18376,6 @@ export namespace Prisma {
   export type EventTypeOnLocationCreateNestedManyWithoutEventTypeInput = {
     create?: XOR<Enumerable<EventTypeOnLocationCreateWithoutEventTypeInput>, Enumerable<EventTypeOnLocationUncheckedCreateWithoutEventTypeInput>>
     connectOrCreate?: Enumerable<EventTypeOnLocationCreateOrConnectWithoutEventTypeInput>
-    createMany?: EventTypeOnLocationCreateManyEventTypeInputEnvelope
     connect?: Enumerable<EventTypeOnLocationWhereUniqueInput>
   }
 
@@ -17331,36 +18388,43 @@ export namespace Prisma {
   export type DateSlotCreateNestedManyWithoutEventTypeInput = {
     create?: XOR<Enumerable<DateSlotCreateWithoutEventTypeInput>, Enumerable<DateSlotUncheckedCreateWithoutEventTypeInput>>
     connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutEventTypeInput>
-    createMany?: DateSlotCreateManyEventTypeInputEnvelope
     connect?: Enumerable<DateSlotWhereUniqueInput>
   }
 
   export type GroupMeetingCreateNestedManyWithoutEventTypeInput = {
     create?: XOR<Enumerable<GroupMeetingCreateWithoutEventTypeInput>, Enumerable<GroupMeetingUncheckedCreateWithoutEventTypeInput>>
     connectOrCreate?: Enumerable<GroupMeetingCreateOrConnectWithoutEventTypeInput>
-    createMany?: GroupMeetingCreateManyEventTypeInputEnvelope
     connect?: Enumerable<GroupMeetingWhereUniqueInput>
+  }
+
+  export type AppointmentCreateNestedManyWithoutEventTypeInput = {
+    create?: XOR<Enumerable<AppointmentCreateWithoutEventTypeInput>, Enumerable<AppointmentUncheckedCreateWithoutEventTypeInput>>
+    connectOrCreate?: Enumerable<AppointmentCreateOrConnectWithoutEventTypeInput>
+    connect?: Enumerable<AppointmentWhereUniqueInput>
   }
 
   export type EventTypeOnLocationUncheckedCreateNestedManyWithoutEventTypeInput = {
     create?: XOR<Enumerable<EventTypeOnLocationCreateWithoutEventTypeInput>, Enumerable<EventTypeOnLocationUncheckedCreateWithoutEventTypeInput>>
     connectOrCreate?: Enumerable<EventTypeOnLocationCreateOrConnectWithoutEventTypeInput>
-    createMany?: EventTypeOnLocationCreateManyEventTypeInputEnvelope
     connect?: Enumerable<EventTypeOnLocationWhereUniqueInput>
   }
 
   export type DateSlotUncheckedCreateNestedManyWithoutEventTypeInput = {
     create?: XOR<Enumerable<DateSlotCreateWithoutEventTypeInput>, Enumerable<DateSlotUncheckedCreateWithoutEventTypeInput>>
     connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutEventTypeInput>
-    createMany?: DateSlotCreateManyEventTypeInputEnvelope
     connect?: Enumerable<DateSlotWhereUniqueInput>
   }
 
   export type GroupMeetingUncheckedCreateNestedManyWithoutEventTypeInput = {
     create?: XOR<Enumerable<GroupMeetingCreateWithoutEventTypeInput>, Enumerable<GroupMeetingUncheckedCreateWithoutEventTypeInput>>
     connectOrCreate?: Enumerable<GroupMeetingCreateOrConnectWithoutEventTypeInput>
-    createMany?: GroupMeetingCreateManyEventTypeInputEnvelope
     connect?: Enumerable<GroupMeetingWhereUniqueInput>
+  }
+
+  export type AppointmentUncheckedCreateNestedManyWithoutEventTypeInput = {
+    create?: XOR<Enumerable<AppointmentCreateWithoutEventTypeInput>, Enumerable<AppointmentUncheckedCreateWithoutEventTypeInput>>
+    connectOrCreate?: Enumerable<AppointmentCreateOrConnectWithoutEventTypeInput>
+    connect?: Enumerable<AppointmentWhereUniqueInput>
   }
 
   export type UserUpdateOneRequiredWithoutEventTypesNestedInput = {
@@ -17375,7 +18439,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<EventTypeOnLocationCreateWithoutEventTypeInput>, Enumerable<EventTypeOnLocationUncheckedCreateWithoutEventTypeInput>>
     connectOrCreate?: Enumerable<EventTypeOnLocationCreateOrConnectWithoutEventTypeInput>
     upsert?: Enumerable<EventTypeOnLocationUpsertWithWhereUniqueWithoutEventTypeInput>
-    createMany?: EventTypeOnLocationCreateManyEventTypeInputEnvelope
     set?: Enumerable<EventTypeOnLocationWhereUniqueInput>
     disconnect?: Enumerable<EventTypeOnLocationWhereUniqueInput>
     delete?: Enumerable<EventTypeOnLocationWhereUniqueInput>
@@ -17399,7 +18462,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<DateSlotCreateWithoutEventTypeInput>, Enumerable<DateSlotUncheckedCreateWithoutEventTypeInput>>
     connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutEventTypeInput>
     upsert?: Enumerable<DateSlotUpsertWithWhereUniqueWithoutEventTypeInput>
-    createMany?: DateSlotCreateManyEventTypeInputEnvelope
     set?: Enumerable<DateSlotWhereUniqueInput>
     disconnect?: Enumerable<DateSlotWhereUniqueInput>
     delete?: Enumerable<DateSlotWhereUniqueInput>
@@ -17413,7 +18475,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<GroupMeetingCreateWithoutEventTypeInput>, Enumerable<GroupMeetingUncheckedCreateWithoutEventTypeInput>>
     connectOrCreate?: Enumerable<GroupMeetingCreateOrConnectWithoutEventTypeInput>
     upsert?: Enumerable<GroupMeetingUpsertWithWhereUniqueWithoutEventTypeInput>
-    createMany?: GroupMeetingCreateManyEventTypeInputEnvelope
     set?: Enumerable<GroupMeetingWhereUniqueInput>
     disconnect?: Enumerable<GroupMeetingWhereUniqueInput>
     delete?: Enumerable<GroupMeetingWhereUniqueInput>
@@ -17421,6 +18482,19 @@ export namespace Prisma {
     update?: Enumerable<GroupMeetingUpdateWithWhereUniqueWithoutEventTypeInput>
     updateMany?: Enumerable<GroupMeetingUpdateManyWithWhereWithoutEventTypeInput>
     deleteMany?: Enumerable<GroupMeetingScalarWhereInput>
+  }
+
+  export type AppointmentUpdateManyWithoutEventTypeNestedInput = {
+    create?: XOR<Enumerable<AppointmentCreateWithoutEventTypeInput>, Enumerable<AppointmentUncheckedCreateWithoutEventTypeInput>>
+    connectOrCreate?: Enumerable<AppointmentCreateOrConnectWithoutEventTypeInput>
+    upsert?: Enumerable<AppointmentUpsertWithWhereUniqueWithoutEventTypeInput>
+    set?: Enumerable<AppointmentWhereUniqueInput>
+    disconnect?: Enumerable<AppointmentWhereUniqueInput>
+    delete?: Enumerable<AppointmentWhereUniqueInput>
+    connect?: Enumerable<AppointmentWhereUniqueInput>
+    update?: Enumerable<AppointmentUpdateWithWhereUniqueWithoutEventTypeInput>
+    updateMany?: Enumerable<AppointmentUpdateManyWithWhereWithoutEventTypeInput>
+    deleteMany?: Enumerable<AppointmentScalarWhereInput>
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -17435,7 +18509,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<EventTypeOnLocationCreateWithoutEventTypeInput>, Enumerable<EventTypeOnLocationUncheckedCreateWithoutEventTypeInput>>
     connectOrCreate?: Enumerable<EventTypeOnLocationCreateOrConnectWithoutEventTypeInput>
     upsert?: Enumerable<EventTypeOnLocationUpsertWithWhereUniqueWithoutEventTypeInput>
-    createMany?: EventTypeOnLocationCreateManyEventTypeInputEnvelope
     set?: Enumerable<EventTypeOnLocationWhereUniqueInput>
     disconnect?: Enumerable<EventTypeOnLocationWhereUniqueInput>
     delete?: Enumerable<EventTypeOnLocationWhereUniqueInput>
@@ -17449,7 +18522,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<DateSlotCreateWithoutEventTypeInput>, Enumerable<DateSlotUncheckedCreateWithoutEventTypeInput>>
     connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutEventTypeInput>
     upsert?: Enumerable<DateSlotUpsertWithWhereUniqueWithoutEventTypeInput>
-    createMany?: DateSlotCreateManyEventTypeInputEnvelope
     set?: Enumerable<DateSlotWhereUniqueInput>
     disconnect?: Enumerable<DateSlotWhereUniqueInput>
     delete?: Enumerable<DateSlotWhereUniqueInput>
@@ -17463,7 +18535,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<GroupMeetingCreateWithoutEventTypeInput>, Enumerable<GroupMeetingUncheckedCreateWithoutEventTypeInput>>
     connectOrCreate?: Enumerable<GroupMeetingCreateOrConnectWithoutEventTypeInput>
     upsert?: Enumerable<GroupMeetingUpsertWithWhereUniqueWithoutEventTypeInput>
-    createMany?: GroupMeetingCreateManyEventTypeInputEnvelope
     set?: Enumerable<GroupMeetingWhereUniqueInput>
     disconnect?: Enumerable<GroupMeetingWhereUniqueInput>
     delete?: Enumerable<GroupMeetingWhereUniqueInput>
@@ -17473,31 +18544,40 @@ export namespace Prisma {
     deleteMany?: Enumerable<GroupMeetingScalarWhereInput>
   }
 
+  export type AppointmentUncheckedUpdateManyWithoutEventTypeNestedInput = {
+    create?: XOR<Enumerable<AppointmentCreateWithoutEventTypeInput>, Enumerable<AppointmentUncheckedCreateWithoutEventTypeInput>>
+    connectOrCreate?: Enumerable<AppointmentCreateOrConnectWithoutEventTypeInput>
+    upsert?: Enumerable<AppointmentUpsertWithWhereUniqueWithoutEventTypeInput>
+    set?: Enumerable<AppointmentWhereUniqueInput>
+    disconnect?: Enumerable<AppointmentWhereUniqueInput>
+    delete?: Enumerable<AppointmentWhereUniqueInput>
+    connect?: Enumerable<AppointmentWhereUniqueInput>
+    update?: Enumerable<AppointmentUpdateWithWhereUniqueWithoutEventTypeInput>
+    updateMany?: Enumerable<AppointmentUpdateManyWithWhereWithoutEventTypeInput>
+    deleteMany?: Enumerable<AppointmentScalarWhereInput>
+  }
+
   export type EventTypeOnLocationCreateNestedManyWithoutLocationInput = {
     create?: XOR<Enumerable<EventTypeOnLocationCreateWithoutLocationInput>, Enumerable<EventTypeOnLocationUncheckedCreateWithoutLocationInput>>
     connectOrCreate?: Enumerable<EventTypeOnLocationCreateOrConnectWithoutLocationInput>
-    createMany?: EventTypeOnLocationCreateManyLocationInputEnvelope
     connect?: Enumerable<EventTypeOnLocationWhereUniqueInput>
   }
 
   export type GroupMeetingCreateNestedManyWithoutLocationInput = {
     create?: XOR<Enumerable<GroupMeetingCreateWithoutLocationInput>, Enumerable<GroupMeetingUncheckedCreateWithoutLocationInput>>
     connectOrCreate?: Enumerable<GroupMeetingCreateOrConnectWithoutLocationInput>
-    createMany?: GroupMeetingCreateManyLocationInputEnvelope
     connect?: Enumerable<GroupMeetingWhereUniqueInput>
   }
 
   export type EventTypeOnLocationUncheckedCreateNestedManyWithoutLocationInput = {
     create?: XOR<Enumerable<EventTypeOnLocationCreateWithoutLocationInput>, Enumerable<EventTypeOnLocationUncheckedCreateWithoutLocationInput>>
     connectOrCreate?: Enumerable<EventTypeOnLocationCreateOrConnectWithoutLocationInput>
-    createMany?: EventTypeOnLocationCreateManyLocationInputEnvelope
     connect?: Enumerable<EventTypeOnLocationWhereUniqueInput>
   }
 
   export type GroupMeetingUncheckedCreateNestedManyWithoutLocationInput = {
     create?: XOR<Enumerable<GroupMeetingCreateWithoutLocationInput>, Enumerable<GroupMeetingUncheckedCreateWithoutLocationInput>>
     connectOrCreate?: Enumerable<GroupMeetingCreateOrConnectWithoutLocationInput>
-    createMany?: GroupMeetingCreateManyLocationInputEnvelope
     connect?: Enumerable<GroupMeetingWhereUniqueInput>
   }
 
@@ -17505,7 +18585,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<EventTypeOnLocationCreateWithoutLocationInput>, Enumerable<EventTypeOnLocationUncheckedCreateWithoutLocationInput>>
     connectOrCreate?: Enumerable<EventTypeOnLocationCreateOrConnectWithoutLocationInput>
     upsert?: Enumerable<EventTypeOnLocationUpsertWithWhereUniqueWithoutLocationInput>
-    createMany?: EventTypeOnLocationCreateManyLocationInputEnvelope
     set?: Enumerable<EventTypeOnLocationWhereUniqueInput>
     disconnect?: Enumerable<EventTypeOnLocationWhereUniqueInput>
     delete?: Enumerable<EventTypeOnLocationWhereUniqueInput>
@@ -17519,7 +18598,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<GroupMeetingCreateWithoutLocationInput>, Enumerable<GroupMeetingUncheckedCreateWithoutLocationInput>>
     connectOrCreate?: Enumerable<GroupMeetingCreateOrConnectWithoutLocationInput>
     upsert?: Enumerable<GroupMeetingUpsertWithWhereUniqueWithoutLocationInput>
-    createMany?: GroupMeetingCreateManyLocationInputEnvelope
     set?: Enumerable<GroupMeetingWhereUniqueInput>
     disconnect?: Enumerable<GroupMeetingWhereUniqueInput>
     delete?: Enumerable<GroupMeetingWhereUniqueInput>
@@ -17533,7 +18611,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<EventTypeOnLocationCreateWithoutLocationInput>, Enumerable<EventTypeOnLocationUncheckedCreateWithoutLocationInput>>
     connectOrCreate?: Enumerable<EventTypeOnLocationCreateOrConnectWithoutLocationInput>
     upsert?: Enumerable<EventTypeOnLocationUpsertWithWhereUniqueWithoutLocationInput>
-    createMany?: EventTypeOnLocationCreateManyLocationInputEnvelope
     set?: Enumerable<EventTypeOnLocationWhereUniqueInput>
     disconnect?: Enumerable<EventTypeOnLocationWhereUniqueInput>
     delete?: Enumerable<EventTypeOnLocationWhereUniqueInput>
@@ -17547,7 +18624,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<GroupMeetingCreateWithoutLocationInput>, Enumerable<GroupMeetingUncheckedCreateWithoutLocationInput>>
     connectOrCreate?: Enumerable<GroupMeetingCreateOrConnectWithoutLocationInput>
     upsert?: Enumerable<GroupMeetingUpsertWithWhereUniqueWithoutLocationInput>
-    createMany?: GroupMeetingCreateManyLocationInputEnvelope
     set?: Enumerable<GroupMeetingWhereUniqueInput>
     disconnect?: Enumerable<GroupMeetingWhereUniqueInput>
     delete?: Enumerable<GroupMeetingWhereUniqueInput>
@@ -17588,28 +18664,24 @@ export namespace Prisma {
   export type EventTypeCreateNestedManyWithoutAvailabilityScheduleInput = {
     create?: XOR<Enumerable<EventTypeCreateWithoutAvailabilityScheduleInput>, Enumerable<EventTypeUncheckedCreateWithoutAvailabilityScheduleInput>>
     connectOrCreate?: Enumerable<EventTypeCreateOrConnectWithoutAvailabilityScheduleInput>
-    createMany?: EventTypeCreateManyAvailabilityScheduleInputEnvelope
     connect?: Enumerable<EventTypeWhereUniqueInput>
   }
 
   export type DateSlotCreateNestedManyWithoutAvailabilityScheduleInput = {
     create?: XOR<Enumerable<DateSlotCreateWithoutAvailabilityScheduleInput>, Enumerable<DateSlotUncheckedCreateWithoutAvailabilityScheduleInput>>
     connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutAvailabilityScheduleInput>
-    createMany?: DateSlotCreateManyAvailabilityScheduleInputEnvelope
     connect?: Enumerable<DateSlotWhereUniqueInput>
   }
 
   export type EventTypeUncheckedCreateNestedManyWithoutAvailabilityScheduleInput = {
     create?: XOR<Enumerable<EventTypeCreateWithoutAvailabilityScheduleInput>, Enumerable<EventTypeUncheckedCreateWithoutAvailabilityScheduleInput>>
     connectOrCreate?: Enumerable<EventTypeCreateOrConnectWithoutAvailabilityScheduleInput>
-    createMany?: EventTypeCreateManyAvailabilityScheduleInputEnvelope
     connect?: Enumerable<EventTypeWhereUniqueInput>
   }
 
   export type DateSlotUncheckedCreateNestedManyWithoutAvailabilityScheduleInput = {
     create?: XOR<Enumerable<DateSlotCreateWithoutAvailabilityScheduleInput>, Enumerable<DateSlotUncheckedCreateWithoutAvailabilityScheduleInput>>
     connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutAvailabilityScheduleInput>
-    createMany?: DateSlotCreateManyAvailabilityScheduleInputEnvelope
     connect?: Enumerable<DateSlotWhereUniqueInput>
   }
 
@@ -17617,7 +18689,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<EventTypeCreateWithoutAvailabilityScheduleInput>, Enumerable<EventTypeUncheckedCreateWithoutAvailabilityScheduleInput>>
     connectOrCreate?: Enumerable<EventTypeCreateOrConnectWithoutAvailabilityScheduleInput>
     upsert?: Enumerable<EventTypeUpsertWithWhereUniqueWithoutAvailabilityScheduleInput>
-    createMany?: EventTypeCreateManyAvailabilityScheduleInputEnvelope
     set?: Enumerable<EventTypeWhereUniqueInput>
     disconnect?: Enumerable<EventTypeWhereUniqueInput>
     delete?: Enumerable<EventTypeWhereUniqueInput>
@@ -17631,7 +18702,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<DateSlotCreateWithoutAvailabilityScheduleInput>, Enumerable<DateSlotUncheckedCreateWithoutAvailabilityScheduleInput>>
     connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutAvailabilityScheduleInput>
     upsert?: Enumerable<DateSlotUpsertWithWhereUniqueWithoutAvailabilityScheduleInput>
-    createMany?: DateSlotCreateManyAvailabilityScheduleInputEnvelope
     set?: Enumerable<DateSlotWhereUniqueInput>
     disconnect?: Enumerable<DateSlotWhereUniqueInput>
     delete?: Enumerable<DateSlotWhereUniqueInput>
@@ -17645,7 +18715,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<EventTypeCreateWithoutAvailabilityScheduleInput>, Enumerable<EventTypeUncheckedCreateWithoutAvailabilityScheduleInput>>
     connectOrCreate?: Enumerable<EventTypeCreateOrConnectWithoutAvailabilityScheduleInput>
     upsert?: Enumerable<EventTypeUpsertWithWhereUniqueWithoutAvailabilityScheduleInput>
-    createMany?: EventTypeCreateManyAvailabilityScheduleInputEnvelope
     set?: Enumerable<EventTypeWhereUniqueInput>
     disconnect?: Enumerable<EventTypeWhereUniqueInput>
     delete?: Enumerable<EventTypeWhereUniqueInput>
@@ -17659,7 +18728,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<DateSlotCreateWithoutAvailabilityScheduleInput>, Enumerable<DateSlotUncheckedCreateWithoutAvailabilityScheduleInput>>
     connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutAvailabilityScheduleInput>
     upsert?: Enumerable<DateSlotUpsertWithWhereUniqueWithoutAvailabilityScheduleInput>
-    createMany?: DateSlotCreateManyAvailabilityScheduleInputEnvelope
     set?: Enumerable<DateSlotWhereUniqueInput>
     disconnect?: Enumerable<DateSlotWhereUniqueInput>
     delete?: Enumerable<DateSlotWhereUniqueInput>
@@ -17672,14 +18740,12 @@ export namespace Prisma {
   export type DateSlotCreateNestedManyWithoutDaySlotInput = {
     create?: XOR<Enumerable<DateSlotCreateWithoutDaySlotInput>, Enumerable<DateSlotUncheckedCreateWithoutDaySlotInput>>
     connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutDaySlotInput>
-    createMany?: DateSlotCreateManyDaySlotInputEnvelope
     connect?: Enumerable<DateSlotWhereUniqueInput>
   }
 
   export type DateSlotUncheckedCreateNestedManyWithoutDaySlotInput = {
     create?: XOR<Enumerable<DateSlotCreateWithoutDaySlotInput>, Enumerable<DateSlotUncheckedCreateWithoutDaySlotInput>>
     connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutDaySlotInput>
-    createMany?: DateSlotCreateManyDaySlotInputEnvelope
     connect?: Enumerable<DateSlotWhereUniqueInput>
   }
 
@@ -17687,7 +18753,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<DateSlotCreateWithoutDaySlotInput>, Enumerable<DateSlotUncheckedCreateWithoutDaySlotInput>>
     connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutDaySlotInput>
     upsert?: Enumerable<DateSlotUpsertWithWhereUniqueWithoutDaySlotInput>
-    createMany?: DateSlotCreateManyDaySlotInputEnvelope
     set?: Enumerable<DateSlotWhereUniqueInput>
     disconnect?: Enumerable<DateSlotWhereUniqueInput>
     delete?: Enumerable<DateSlotWhereUniqueInput>
@@ -17701,7 +18766,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<DateSlotCreateWithoutDaySlotInput>, Enumerable<DateSlotUncheckedCreateWithoutDaySlotInput>>
     connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutDaySlotInput>
     upsert?: Enumerable<DateSlotUpsertWithWhereUniqueWithoutDaySlotInput>
-    createMany?: DateSlotCreateManyDaySlotInputEnvelope
     set?: Enumerable<DateSlotWhereUniqueInput>
     disconnect?: Enumerable<DateSlotWhereUniqueInput>
     delete?: Enumerable<DateSlotWhereUniqueInput>
@@ -17738,14 +18802,12 @@ export namespace Prisma {
   export type DateOnTimeSlotCreateNestedManyWithoutDateSlotInput = {
     create?: XOR<Enumerable<DateOnTimeSlotCreateWithoutDateSlotInput>, Enumerable<DateOnTimeSlotUncheckedCreateWithoutDateSlotInput>>
     connectOrCreate?: Enumerable<DateOnTimeSlotCreateOrConnectWithoutDateSlotInput>
-    createMany?: DateOnTimeSlotCreateManyDateSlotInputEnvelope
     connect?: Enumerable<DateOnTimeSlotWhereUniqueInput>
   }
 
   export type DateOnTimeSlotUncheckedCreateNestedManyWithoutDateSlotInput = {
     create?: XOR<Enumerable<DateOnTimeSlotCreateWithoutDateSlotInput>, Enumerable<DateOnTimeSlotUncheckedCreateWithoutDateSlotInput>>
     connectOrCreate?: Enumerable<DateOnTimeSlotCreateOrConnectWithoutDateSlotInput>
-    createMany?: DateOnTimeSlotCreateManyDateSlotInputEnvelope
     connect?: Enumerable<DateOnTimeSlotWhereUniqueInput>
   }
 
@@ -17789,7 +18851,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<DateOnTimeSlotCreateWithoutDateSlotInput>, Enumerable<DateOnTimeSlotUncheckedCreateWithoutDateSlotInput>>
     connectOrCreate?: Enumerable<DateOnTimeSlotCreateOrConnectWithoutDateSlotInput>
     upsert?: Enumerable<DateOnTimeSlotUpsertWithWhereUniqueWithoutDateSlotInput>
-    createMany?: DateOnTimeSlotCreateManyDateSlotInputEnvelope
     set?: Enumerable<DateOnTimeSlotWhereUniqueInput>
     disconnect?: Enumerable<DateOnTimeSlotWhereUniqueInput>
     delete?: Enumerable<DateOnTimeSlotWhereUniqueInput>
@@ -17803,7 +18864,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<DateOnTimeSlotCreateWithoutDateSlotInput>, Enumerable<DateOnTimeSlotUncheckedCreateWithoutDateSlotInput>>
     connectOrCreate?: Enumerable<DateOnTimeSlotCreateOrConnectWithoutDateSlotInput>
     upsert?: Enumerable<DateOnTimeSlotUpsertWithWhereUniqueWithoutDateSlotInput>
-    createMany?: DateOnTimeSlotCreateManyDateSlotInputEnvelope
     set?: Enumerable<DateOnTimeSlotWhereUniqueInput>
     disconnect?: Enumerable<DateOnTimeSlotWhereUniqueInput>
     delete?: Enumerable<DateOnTimeSlotWhereUniqueInput>
@@ -17844,14 +18904,12 @@ export namespace Prisma {
   export type DateOnTimeSlotCreateNestedManyWithoutTimeSlotInput = {
     create?: XOR<Enumerable<DateOnTimeSlotCreateWithoutTimeSlotInput>, Enumerable<DateOnTimeSlotUncheckedCreateWithoutTimeSlotInput>>
     connectOrCreate?: Enumerable<DateOnTimeSlotCreateOrConnectWithoutTimeSlotInput>
-    createMany?: DateOnTimeSlotCreateManyTimeSlotInputEnvelope
     connect?: Enumerable<DateOnTimeSlotWhereUniqueInput>
   }
 
   export type DateOnTimeSlotUncheckedCreateNestedManyWithoutTimeSlotInput = {
     create?: XOR<Enumerable<DateOnTimeSlotCreateWithoutTimeSlotInput>, Enumerable<DateOnTimeSlotUncheckedCreateWithoutTimeSlotInput>>
     connectOrCreate?: Enumerable<DateOnTimeSlotCreateOrConnectWithoutTimeSlotInput>
-    createMany?: DateOnTimeSlotCreateManyTimeSlotInputEnvelope
     connect?: Enumerable<DateOnTimeSlotWhereUniqueInput>
   }
 
@@ -17859,7 +18917,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<DateOnTimeSlotCreateWithoutTimeSlotInput>, Enumerable<DateOnTimeSlotUncheckedCreateWithoutTimeSlotInput>>
     connectOrCreate?: Enumerable<DateOnTimeSlotCreateOrConnectWithoutTimeSlotInput>
     upsert?: Enumerable<DateOnTimeSlotUpsertWithWhereUniqueWithoutTimeSlotInput>
-    createMany?: DateOnTimeSlotCreateManyTimeSlotInputEnvelope
     set?: Enumerable<DateOnTimeSlotWhereUniqueInput>
     disconnect?: Enumerable<DateOnTimeSlotWhereUniqueInput>
     delete?: Enumerable<DateOnTimeSlotWhereUniqueInput>
@@ -17873,7 +18930,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<DateOnTimeSlotCreateWithoutTimeSlotInput>, Enumerable<DateOnTimeSlotUncheckedCreateWithoutTimeSlotInput>>
     connectOrCreate?: Enumerable<DateOnTimeSlotCreateOrConnectWithoutTimeSlotInput>
     upsert?: Enumerable<DateOnTimeSlotUpsertWithWhereUniqueWithoutTimeSlotInput>
-    createMany?: DateOnTimeSlotCreateManyTimeSlotInputEnvelope
     set?: Enumerable<DateOnTimeSlotWhereUniqueInput>
     disconnect?: Enumerable<DateOnTimeSlotWhereUniqueInput>
     delete?: Enumerable<DateOnTimeSlotWhereUniqueInput>
@@ -17886,28 +18942,24 @@ export namespace Prisma {
   export type GroupMeetingCreateNestedManyWithoutCustomerInput = {
     create?: XOR<Enumerable<GroupMeetingCreateWithoutCustomerInput>, Enumerable<GroupMeetingUncheckedCreateWithoutCustomerInput>>
     connectOrCreate?: Enumerable<GroupMeetingCreateOrConnectWithoutCustomerInput>
-    createMany?: GroupMeetingCreateManyCustomerInputEnvelope
     connect?: Enumerable<GroupMeetingWhereUniqueInput>
   }
 
-  export type DateSlotCreateNestedManyWithoutCustomerInput = {
-    create?: XOR<Enumerable<DateSlotCreateWithoutCustomerInput>, Enumerable<DateSlotUncheckedCreateWithoutCustomerInput>>
-    connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutCustomerInput>
-    createMany?: DateSlotCreateManyCustomerInputEnvelope
+  export type DateSlotCreateNestedManyWithoutCustormerInput = {
+    create?: XOR<Enumerable<DateSlotCreateWithoutCustormerInput>, Enumerable<DateSlotUncheckedCreateWithoutCustormerInput>>
+    connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutCustormerInput>
     connect?: Enumerable<DateSlotWhereUniqueInput>
   }
 
   export type GroupMeetingUncheckedCreateNestedManyWithoutCustomerInput = {
     create?: XOR<Enumerable<GroupMeetingCreateWithoutCustomerInput>, Enumerable<GroupMeetingUncheckedCreateWithoutCustomerInput>>
     connectOrCreate?: Enumerable<GroupMeetingCreateOrConnectWithoutCustomerInput>
-    createMany?: GroupMeetingCreateManyCustomerInputEnvelope
     connect?: Enumerable<GroupMeetingWhereUniqueInput>
   }
 
-  export type DateSlotUncheckedCreateNestedManyWithoutCustomerInput = {
-    create?: XOR<Enumerable<DateSlotCreateWithoutCustomerInput>, Enumerable<DateSlotUncheckedCreateWithoutCustomerInput>>
-    connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutCustomerInput>
-    createMany?: DateSlotCreateManyCustomerInputEnvelope
+  export type DateSlotUncheckedCreateNestedManyWithoutCustormerInput = {
+    create?: XOR<Enumerable<DateSlotCreateWithoutCustormerInput>, Enumerable<DateSlotUncheckedCreateWithoutCustormerInput>>
+    connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutCustormerInput>
     connect?: Enumerable<DateSlotWhereUniqueInput>
   }
 
@@ -17915,7 +18967,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<GroupMeetingCreateWithoutCustomerInput>, Enumerable<GroupMeetingUncheckedCreateWithoutCustomerInput>>
     connectOrCreate?: Enumerable<GroupMeetingCreateOrConnectWithoutCustomerInput>
     upsert?: Enumerable<GroupMeetingUpsertWithWhereUniqueWithoutCustomerInput>
-    createMany?: GroupMeetingCreateManyCustomerInputEnvelope
     set?: Enumerable<GroupMeetingWhereUniqueInput>
     disconnect?: Enumerable<GroupMeetingWhereUniqueInput>
     delete?: Enumerable<GroupMeetingWhereUniqueInput>
@@ -17925,17 +18976,16 @@ export namespace Prisma {
     deleteMany?: Enumerable<GroupMeetingScalarWhereInput>
   }
 
-  export type DateSlotUpdateManyWithoutCustomerNestedInput = {
-    create?: XOR<Enumerable<DateSlotCreateWithoutCustomerInput>, Enumerable<DateSlotUncheckedCreateWithoutCustomerInput>>
-    connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutCustomerInput>
-    upsert?: Enumerable<DateSlotUpsertWithWhereUniqueWithoutCustomerInput>
-    createMany?: DateSlotCreateManyCustomerInputEnvelope
+  export type DateSlotUpdateManyWithoutCustormerNestedInput = {
+    create?: XOR<Enumerable<DateSlotCreateWithoutCustormerInput>, Enumerable<DateSlotUncheckedCreateWithoutCustormerInput>>
+    connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutCustormerInput>
+    upsert?: Enumerable<DateSlotUpsertWithWhereUniqueWithoutCustormerInput>
     set?: Enumerable<DateSlotWhereUniqueInput>
     disconnect?: Enumerable<DateSlotWhereUniqueInput>
     delete?: Enumerable<DateSlotWhereUniqueInput>
     connect?: Enumerable<DateSlotWhereUniqueInput>
-    update?: Enumerable<DateSlotUpdateWithWhereUniqueWithoutCustomerInput>
-    updateMany?: Enumerable<DateSlotUpdateManyWithWhereWithoutCustomerInput>
+    update?: Enumerable<DateSlotUpdateWithWhereUniqueWithoutCustormerInput>
+    updateMany?: Enumerable<DateSlotUpdateManyWithWhereWithoutCustormerInput>
     deleteMany?: Enumerable<DateSlotScalarWhereInput>
   }
 
@@ -17943,7 +18993,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<GroupMeetingCreateWithoutCustomerInput>, Enumerable<GroupMeetingUncheckedCreateWithoutCustomerInput>>
     connectOrCreate?: Enumerable<GroupMeetingCreateOrConnectWithoutCustomerInput>
     upsert?: Enumerable<GroupMeetingUpsertWithWhereUniqueWithoutCustomerInput>
-    createMany?: GroupMeetingCreateManyCustomerInputEnvelope
     set?: Enumerable<GroupMeetingWhereUniqueInput>
     disconnect?: Enumerable<GroupMeetingWhereUniqueInput>
     delete?: Enumerable<GroupMeetingWhereUniqueInput>
@@ -17953,17 +19002,16 @@ export namespace Prisma {
     deleteMany?: Enumerable<GroupMeetingScalarWhereInput>
   }
 
-  export type DateSlotUncheckedUpdateManyWithoutCustomerNestedInput = {
-    create?: XOR<Enumerable<DateSlotCreateWithoutCustomerInput>, Enumerable<DateSlotUncheckedCreateWithoutCustomerInput>>
-    connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutCustomerInput>
-    upsert?: Enumerable<DateSlotUpsertWithWhereUniqueWithoutCustomerInput>
-    createMany?: DateSlotCreateManyCustomerInputEnvelope
+  export type DateSlotUncheckedUpdateManyWithoutCustormerNestedInput = {
+    create?: XOR<Enumerable<DateSlotCreateWithoutCustormerInput>, Enumerable<DateSlotUncheckedCreateWithoutCustormerInput>>
+    connectOrCreate?: Enumerable<DateSlotCreateOrConnectWithoutCustormerInput>
+    upsert?: Enumerable<DateSlotUpsertWithWhereUniqueWithoutCustormerInput>
     set?: Enumerable<DateSlotWhereUniqueInput>
     disconnect?: Enumerable<DateSlotWhereUniqueInput>
     delete?: Enumerable<DateSlotWhereUniqueInput>
     connect?: Enumerable<DateSlotWhereUniqueInput>
-    update?: Enumerable<DateSlotUpdateWithWhereUniqueWithoutCustomerInput>
-    updateMany?: Enumerable<DateSlotUpdateManyWithWhereWithoutCustomerInput>
+    update?: Enumerable<DateSlotUpdateWithWhereUniqueWithoutCustormerInput>
+    updateMany?: Enumerable<DateSlotUpdateManyWithWhereWithoutCustormerInput>
     deleteMany?: Enumerable<DateSlotScalarWhereInput>
   }
 
@@ -18002,14 +19050,12 @@ export namespace Prisma {
   export type UserOnGroupMeetingCreateNestedManyWithoutGroupMeetingInput = {
     create?: XOR<Enumerable<UserOnGroupMeetingCreateWithoutGroupMeetingInput>, Enumerable<UserOnGroupMeetingUncheckedCreateWithoutGroupMeetingInput>>
     connectOrCreate?: Enumerable<UserOnGroupMeetingCreateOrConnectWithoutGroupMeetingInput>
-    createMany?: UserOnGroupMeetingCreateManyGroupMeetingInputEnvelope
     connect?: Enumerable<UserOnGroupMeetingWhereUniqueInput>
   }
 
   export type UserOnGroupMeetingUncheckedCreateNestedManyWithoutGroupMeetingInput = {
     create?: XOR<Enumerable<UserOnGroupMeetingCreateWithoutGroupMeetingInput>, Enumerable<UserOnGroupMeetingUncheckedCreateWithoutGroupMeetingInput>>
     connectOrCreate?: Enumerable<UserOnGroupMeetingCreateOrConnectWithoutGroupMeetingInput>
-    createMany?: UserOnGroupMeetingCreateManyGroupMeetingInputEnvelope
     connect?: Enumerable<UserOnGroupMeetingWhereUniqueInput>
   }
 
@@ -18041,7 +19087,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<UserOnGroupMeetingCreateWithoutGroupMeetingInput>, Enumerable<UserOnGroupMeetingUncheckedCreateWithoutGroupMeetingInput>>
     connectOrCreate?: Enumerable<UserOnGroupMeetingCreateOrConnectWithoutGroupMeetingInput>
     upsert?: Enumerable<UserOnGroupMeetingUpsertWithWhereUniqueWithoutGroupMeetingInput>
-    createMany?: UserOnGroupMeetingCreateManyGroupMeetingInputEnvelope
     set?: Enumerable<UserOnGroupMeetingWhereUniqueInput>
     disconnect?: Enumerable<UserOnGroupMeetingWhereUniqueInput>
     delete?: Enumerable<UserOnGroupMeetingWhereUniqueInput>
@@ -18055,7 +19100,6 @@ export namespace Prisma {
     create?: XOR<Enumerable<UserOnGroupMeetingCreateWithoutGroupMeetingInput>, Enumerable<UserOnGroupMeetingUncheckedCreateWithoutGroupMeetingInput>>
     connectOrCreate?: Enumerable<UserOnGroupMeetingCreateOrConnectWithoutGroupMeetingInput>
     upsert?: Enumerable<UserOnGroupMeetingUpsertWithWhereUniqueWithoutGroupMeetingInput>
-    createMany?: UserOnGroupMeetingCreateManyGroupMeetingInputEnvelope
     set?: Enumerable<UserOnGroupMeetingWhereUniqueInput>
     disconnect?: Enumerable<UserOnGroupMeetingWhereUniqueInput>
     delete?: Enumerable<UserOnGroupMeetingWhereUniqueInput>
@@ -18093,6 +19137,48 @@ export namespace Prisma {
     update?: XOR<GroupMeetingUpdateWithoutUserOnGroupMeetingsInput, GroupMeetingUncheckedUpdateWithoutUserOnGroupMeetingsInput>
   }
 
+  export type UserCreateNestedOneWithoutAppointmentsOrganizedInput = {
+    create?: XOR<UserCreateWithoutAppointmentsOrganizedInput, UserUncheckedCreateWithoutAppointmentsOrganizedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAppointmentsOrganizedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutAppointmentsAttendingInput = {
+    create?: XOR<UserCreateWithoutAppointmentsAttendingInput, UserUncheckedCreateWithoutAppointmentsAttendingInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAppointmentsAttendingInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EventTypeCreateNestedOneWithoutAppointmentsInput = {
+    create?: XOR<EventTypeCreateWithoutAppointmentsInput, EventTypeUncheckedCreateWithoutAppointmentsInput>
+    connectOrCreate?: EventTypeCreateOrConnectWithoutAppointmentsInput
+    connect?: EventTypeWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutAppointmentsOrganizedNestedInput = {
+    create?: XOR<UserCreateWithoutAppointmentsOrganizedInput, UserUncheckedCreateWithoutAppointmentsOrganizedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAppointmentsOrganizedInput
+    upsert?: UserUpsertWithoutAppointmentsOrganizedInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<UserUpdateWithoutAppointmentsOrganizedInput, UserUncheckedUpdateWithoutAppointmentsOrganizedInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutAppointmentsAttendingNestedInput = {
+    create?: XOR<UserCreateWithoutAppointmentsAttendingInput, UserUncheckedCreateWithoutAppointmentsAttendingInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAppointmentsAttendingInput
+    upsert?: UserUpsertWithoutAppointmentsAttendingInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<UserUpdateWithoutAppointmentsAttendingInput, UserUncheckedUpdateWithoutAppointmentsAttendingInput>
+  }
+
+  export type EventTypeUpdateOneRequiredWithoutAppointmentsNestedInput = {
+    create?: XOR<EventTypeCreateWithoutAppointmentsInput, EventTypeUncheckedCreateWithoutAppointmentsInput>
+    connectOrCreate?: EventTypeCreateOrConnectWithoutAppointmentsInput
+    upsert?: EventTypeUpsertWithoutAppointmentsInput
+    connect?: EventTypeWhereUniqueInput
+    update?: XOR<EventTypeUpdateWithoutAppointmentsInput, EventTypeUncheckedUpdateWithoutAppointmentsInput>
+  }
+
   export type NestedIntFilter = {
     equals?: number
     in?: Enumerable<number>
@@ -18116,6 +19202,20 @@ export namespace Prisma {
     startsWith?: string
     endsWith?: string
     not?: NestedStringFilter | string
+  }
+
+  export type NestedStringNullableFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | null
+    notIn?: Enumerable<string> | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    not?: NestedStringNullableFilter | string | null
   }
 
   export type NestedDateTimeFilter = {
@@ -18173,6 +19273,34 @@ export namespace Prisma {
     _max?: NestedStringFilter
   }
 
+  export type NestedStringNullableWithAggregatesFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | null
+    notIn?: Enumerable<string> | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    not?: NestedStringNullableWithAggregatesFilter | string | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedStringNullableFilter
+    _max?: NestedStringNullableFilter
+  }
+
+  export type NestedIntNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableFilter | number | null
+  }
+
   export type NestedDateTimeWithAggregatesFilter = {
     equals?: Date | string
     in?: Enumerable<Date> | Enumerable<string>
@@ -18185,17 +19313,6 @@ export namespace Prisma {
     _count?: NestedIntFilter
     _min?: NestedDateTimeFilter
     _max?: NestedDateTimeFilter
-  }
-
-  export type NestedIntNullableFilter = {
-    equals?: number | null
-    in?: Enumerable<number> | null
-    notIn?: Enumerable<number> | null
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntNullableFilter | number | null
   }
 
   export type NestedIntNullableWithAggregatesFilter = {
@@ -18236,6 +19353,7 @@ export namespace Prisma {
     availabilitySchedule?: AvailabilityScheduleCreateNestedOneWithoutEventTypesInput
     dateSlots?: DateSlotCreateNestedManyWithoutEventTypeInput
     groupMeetings?: GroupMeetingCreateNestedManyWithoutEventTypeInput
+    appointments?: AppointmentCreateNestedManyWithoutEventTypeInput
   }
 
   export type EventTypeUncheckedCreateWithoutUserInput = {
@@ -18250,16 +19368,12 @@ export namespace Prisma {
     eventTypeOnLocations?: EventTypeOnLocationUncheckedCreateNestedManyWithoutEventTypeInput
     dateSlots?: DateSlotUncheckedCreateNestedManyWithoutEventTypeInput
     groupMeetings?: GroupMeetingUncheckedCreateNestedManyWithoutEventTypeInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutEventTypeInput
   }
 
   export type EventTypeCreateOrConnectWithoutUserInput = {
     where: EventTypeWhereUniqueInput
     create: XOR<EventTypeCreateWithoutUserInput, EventTypeUncheckedCreateWithoutUserInput>
-  }
-
-  export type EventTypeCreateManyUserInputEnvelope = {
-    data: Enumerable<EventTypeCreateManyUserInput>
-    skipDuplicates?: boolean
   }
 
   export type BillingCreateWithoutUserInput = {
@@ -18284,11 +19398,6 @@ export namespace Prisma {
     create: XOR<BillingCreateWithoutUserInput, BillingUncheckedCreateWithoutUserInput>
   }
 
-  export type BillingCreateManyUserInputEnvelope = {
-    data: Enumerable<BillingCreateManyUserInput>
-    skipDuplicates?: boolean
-  }
-
   export type UserOnGroupMeetingCreateWithoutUserInput = {
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18307,9 +19416,56 @@ export namespace Prisma {
     create: XOR<UserOnGroupMeetingCreateWithoutUserInput, UserOnGroupMeetingUncheckedCreateWithoutUserInput>
   }
 
-  export type UserOnGroupMeetingCreateManyUserInputEnvelope = {
-    data: Enumerable<UserOnGroupMeetingCreateManyUserInput>
-    skipDuplicates?: boolean
+  export type AppointmentCreateWithoutOrganizerInput = {
+    startTime: Date | string
+    endTime: Date | string
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    attendee: UserCreateNestedOneWithoutAppointmentsAttendingInput
+    eventType: EventTypeCreateNestedOneWithoutAppointmentsInput
+  }
+
+  export type AppointmentUncheckedCreateWithoutOrganizerInput = {
+    id?: number
+    attendeeId: number
+    eventTypeId: number
+    startTime: Date | string
+    endTime: Date | string
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AppointmentCreateOrConnectWithoutOrganizerInput = {
+    where: AppointmentWhereUniqueInput
+    create: XOR<AppointmentCreateWithoutOrganizerInput, AppointmentUncheckedCreateWithoutOrganizerInput>
+  }
+
+  export type AppointmentCreateWithoutAttendeeInput = {
+    startTime: Date | string
+    endTime: Date | string
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organizer: UserCreateNestedOneWithoutAppointmentsOrganizedInput
+    eventType: EventTypeCreateNestedOneWithoutAppointmentsInput
+  }
+
+  export type AppointmentUncheckedCreateWithoutAttendeeInput = {
+    id?: number
+    organizerId: number
+    eventTypeId: number
+    startTime: Date | string
+    endTime: Date | string
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AppointmentCreateOrConnectWithoutAttendeeInput = {
+    where: AppointmentWhereUniqueInput
+    create: XOR<AppointmentCreateWithoutAttendeeInput, AppointmentUncheckedCreateWithoutAttendeeInput>
   }
 
   export type EventTypeUpsertWithWhereUniqueWithoutUserInput = {
@@ -18399,14 +19555,68 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter | Date | string
   }
 
+  export type AppointmentUpsertWithWhereUniqueWithoutOrganizerInput = {
+    where: AppointmentWhereUniqueInput
+    update: XOR<AppointmentUpdateWithoutOrganizerInput, AppointmentUncheckedUpdateWithoutOrganizerInput>
+    create: XOR<AppointmentCreateWithoutOrganizerInput, AppointmentUncheckedCreateWithoutOrganizerInput>
+  }
+
+  export type AppointmentUpdateWithWhereUniqueWithoutOrganizerInput = {
+    where: AppointmentWhereUniqueInput
+    data: XOR<AppointmentUpdateWithoutOrganizerInput, AppointmentUncheckedUpdateWithoutOrganizerInput>
+  }
+
+  export type AppointmentUpdateManyWithWhereWithoutOrganizerInput = {
+    where: AppointmentScalarWhereInput
+    data: XOR<AppointmentUpdateManyMutationInput, AppointmentUncheckedUpdateManyWithoutAppointmentsOrganizedInput>
+  }
+
+  export type AppointmentScalarWhereInput = {
+    AND?: Enumerable<AppointmentScalarWhereInput>
+    OR?: Enumerable<AppointmentScalarWhereInput>
+    NOT?: Enumerable<AppointmentScalarWhereInput>
+    id?: IntFilter | number
+    organizerId?: IntFilter | number
+    attendeeId?: IntFilter | number
+    eventTypeId?: IntFilter | number
+    startTime?: DateTimeFilter | Date | string
+    endTime?: DateTimeFilter | Date | string
+    status?: StringFilter | string
+    createdAt?: DateTimeFilter | Date | string
+    updatedAt?: DateTimeFilter | Date | string
+  }
+
+  export type AppointmentUpsertWithWhereUniqueWithoutAttendeeInput = {
+    where: AppointmentWhereUniqueInput
+    update: XOR<AppointmentUpdateWithoutAttendeeInput, AppointmentUncheckedUpdateWithoutAttendeeInput>
+    create: XOR<AppointmentCreateWithoutAttendeeInput, AppointmentUncheckedCreateWithoutAttendeeInput>
+  }
+
+  export type AppointmentUpdateWithWhereUniqueWithoutAttendeeInput = {
+    where: AppointmentWhereUniqueInput
+    data: XOR<AppointmentUpdateWithoutAttendeeInput, AppointmentUncheckedUpdateWithoutAttendeeInput>
+  }
+
+  export type AppointmentUpdateManyWithWhereWithoutAttendeeInput = {
+    where: AppointmentScalarWhereInput
+    data: XOR<AppointmentUpdateManyMutationInput, AppointmentUncheckedUpdateManyWithoutAppointmentsAttendingInput>
+  }
+
   export type UserCreateWithoutEventTypesInput = {
     name: string
     username: string
     firebaseUid: string
+    subscription?: string | null
+    mobileNumber?: string | null
+    userLink?: string | null
+    job?: string | null
+    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     billings?: BillingCreateNestedManyWithoutUserInput
     userOnGroupMeetings?: UserOnGroupMeetingCreateNestedManyWithoutUserInput
+    appointmentsOrganized?: AppointmentCreateNestedManyWithoutOrganizerInput
+    appointmentsAttending?: AppointmentCreateNestedManyWithoutAttendeeInput
   }
 
   export type UserUncheckedCreateWithoutEventTypesInput = {
@@ -18414,10 +19624,17 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
+    subscription?: string | null
+    mobileNumber?: string | null
+    userLink?: string | null
+    job?: string | null
+    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     billings?: BillingUncheckedCreateNestedManyWithoutUserInput
     userOnGroupMeetings?: UserOnGroupMeetingUncheckedCreateNestedManyWithoutUserInput
+    appointmentsOrganized?: AppointmentUncheckedCreateNestedManyWithoutOrganizerInput
+    appointmentsAttending?: AppointmentUncheckedCreateNestedManyWithoutAttendeeInput
   }
 
   export type UserCreateOrConnectWithoutEventTypesInput = {
@@ -18441,11 +19658,6 @@ export namespace Prisma {
   export type EventTypeOnLocationCreateOrConnectWithoutEventTypeInput = {
     where: EventTypeOnLocationWhereUniqueInput
     create: XOR<EventTypeOnLocationCreateWithoutEventTypeInput, EventTypeOnLocationUncheckedCreateWithoutEventTypeInput>
-  }
-
-  export type EventTypeOnLocationCreateManyEventTypeInputEnvelope = {
-    data: Enumerable<EventTypeOnLocationCreateManyEventTypeInput>
-    skipDuplicates?: boolean
   }
 
   export type AvailabilityScheduleCreateWithoutEventTypesInput = {
@@ -18475,7 +19687,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     availabilitySchedule?: AvailabilityScheduleCreateNestedOneWithoutDateSlotsInput
-    customer?: CustomerCreateNestedOneWithoutDateSlotsInput
+    custormer?: CustomerCreateNestedOneWithoutDateSlotsInput
     daySlot: DaySlotCreateNestedOneWithoutDateSlotsInput
     dateOnTimeSlots?: DateOnTimeSlotCreateNestedManyWithoutDateSlotInput
   }
@@ -18484,7 +19696,7 @@ export namespace Prisma {
     id?: number
     availabilityScheduleId?: number | null
     name: Date | string
-    customerId?: number | null
+    custormerId?: number | null
     dayName: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18494,11 +19706,6 @@ export namespace Prisma {
   export type DateSlotCreateOrConnectWithoutEventTypeInput = {
     where: DateSlotWhereUniqueInput
     create: XOR<DateSlotCreateWithoutEventTypeInput, DateSlotUncheckedCreateWithoutEventTypeInput>
-  }
-
-  export type DateSlotCreateManyEventTypeInputEnvelope = {
-    data: Enumerable<DateSlotCreateManyEventTypeInput>
-    skipDuplicates?: boolean
   }
 
   export type GroupMeetingCreateWithoutEventTypeInput = {
@@ -18527,9 +19734,30 @@ export namespace Prisma {
     create: XOR<GroupMeetingCreateWithoutEventTypeInput, GroupMeetingUncheckedCreateWithoutEventTypeInput>
   }
 
-  export type GroupMeetingCreateManyEventTypeInputEnvelope = {
-    data: Enumerable<GroupMeetingCreateManyEventTypeInput>
-    skipDuplicates?: boolean
+  export type AppointmentCreateWithoutEventTypeInput = {
+    startTime: Date | string
+    endTime: Date | string
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organizer: UserCreateNestedOneWithoutAppointmentsOrganizedInput
+    attendee: UserCreateNestedOneWithoutAppointmentsAttendingInput
+  }
+
+  export type AppointmentUncheckedCreateWithoutEventTypeInput = {
+    id?: number
+    organizerId: number
+    attendeeId: number
+    startTime: Date | string
+    endTime: Date | string
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AppointmentCreateOrConnectWithoutEventTypeInput = {
+    where: AppointmentWhereUniqueInput
+    create: XOR<AppointmentCreateWithoutEventTypeInput, AppointmentUncheckedCreateWithoutEventTypeInput>
   }
 
   export type UserUpsertWithoutEventTypesInput = {
@@ -18541,10 +19769,17 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
+    subscription?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userLink?: NullableStringFieldUpdateOperationsInput | string | null
+    job?: NullableStringFieldUpdateOperationsInput | string | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     billings?: BillingUpdateManyWithoutUserNestedInput
     userOnGroupMeetings?: UserOnGroupMeetingUpdateManyWithoutUserNestedInput
+    appointmentsOrganized?: AppointmentUpdateManyWithoutOrganizerNestedInput
+    appointmentsAttending?: AppointmentUpdateManyWithoutAttendeeNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventTypesInput = {
@@ -18552,10 +19787,17 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
+    subscription?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userLink?: NullableStringFieldUpdateOperationsInput | string | null
+    job?: NullableStringFieldUpdateOperationsInput | string | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     billings?: BillingUncheckedUpdateManyWithoutUserNestedInput
     userOnGroupMeetings?: UserOnGroupMeetingUncheckedUpdateManyWithoutUserNestedInput
+    appointmentsOrganized?: AppointmentUncheckedUpdateManyWithoutOrganizerNestedInput
+    appointmentsAttending?: AppointmentUncheckedUpdateManyWithoutAttendeeNestedInput
   }
 
   export type EventTypeOnLocationUpsertWithWhereUniqueWithoutEventTypeInput = {
@@ -18630,7 +19872,7 @@ export namespace Prisma {
     id?: IntFilter | number
     availabilityScheduleId?: IntNullableFilter | number | null
     name?: DateTimeFilter | Date | string
-    customerId?: IntNullableFilter | number | null
+    custormerId?: IntNullableFilter | number | null
     eventId?: IntFilter | number
     dayName?: StringFilter | string
     createdAt?: DateTimeFilter | Date | string
@@ -18667,6 +19909,22 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter | Date | string
   }
 
+  export type AppointmentUpsertWithWhereUniqueWithoutEventTypeInput = {
+    where: AppointmentWhereUniqueInput
+    update: XOR<AppointmentUpdateWithoutEventTypeInput, AppointmentUncheckedUpdateWithoutEventTypeInput>
+    create: XOR<AppointmentCreateWithoutEventTypeInput, AppointmentUncheckedCreateWithoutEventTypeInput>
+  }
+
+  export type AppointmentUpdateWithWhereUniqueWithoutEventTypeInput = {
+    where: AppointmentWhereUniqueInput
+    data: XOR<AppointmentUpdateWithoutEventTypeInput, AppointmentUncheckedUpdateWithoutEventTypeInput>
+  }
+
+  export type AppointmentUpdateManyWithWhereWithoutEventTypeInput = {
+    where: AppointmentScalarWhereInput
+    data: XOR<AppointmentUpdateManyMutationInput, AppointmentUncheckedUpdateManyWithoutAppointmentsInput>
+  }
+
   export type EventTypeOnLocationCreateWithoutLocationInput = {
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18683,11 +19941,6 @@ export namespace Prisma {
   export type EventTypeOnLocationCreateOrConnectWithoutLocationInput = {
     where: EventTypeOnLocationWhereUniqueInput
     create: XOR<EventTypeOnLocationCreateWithoutLocationInput, EventTypeOnLocationUncheckedCreateWithoutLocationInput>
-  }
-
-  export type EventTypeOnLocationCreateManyLocationInputEnvelope = {
-    data: Enumerable<EventTypeOnLocationCreateManyLocationInput>
-    skipDuplicates?: boolean
   }
 
   export type GroupMeetingCreateWithoutLocationInput = {
@@ -18714,11 +19967,6 @@ export namespace Prisma {
   export type GroupMeetingCreateOrConnectWithoutLocationInput = {
     where: GroupMeetingWhereUniqueInput
     create: XOR<GroupMeetingCreateWithoutLocationInput, GroupMeetingUncheckedCreateWithoutLocationInput>
-  }
-
-  export type GroupMeetingCreateManyLocationInputEnvelope = {
-    data: Enumerable<GroupMeetingCreateManyLocationInput>
-    skipDuplicates?: boolean
   }
 
   export type EventTypeOnLocationUpsertWithWhereUniqueWithoutLocationInput = {
@@ -18764,6 +20012,7 @@ export namespace Prisma {
     availabilitySchedule?: AvailabilityScheduleCreateNestedOneWithoutEventTypesInput
     dateSlots?: DateSlotCreateNestedManyWithoutEventTypeInput
     groupMeetings?: GroupMeetingCreateNestedManyWithoutEventTypeInput
+    appointments?: AppointmentCreateNestedManyWithoutEventTypeInput
   }
 
   export type EventTypeUncheckedCreateWithoutEventTypeOnLocationsInput = {
@@ -18778,6 +20027,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dateSlots?: DateSlotUncheckedCreateNestedManyWithoutEventTypeInput
     groupMeetings?: GroupMeetingUncheckedCreateNestedManyWithoutEventTypeInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutEventTypeInput
   }
 
   export type EventTypeCreateOrConnectWithoutEventTypeOnLocationsInput = {
@@ -18821,6 +20071,7 @@ export namespace Prisma {
     availabilitySchedule?: AvailabilityScheduleUpdateOneWithoutEventTypesNestedInput
     dateSlots?: DateSlotUpdateManyWithoutEventTypeNestedInput
     groupMeetings?: GroupMeetingUpdateManyWithoutEventTypeNestedInput
+    appointments?: AppointmentUpdateManyWithoutEventTypeNestedInput
   }
 
   export type EventTypeUncheckedUpdateWithoutEventTypeOnLocationsInput = {
@@ -18835,6 +20086,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateSlots?: DateSlotUncheckedUpdateManyWithoutEventTypeNestedInput
     groupMeetings?: GroupMeetingUncheckedUpdateManyWithoutEventTypeNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutEventTypeNestedInput
   }
 
   export type LocationUpsertWithoutEventTypeOnLocationsInput = {
@@ -18868,6 +20120,7 @@ export namespace Prisma {
     eventTypeOnLocations?: EventTypeOnLocationCreateNestedManyWithoutEventTypeInput
     dateSlots?: DateSlotCreateNestedManyWithoutEventTypeInput
     groupMeetings?: GroupMeetingCreateNestedManyWithoutEventTypeInput
+    appointments?: AppointmentCreateNestedManyWithoutEventTypeInput
   }
 
   export type EventTypeUncheckedCreateWithoutAvailabilityScheduleInput = {
@@ -18882,6 +20135,7 @@ export namespace Prisma {
     eventTypeOnLocations?: EventTypeOnLocationUncheckedCreateNestedManyWithoutEventTypeInput
     dateSlots?: DateSlotUncheckedCreateNestedManyWithoutEventTypeInput
     groupMeetings?: GroupMeetingUncheckedCreateNestedManyWithoutEventTypeInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutEventTypeInput
   }
 
   export type EventTypeCreateOrConnectWithoutAvailabilityScheduleInput = {
@@ -18889,16 +20143,11 @@ export namespace Prisma {
     create: XOR<EventTypeCreateWithoutAvailabilityScheduleInput, EventTypeUncheckedCreateWithoutAvailabilityScheduleInput>
   }
 
-  export type EventTypeCreateManyAvailabilityScheduleInputEnvelope = {
-    data: Enumerable<EventTypeCreateManyAvailabilityScheduleInput>
-    skipDuplicates?: boolean
-  }
-
   export type DateSlotCreateWithoutAvailabilityScheduleInput = {
     name: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    customer?: CustomerCreateNestedOneWithoutDateSlotsInput
+    custormer?: CustomerCreateNestedOneWithoutDateSlotsInput
     eventType: EventTypeCreateNestedOneWithoutDateSlotsInput
     daySlot: DaySlotCreateNestedOneWithoutDateSlotsInput
     dateOnTimeSlots?: DateOnTimeSlotCreateNestedManyWithoutDateSlotInput
@@ -18907,7 +20156,7 @@ export namespace Prisma {
   export type DateSlotUncheckedCreateWithoutAvailabilityScheduleInput = {
     id?: number
     name: Date | string
-    customerId?: number | null
+    custormerId?: number | null
     eventId: number
     dayName: string
     createdAt?: Date | string
@@ -18918,11 +20167,6 @@ export namespace Prisma {
   export type DateSlotCreateOrConnectWithoutAvailabilityScheduleInput = {
     where: DateSlotWhereUniqueInput
     create: XOR<DateSlotCreateWithoutAvailabilityScheduleInput, DateSlotUncheckedCreateWithoutAvailabilityScheduleInput>
-  }
-
-  export type DateSlotCreateManyAvailabilityScheduleInputEnvelope = {
-    data: Enumerable<DateSlotCreateManyAvailabilityScheduleInput>
-    skipDuplicates?: boolean
   }
 
   export type EventTypeUpsertWithWhereUniqueWithoutAvailabilityScheduleInput = {
@@ -18962,7 +20206,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     availabilitySchedule?: AvailabilityScheduleCreateNestedOneWithoutDateSlotsInput
-    customer?: CustomerCreateNestedOneWithoutDateSlotsInput
+    custormer?: CustomerCreateNestedOneWithoutDateSlotsInput
     eventType: EventTypeCreateNestedOneWithoutDateSlotsInput
     dateOnTimeSlots?: DateOnTimeSlotCreateNestedManyWithoutDateSlotInput
   }
@@ -18971,7 +20215,7 @@ export namespace Prisma {
     id?: number
     availabilityScheduleId?: number | null
     name: Date | string
-    customerId?: number | null
+    custormerId?: number | null
     eventId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18981,11 +20225,6 @@ export namespace Prisma {
   export type DateSlotCreateOrConnectWithoutDaySlotInput = {
     where: DateSlotWhereUniqueInput
     create: XOR<DateSlotCreateWithoutDaySlotInput, DateSlotUncheckedCreateWithoutDaySlotInput>
-  }
-
-  export type DateSlotCreateManyDaySlotInputEnvelope = {
-    data: Enumerable<DateSlotCreateManyDaySlotInput>
-    skipDuplicates?: boolean
   }
 
   export type DateSlotUpsertWithWhereUniqueWithoutDaySlotInput = {
@@ -19059,6 +20298,7 @@ export namespace Prisma {
     eventTypeOnLocations?: EventTypeOnLocationCreateNestedManyWithoutEventTypeInput
     availabilitySchedule?: AvailabilityScheduleCreateNestedOneWithoutEventTypesInput
     groupMeetings?: GroupMeetingCreateNestedManyWithoutEventTypeInput
+    appointments?: AppointmentCreateNestedManyWithoutEventTypeInput
   }
 
   export type EventTypeUncheckedCreateWithoutDateSlotsInput = {
@@ -19073,6 +20313,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     eventTypeOnLocations?: EventTypeOnLocationUncheckedCreateNestedManyWithoutEventTypeInput
     groupMeetings?: GroupMeetingUncheckedCreateNestedManyWithoutEventTypeInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutEventTypeInput
   }
 
   export type EventTypeCreateOrConnectWithoutDateSlotsInput = {
@@ -19116,11 +20357,6 @@ export namespace Prisma {
   export type DateOnTimeSlotCreateOrConnectWithoutDateSlotInput = {
     where: DateOnTimeSlotWhereUniqueInput
     create: XOR<DateOnTimeSlotCreateWithoutDateSlotInput, DateOnTimeSlotUncheckedCreateWithoutDateSlotInput>
-  }
-
-  export type DateOnTimeSlotCreateManyDateSlotInputEnvelope = {
-    data: Enumerable<DateOnTimeSlotCreateManyDateSlotInput>
-    skipDuplicates?: boolean
   }
 
   export type AvailabilityScheduleUpsertWithoutDateSlotsInput = {
@@ -19183,6 +20419,7 @@ export namespace Prisma {
     eventTypeOnLocations?: EventTypeOnLocationUpdateManyWithoutEventTypeNestedInput
     availabilitySchedule?: AvailabilityScheduleUpdateOneWithoutEventTypesNestedInput
     groupMeetings?: GroupMeetingUpdateManyWithoutEventTypeNestedInput
+    appointments?: AppointmentUpdateManyWithoutEventTypeNestedInput
   }
 
   export type EventTypeUncheckedUpdateWithoutDateSlotsInput = {
@@ -19197,6 +20434,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventTypeOnLocations?: EventTypeOnLocationUncheckedUpdateManyWithoutEventTypeNestedInput
     groupMeetings?: GroupMeetingUncheckedUpdateManyWithoutEventTypeNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutEventTypeNestedInput
   }
 
   export type DaySlotUpsertWithoutDateSlotsInput = {
@@ -19270,7 +20508,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     availabilitySchedule?: AvailabilityScheduleCreateNestedOneWithoutDateSlotsInput
-    customer?: CustomerCreateNestedOneWithoutDateSlotsInput
+    custormer?: CustomerCreateNestedOneWithoutDateSlotsInput
     eventType: EventTypeCreateNestedOneWithoutDateSlotsInput
     daySlot: DaySlotCreateNestedOneWithoutDateSlotsInput
   }
@@ -19279,7 +20517,7 @@ export namespace Prisma {
     id?: number
     availabilityScheduleId?: number | null
     name: Date | string
-    customerId?: number | null
+    custormerId?: number | null
     eventId: number
     dayName: string
     createdAt?: Date | string
@@ -19321,7 +20559,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     availabilitySchedule?: AvailabilityScheduleUpdateOneWithoutDateSlotsNestedInput
-    customer?: CustomerUpdateOneWithoutDateSlotsNestedInput
+    custormer?: CustomerUpdateOneWithoutDateSlotsNestedInput
     eventType?: EventTypeUpdateOneRequiredWithoutDateSlotsNestedInput
     daySlot?: DaySlotUpdateOneRequiredWithoutDateSlotsNestedInput
   }
@@ -19330,7 +20568,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     availabilityScheduleId?: NullableIntFieldUpdateOperationsInput | number | null
     name?: DateTimeFieldUpdateOperationsInput | Date | string
-    customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    custormerId?: NullableIntFieldUpdateOperationsInput | number | null
     eventId?: IntFieldUpdateOperationsInput | number
     dayName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19355,11 +20593,6 @@ export namespace Prisma {
   export type DateOnTimeSlotCreateOrConnectWithoutTimeSlotInput = {
     where: DateOnTimeSlotWhereUniqueInput
     create: XOR<DateOnTimeSlotCreateWithoutTimeSlotInput, DateOnTimeSlotUncheckedCreateWithoutTimeSlotInput>
-  }
-
-  export type DateOnTimeSlotCreateManyTimeSlotInputEnvelope = {
-    data: Enumerable<DateOnTimeSlotCreateManyTimeSlotInput>
-    skipDuplicates?: boolean
   }
 
   export type DateOnTimeSlotUpsertWithWhereUniqueWithoutTimeSlotInput = {
@@ -19404,12 +20637,7 @@ export namespace Prisma {
     create: XOR<GroupMeetingCreateWithoutCustomerInput, GroupMeetingUncheckedCreateWithoutCustomerInput>
   }
 
-  export type GroupMeetingCreateManyCustomerInputEnvelope = {
-    data: Enumerable<GroupMeetingCreateManyCustomerInput>
-    skipDuplicates?: boolean
-  }
-
-  export type DateSlotCreateWithoutCustomerInput = {
+  export type DateSlotCreateWithoutCustormerInput = {
     name: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19419,7 +20647,7 @@ export namespace Prisma {
     dateOnTimeSlots?: DateOnTimeSlotCreateNestedManyWithoutDateSlotInput
   }
 
-  export type DateSlotUncheckedCreateWithoutCustomerInput = {
+  export type DateSlotUncheckedCreateWithoutCustormerInput = {
     id?: number
     availabilityScheduleId?: number | null
     name: Date | string
@@ -19430,14 +20658,9 @@ export namespace Prisma {
     dateOnTimeSlots?: DateOnTimeSlotUncheckedCreateNestedManyWithoutDateSlotInput
   }
 
-  export type DateSlotCreateOrConnectWithoutCustomerInput = {
+  export type DateSlotCreateOrConnectWithoutCustormerInput = {
     where: DateSlotWhereUniqueInput
-    create: XOR<DateSlotCreateWithoutCustomerInput, DateSlotUncheckedCreateWithoutCustomerInput>
-  }
-
-  export type DateSlotCreateManyCustomerInputEnvelope = {
-    data: Enumerable<DateSlotCreateManyCustomerInput>
-    skipDuplicates?: boolean
+    create: XOR<DateSlotCreateWithoutCustormerInput, DateSlotUncheckedCreateWithoutCustormerInput>
   }
 
   export type GroupMeetingUpsertWithWhereUniqueWithoutCustomerInput = {
@@ -19456,18 +20679,18 @@ export namespace Prisma {
     data: XOR<GroupMeetingUpdateManyMutationInput, GroupMeetingUncheckedUpdateManyWithoutGroupMeetingsInput>
   }
 
-  export type DateSlotUpsertWithWhereUniqueWithoutCustomerInput = {
+  export type DateSlotUpsertWithWhereUniqueWithoutCustormerInput = {
     where: DateSlotWhereUniqueInput
-    update: XOR<DateSlotUpdateWithoutCustomerInput, DateSlotUncheckedUpdateWithoutCustomerInput>
-    create: XOR<DateSlotCreateWithoutCustomerInput, DateSlotUncheckedCreateWithoutCustomerInput>
+    update: XOR<DateSlotUpdateWithoutCustormerInput, DateSlotUncheckedUpdateWithoutCustormerInput>
+    create: XOR<DateSlotCreateWithoutCustormerInput, DateSlotUncheckedCreateWithoutCustormerInput>
   }
 
-  export type DateSlotUpdateWithWhereUniqueWithoutCustomerInput = {
+  export type DateSlotUpdateWithWhereUniqueWithoutCustormerInput = {
     where: DateSlotWhereUniqueInput
-    data: XOR<DateSlotUpdateWithoutCustomerInput, DateSlotUncheckedUpdateWithoutCustomerInput>
+    data: XOR<DateSlotUpdateWithoutCustormerInput, DateSlotUncheckedUpdateWithoutCustormerInput>
   }
 
-  export type DateSlotUpdateManyWithWhereWithoutCustomerInput = {
+  export type DateSlotUpdateManyWithWhereWithoutCustormerInput = {
     where: DateSlotScalarWhereInput
     data: XOR<DateSlotUpdateManyMutationInput, DateSlotUncheckedUpdateManyWithoutDateSlotsInput>
   }
@@ -19476,10 +20699,17 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
+    subscription?: string | null
+    mobileNumber?: string | null
+    userLink?: string | null
+    job?: string | null
+    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     eventTypes?: EventTypeCreateNestedManyWithoutUserInput
     userOnGroupMeetings?: UserOnGroupMeetingCreateNestedManyWithoutUserInput
+    appointmentsOrganized?: AppointmentCreateNestedManyWithoutOrganizerInput
+    appointmentsAttending?: AppointmentCreateNestedManyWithoutAttendeeInput
   }
 
   export type UserUncheckedCreateWithoutBillingsInput = {
@@ -19487,10 +20717,17 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
+    subscription?: string | null
+    mobileNumber?: string | null
+    userLink?: string | null
+    job?: string | null
+    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     eventTypes?: EventTypeUncheckedCreateNestedManyWithoutUserInput
     userOnGroupMeetings?: UserOnGroupMeetingUncheckedCreateNestedManyWithoutUserInput
+    appointmentsOrganized?: AppointmentUncheckedCreateNestedManyWithoutOrganizerInput
+    appointmentsAttending?: AppointmentUncheckedCreateNestedManyWithoutAttendeeInput
   }
 
   export type UserCreateOrConnectWithoutBillingsInput = {
@@ -19507,10 +20744,17 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
+    subscription?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userLink?: NullableStringFieldUpdateOperationsInput | string | null
+    job?: NullableStringFieldUpdateOperationsInput | string | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventTypes?: EventTypeUpdateManyWithoutUserNestedInput
     userOnGroupMeetings?: UserOnGroupMeetingUpdateManyWithoutUserNestedInput
+    appointmentsOrganized?: AppointmentUpdateManyWithoutOrganizerNestedInput
+    appointmentsAttending?: AppointmentUpdateManyWithoutAttendeeNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBillingsInput = {
@@ -19518,10 +20762,17 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
+    subscription?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userLink?: NullableStringFieldUpdateOperationsInput | string | null
+    job?: NullableStringFieldUpdateOperationsInput | string | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventTypes?: EventTypeUncheckedUpdateManyWithoutUserNestedInput
     userOnGroupMeetings?: UserOnGroupMeetingUncheckedUpdateManyWithoutUserNestedInput
+    appointmentsOrganized?: AppointmentUncheckedUpdateManyWithoutOrganizerNestedInput
+    appointmentsAttending?: AppointmentUncheckedUpdateManyWithoutAttendeeNestedInput
   }
 
   export type LocationCreateWithoutGroupMeetingsInput = {
@@ -19549,7 +20800,7 @@ export namespace Prisma {
     email: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    dateSlots?: DateSlotCreateNestedManyWithoutCustomerInput
+    dateSlots?: DateSlotCreateNestedManyWithoutCustormerInput
   }
 
   export type CustomerUncheckedCreateWithoutGroupMeetingsInput = {
@@ -19558,7 +20809,7 @@ export namespace Prisma {
     email: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    dateSlots?: DateSlotUncheckedCreateNestedManyWithoutCustomerInput
+    dateSlots?: DateSlotUncheckedCreateNestedManyWithoutCustormerInput
   }
 
   export type CustomerCreateOrConnectWithoutGroupMeetingsInput = {
@@ -19577,6 +20828,7 @@ export namespace Prisma {
     eventTypeOnLocations?: EventTypeOnLocationCreateNestedManyWithoutEventTypeInput
     availabilitySchedule?: AvailabilityScheduleCreateNestedOneWithoutEventTypesInput
     dateSlots?: DateSlotCreateNestedManyWithoutEventTypeInput
+    appointments?: AppointmentCreateNestedManyWithoutEventTypeInput
   }
 
   export type EventTypeUncheckedCreateWithoutGroupMeetingsInput = {
@@ -19591,6 +20843,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     eventTypeOnLocations?: EventTypeOnLocationUncheckedCreateNestedManyWithoutEventTypeInput
     dateSlots?: DateSlotUncheckedCreateNestedManyWithoutEventTypeInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutEventTypeInput
   }
 
   export type EventTypeCreateOrConnectWithoutGroupMeetingsInput = {
@@ -19614,11 +20867,6 @@ export namespace Prisma {
   export type UserOnGroupMeetingCreateOrConnectWithoutGroupMeetingInput = {
     where: UserOnGroupMeetingWhereUniqueInput
     create: XOR<UserOnGroupMeetingCreateWithoutGroupMeetingInput, UserOnGroupMeetingUncheckedCreateWithoutGroupMeetingInput>
-  }
-
-  export type UserOnGroupMeetingCreateManyGroupMeetingInputEnvelope = {
-    data: Enumerable<UserOnGroupMeetingCreateManyGroupMeetingInput>
-    skipDuplicates?: boolean
   }
 
   export type LocationUpsertWithoutGroupMeetingsInput = {
@@ -19651,7 +20899,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dateSlots?: DateSlotUpdateManyWithoutCustomerNestedInput
+    dateSlots?: DateSlotUpdateManyWithoutCustormerNestedInput
   }
 
   export type CustomerUncheckedUpdateWithoutGroupMeetingsInput = {
@@ -19660,7 +20908,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dateSlots?: DateSlotUncheckedUpdateManyWithoutCustomerNestedInput
+    dateSlots?: DateSlotUncheckedUpdateManyWithoutCustormerNestedInput
   }
 
   export type EventTypeUpsertWithoutGroupMeetingsInput = {
@@ -19679,6 +20927,7 @@ export namespace Prisma {
     eventTypeOnLocations?: EventTypeOnLocationUpdateManyWithoutEventTypeNestedInput
     availabilitySchedule?: AvailabilityScheduleUpdateOneWithoutEventTypesNestedInput
     dateSlots?: DateSlotUpdateManyWithoutEventTypeNestedInput
+    appointments?: AppointmentUpdateManyWithoutEventTypeNestedInput
   }
 
   export type EventTypeUncheckedUpdateWithoutGroupMeetingsInput = {
@@ -19693,6 +20942,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventTypeOnLocations?: EventTypeOnLocationUncheckedUpdateManyWithoutEventTypeNestedInput
     dateSlots?: DateSlotUncheckedUpdateManyWithoutEventTypeNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutEventTypeNestedInput
   }
 
   export type UserOnGroupMeetingUpsertWithWhereUniqueWithoutGroupMeetingInput = {
@@ -19715,10 +20965,17 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
+    subscription?: string | null
+    mobileNumber?: string | null
+    userLink?: string | null
+    job?: string | null
+    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     eventTypes?: EventTypeCreateNestedManyWithoutUserInput
     billings?: BillingCreateNestedManyWithoutUserInput
+    appointmentsOrganized?: AppointmentCreateNestedManyWithoutOrganizerInput
+    appointmentsAttending?: AppointmentCreateNestedManyWithoutAttendeeInput
   }
 
   export type UserUncheckedCreateWithoutUserOnGroupMeetingsInput = {
@@ -19726,10 +20983,17 @@ export namespace Prisma {
     name: string
     username: string
     firebaseUid: string
+    subscription?: string | null
+    mobileNumber?: string | null
+    userLink?: string | null
+    job?: string | null
+    education?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     eventTypes?: EventTypeUncheckedCreateNestedManyWithoutUserInput
     billings?: BillingUncheckedCreateNestedManyWithoutUserInput
+    appointmentsOrganized?: AppointmentUncheckedCreateNestedManyWithoutOrganizerInput
+    appointmentsAttending?: AppointmentUncheckedCreateNestedManyWithoutAttendeeInput
   }
 
   export type UserCreateOrConnectWithoutUserOnGroupMeetingsInput = {
@@ -19772,10 +21036,17 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
+    subscription?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userLink?: NullableStringFieldUpdateOperationsInput | string | null
+    job?: NullableStringFieldUpdateOperationsInput | string | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventTypes?: EventTypeUpdateManyWithoutUserNestedInput
     billings?: BillingUpdateManyWithoutUserNestedInput
+    appointmentsOrganized?: AppointmentUpdateManyWithoutOrganizerNestedInput
+    appointmentsAttending?: AppointmentUpdateManyWithoutAttendeeNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUserOnGroupMeetingsInput = {
@@ -19783,10 +21054,17 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     firebaseUid?: StringFieldUpdateOperationsInput | string
+    subscription?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userLink?: NullableStringFieldUpdateOperationsInput | string | null
+    job?: NullableStringFieldUpdateOperationsInput | string | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventTypes?: EventTypeUncheckedUpdateManyWithoutUserNestedInput
     billings?: BillingUncheckedUpdateManyWithoutUserNestedInput
+    appointmentsOrganized?: AppointmentUncheckedUpdateManyWithoutOrganizerNestedInput
+    appointmentsAttending?: AppointmentUncheckedUpdateManyWithoutAttendeeNestedInput
   }
 
   export type GroupMeetingUpsertWithoutUserOnGroupMeetingsInput = {
@@ -19815,31 +21093,232 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type EventTypeCreateManyUserInput = {
+  export type UserCreateWithoutAppointmentsOrganizedInput = {
+    name: string
+    username: string
+    firebaseUid: string
+    subscription?: string | null
+    mobileNumber?: string | null
+    userLink?: string | null
+    job?: string | null
+    education?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    eventTypes?: EventTypeCreateNestedManyWithoutUserInput
+    billings?: BillingCreateNestedManyWithoutUserInput
+    userOnGroupMeetings?: UserOnGroupMeetingCreateNestedManyWithoutUserInput
+    appointmentsAttending?: AppointmentCreateNestedManyWithoutAttendeeInput
+  }
+
+  export type UserUncheckedCreateWithoutAppointmentsOrganizedInput = {
     id?: number
     name: string
+    username: string
+    firebaseUid: string
+    subscription?: string | null
+    mobileNumber?: string | null
+    userLink?: string | null
+    job?: string | null
+    education?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    eventTypes?: EventTypeUncheckedCreateNestedManyWithoutUserInput
+    billings?: BillingUncheckedCreateNestedManyWithoutUserInput
+    userOnGroupMeetings?: UserOnGroupMeetingUncheckedCreateNestedManyWithoutUserInput
+    appointmentsAttending?: AppointmentUncheckedCreateNestedManyWithoutAttendeeInput
+  }
+
+  export type UserCreateOrConnectWithoutAppointmentsOrganizedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAppointmentsOrganizedInput, UserUncheckedCreateWithoutAppointmentsOrganizedInput>
+  }
+
+  export type UserCreateWithoutAppointmentsAttendingInput = {
+    name: string
+    username: string
+    firebaseUid: string
+    subscription?: string | null
+    mobileNumber?: string | null
+    userLink?: string | null
+    job?: string | null
+    education?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    eventTypes?: EventTypeCreateNestedManyWithoutUserInput
+    billings?: BillingCreateNestedManyWithoutUserInput
+    userOnGroupMeetings?: UserOnGroupMeetingCreateNestedManyWithoutUserInput
+    appointmentsOrganized?: AppointmentCreateNestedManyWithoutOrganizerInput
+  }
+
+  export type UserUncheckedCreateWithoutAppointmentsAttendingInput = {
+    id?: number
+    name: string
+    username: string
+    firebaseUid: string
+    subscription?: string | null
+    mobileNumber?: string | null
+    userLink?: string | null
+    job?: string | null
+    education?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    eventTypes?: EventTypeUncheckedCreateNestedManyWithoutUserInput
+    billings?: BillingUncheckedCreateNestedManyWithoutUserInput
+    userOnGroupMeetings?: UserOnGroupMeetingUncheckedCreateNestedManyWithoutUserInput
+    appointmentsOrganized?: AppointmentUncheckedCreateNestedManyWithoutOrganizerInput
+  }
+
+  export type UserCreateOrConnectWithoutAppointmentsAttendingInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAppointmentsAttendingInput, UserUncheckedCreateWithoutAppointmentsAttendingInput>
+  }
+
+  export type EventTypeCreateWithoutAppointmentsInput = {
+    name: string
+    description: string
+    price: number
+    timeDuration: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutEventTypesInput
+    eventTypeOnLocations?: EventTypeOnLocationCreateNestedManyWithoutEventTypeInput
+    availabilitySchedule?: AvailabilityScheduleCreateNestedOneWithoutEventTypesInput
+    dateSlots?: DateSlotCreateNestedManyWithoutEventTypeInput
+    groupMeetings?: GroupMeetingCreateNestedManyWithoutEventTypeInput
+  }
+
+  export type EventTypeUncheckedCreateWithoutAppointmentsInput = {
+    id?: number
+    name: string
+    userId: number
     description: string
     price: number
     timeDuration: number
     availabilityScheduleId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    eventTypeOnLocations?: EventTypeOnLocationUncheckedCreateNestedManyWithoutEventTypeInput
+    dateSlots?: DateSlotUncheckedCreateNestedManyWithoutEventTypeInput
+    groupMeetings?: GroupMeetingUncheckedCreateNestedManyWithoutEventTypeInput
   }
 
-  export type BillingCreateManyUserInput = {
-    id?: number
-    subscriptionMonth: number
-    subscriptionPrice: number
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type EventTypeCreateOrConnectWithoutAppointmentsInput = {
+    where: EventTypeWhereUniqueInput
+    create: XOR<EventTypeCreateWithoutAppointmentsInput, EventTypeUncheckedCreateWithoutAppointmentsInput>
   }
 
-  export type UserOnGroupMeetingCreateManyUserInput = {
-    id?: number
-    groupMeetingId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type UserUpsertWithoutAppointmentsOrganizedInput = {
+    update: XOR<UserUpdateWithoutAppointmentsOrganizedInput, UserUncheckedUpdateWithoutAppointmentsOrganizedInput>
+    create: XOR<UserCreateWithoutAppointmentsOrganizedInput, UserUncheckedCreateWithoutAppointmentsOrganizedInput>
+  }
+
+  export type UserUpdateWithoutAppointmentsOrganizedInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    firebaseUid?: StringFieldUpdateOperationsInput | string
+    subscription?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userLink?: NullableStringFieldUpdateOperationsInput | string | null
+    job?: NullableStringFieldUpdateOperationsInput | string | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventTypes?: EventTypeUpdateManyWithoutUserNestedInput
+    billings?: BillingUpdateManyWithoutUserNestedInput
+    userOnGroupMeetings?: UserOnGroupMeetingUpdateManyWithoutUserNestedInput
+    appointmentsAttending?: AppointmentUpdateManyWithoutAttendeeNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAppointmentsOrganizedInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    firebaseUid?: StringFieldUpdateOperationsInput | string
+    subscription?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userLink?: NullableStringFieldUpdateOperationsInput | string | null
+    job?: NullableStringFieldUpdateOperationsInput | string | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventTypes?: EventTypeUncheckedUpdateManyWithoutUserNestedInput
+    billings?: BillingUncheckedUpdateManyWithoutUserNestedInput
+    userOnGroupMeetings?: UserOnGroupMeetingUncheckedUpdateManyWithoutUserNestedInput
+    appointmentsAttending?: AppointmentUncheckedUpdateManyWithoutAttendeeNestedInput
+  }
+
+  export type UserUpsertWithoutAppointmentsAttendingInput = {
+    update: XOR<UserUpdateWithoutAppointmentsAttendingInput, UserUncheckedUpdateWithoutAppointmentsAttendingInput>
+    create: XOR<UserCreateWithoutAppointmentsAttendingInput, UserUncheckedCreateWithoutAppointmentsAttendingInput>
+  }
+
+  export type UserUpdateWithoutAppointmentsAttendingInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    firebaseUid?: StringFieldUpdateOperationsInput | string
+    subscription?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userLink?: NullableStringFieldUpdateOperationsInput | string | null
+    job?: NullableStringFieldUpdateOperationsInput | string | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventTypes?: EventTypeUpdateManyWithoutUserNestedInput
+    billings?: BillingUpdateManyWithoutUserNestedInput
+    userOnGroupMeetings?: UserOnGroupMeetingUpdateManyWithoutUserNestedInput
+    appointmentsOrganized?: AppointmentUpdateManyWithoutOrganizerNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAppointmentsAttendingInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    firebaseUid?: StringFieldUpdateOperationsInput | string
+    subscription?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userLink?: NullableStringFieldUpdateOperationsInput | string | null
+    job?: NullableStringFieldUpdateOperationsInput | string | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventTypes?: EventTypeUncheckedUpdateManyWithoutUserNestedInput
+    billings?: BillingUncheckedUpdateManyWithoutUserNestedInput
+    userOnGroupMeetings?: UserOnGroupMeetingUncheckedUpdateManyWithoutUserNestedInput
+    appointmentsOrganized?: AppointmentUncheckedUpdateManyWithoutOrganizerNestedInput
+  }
+
+  export type EventTypeUpsertWithoutAppointmentsInput = {
+    update: XOR<EventTypeUpdateWithoutAppointmentsInput, EventTypeUncheckedUpdateWithoutAppointmentsInput>
+    create: XOR<EventTypeCreateWithoutAppointmentsInput, EventTypeUncheckedCreateWithoutAppointmentsInput>
+  }
+
+  export type EventTypeUpdateWithoutAppointmentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    price?: IntFieldUpdateOperationsInput | number
+    timeDuration?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutEventTypesNestedInput
+    eventTypeOnLocations?: EventTypeOnLocationUpdateManyWithoutEventTypeNestedInput
+    availabilitySchedule?: AvailabilityScheduleUpdateOneWithoutEventTypesNestedInput
+    dateSlots?: DateSlotUpdateManyWithoutEventTypeNestedInput
+    groupMeetings?: GroupMeetingUpdateManyWithoutEventTypeNestedInput
+  }
+
+  export type EventTypeUncheckedUpdateWithoutAppointmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    price?: IntFieldUpdateOperationsInput | number
+    timeDuration?: IntFieldUpdateOperationsInput | number
+    availabilityScheduleId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventTypeOnLocations?: EventTypeOnLocationUncheckedUpdateManyWithoutEventTypeNestedInput
+    dateSlots?: DateSlotUncheckedUpdateManyWithoutEventTypeNestedInput
+    groupMeetings?: GroupMeetingUncheckedUpdateManyWithoutEventTypeNestedInput
   }
 
   export type EventTypeUpdateWithoutUserInput = {
@@ -19853,6 +21332,7 @@ export namespace Prisma {
     availabilitySchedule?: AvailabilityScheduleUpdateOneWithoutEventTypesNestedInput
     dateSlots?: DateSlotUpdateManyWithoutEventTypeNestedInput
     groupMeetings?: GroupMeetingUpdateManyWithoutEventTypeNestedInput
+    appointments?: AppointmentUpdateManyWithoutEventTypeNestedInput
   }
 
   export type EventTypeUncheckedUpdateWithoutUserInput = {
@@ -19867,6 +21347,7 @@ export namespace Prisma {
     eventTypeOnLocations?: EventTypeOnLocationUncheckedUpdateManyWithoutEventTypeNestedInput
     dateSlots?: DateSlotUncheckedUpdateManyWithoutEventTypeNestedInput
     groupMeetings?: GroupMeetingUncheckedUpdateManyWithoutEventTypeNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutEventTypeNestedInput
   }
 
   export type EventTypeUncheckedUpdateManyWithoutEventTypesInput = {
@@ -19926,31 +21407,68 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type EventTypeOnLocationCreateManyEventTypeInput = {
-    id?: number
-    locationId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type AppointmentUpdateWithoutOrganizerInput = {
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attendee?: UserUpdateOneRequiredWithoutAppointmentsAttendingNestedInput
+    eventType?: EventTypeUpdateOneRequiredWithoutAppointmentsNestedInput
   }
 
-  export type DateSlotCreateManyEventTypeInput = {
-    id?: number
-    availabilityScheduleId?: number | null
-    name: Date | string
-    customerId?: number | null
-    dayName: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type AppointmentUncheckedUpdateWithoutOrganizerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    attendeeId?: IntFieldUpdateOperationsInput | number
+    eventTypeId?: IntFieldUpdateOperationsInput | number
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GroupMeetingCreateManyEventTypeInput = {
-    id?: number
-    locationId: number
-    customerId: number
-    totalPrice: number
-    timezone: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type AppointmentUncheckedUpdateManyWithoutAppointmentsOrganizedInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    attendeeId?: IntFieldUpdateOperationsInput | number
+    eventTypeId?: IntFieldUpdateOperationsInput | number
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppointmentUpdateWithoutAttendeeInput = {
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organizer?: UserUpdateOneRequiredWithoutAppointmentsOrganizedNestedInput
+    eventType?: EventTypeUpdateOneRequiredWithoutAppointmentsNestedInput
+  }
+
+  export type AppointmentUncheckedUpdateWithoutAttendeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    organizerId?: IntFieldUpdateOperationsInput | number
+    eventTypeId?: IntFieldUpdateOperationsInput | number
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppointmentUncheckedUpdateManyWithoutAppointmentsAttendingInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    organizerId?: IntFieldUpdateOperationsInput | number
+    eventTypeId?: IntFieldUpdateOperationsInput | number
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventTypeOnLocationUpdateWithoutEventTypeInput = {
@@ -19978,7 +21496,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     availabilitySchedule?: AvailabilityScheduleUpdateOneWithoutDateSlotsNestedInput
-    customer?: CustomerUpdateOneWithoutDateSlotsNestedInput
+    custormer?: CustomerUpdateOneWithoutDateSlotsNestedInput
     daySlot?: DaySlotUpdateOneRequiredWithoutDateSlotsNestedInput
     dateOnTimeSlots?: DateOnTimeSlotUpdateManyWithoutDateSlotNestedInput
   }
@@ -19987,7 +21505,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     availabilityScheduleId?: NullableIntFieldUpdateOperationsInput | number | null
     name?: DateTimeFieldUpdateOperationsInput | Date | string
-    customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    custormerId?: NullableIntFieldUpdateOperationsInput | number | null
     dayName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19998,7 +21516,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     availabilityScheduleId?: NullableIntFieldUpdateOperationsInput | number | null
     name?: DateTimeFieldUpdateOperationsInput | Date | string
-    customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    custormerId?: NullableIntFieldUpdateOperationsInput | number | null
     dayName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20035,21 +21553,36 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type EventTypeOnLocationCreateManyLocationInput = {
-    id?: number
-    eventTypeId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type AppointmentUpdateWithoutEventTypeInput = {
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organizer?: UserUpdateOneRequiredWithoutAppointmentsOrganizedNestedInput
+    attendee?: UserUpdateOneRequiredWithoutAppointmentsAttendingNestedInput
   }
 
-  export type GroupMeetingCreateManyLocationInput = {
-    id?: number
-    customerId: number
-    totalPrice: number
-    timezone: string
-    eventTypeId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type AppointmentUncheckedUpdateWithoutEventTypeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    organizerId?: IntFieldUpdateOperationsInput | number
+    attendeeId?: IntFieldUpdateOperationsInput | number
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppointmentUncheckedUpdateManyWithoutAppointmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    organizerId?: IntFieldUpdateOperationsInput | number
+    attendeeId?: IntFieldUpdateOperationsInput | number
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventTypeOnLocationUpdateWithoutLocationInput = {
@@ -20086,27 +21619,6 @@ export namespace Prisma {
     userOnGroupMeetings?: UserOnGroupMeetingUncheckedUpdateManyWithoutGroupMeetingNestedInput
   }
 
-  export type EventTypeCreateManyAvailabilityScheduleInput = {
-    id?: number
-    name: string
-    userId: number
-    description: string
-    price: number
-    timeDuration: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type DateSlotCreateManyAvailabilityScheduleInput = {
-    id?: number
-    name: Date | string
-    customerId?: number | null
-    eventId: number
-    dayName: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type EventTypeUpdateWithoutAvailabilityScheduleInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
@@ -20118,6 +21630,7 @@ export namespace Prisma {
     eventTypeOnLocations?: EventTypeOnLocationUpdateManyWithoutEventTypeNestedInput
     dateSlots?: DateSlotUpdateManyWithoutEventTypeNestedInput
     groupMeetings?: GroupMeetingUpdateManyWithoutEventTypeNestedInput
+    appointments?: AppointmentUpdateManyWithoutEventTypeNestedInput
   }
 
   export type EventTypeUncheckedUpdateWithoutAvailabilityScheduleInput = {
@@ -20132,13 +21645,14 @@ export namespace Prisma {
     eventTypeOnLocations?: EventTypeOnLocationUncheckedUpdateManyWithoutEventTypeNestedInput
     dateSlots?: DateSlotUncheckedUpdateManyWithoutEventTypeNestedInput
     groupMeetings?: GroupMeetingUncheckedUpdateManyWithoutEventTypeNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutEventTypeNestedInput
   }
 
   export type DateSlotUpdateWithoutAvailabilityScheduleInput = {
     name?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    customer?: CustomerUpdateOneWithoutDateSlotsNestedInput
+    custormer?: CustomerUpdateOneWithoutDateSlotsNestedInput
     eventType?: EventTypeUpdateOneRequiredWithoutDateSlotsNestedInput
     daySlot?: DaySlotUpdateOneRequiredWithoutDateSlotsNestedInput
     dateOnTimeSlots?: DateOnTimeSlotUpdateManyWithoutDateSlotNestedInput
@@ -20147,7 +21661,7 @@ export namespace Prisma {
   export type DateSlotUncheckedUpdateWithoutAvailabilityScheduleInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: DateTimeFieldUpdateOperationsInput | Date | string
-    customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    custormerId?: NullableIntFieldUpdateOperationsInput | number | null
     eventId?: IntFieldUpdateOperationsInput | number
     dayName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20155,22 +21669,12 @@ export namespace Prisma {
     dateOnTimeSlots?: DateOnTimeSlotUncheckedUpdateManyWithoutDateSlotNestedInput
   }
 
-  export type DateSlotCreateManyDaySlotInput = {
-    id?: number
-    availabilityScheduleId?: number | null
-    name: Date | string
-    customerId?: number | null
-    eventId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type DateSlotUpdateWithoutDaySlotInput = {
     name?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     availabilitySchedule?: AvailabilityScheduleUpdateOneWithoutDateSlotsNestedInput
-    customer?: CustomerUpdateOneWithoutDateSlotsNestedInput
+    custormer?: CustomerUpdateOneWithoutDateSlotsNestedInput
     eventType?: EventTypeUpdateOneRequiredWithoutDateSlotsNestedInput
     dateOnTimeSlots?: DateOnTimeSlotUpdateManyWithoutDateSlotNestedInput
   }
@@ -20179,19 +21683,11 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     availabilityScheduleId?: NullableIntFieldUpdateOperationsInput | number | null
     name?: DateTimeFieldUpdateOperationsInput | Date | string
-    customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    custormerId?: NullableIntFieldUpdateOperationsInput | number | null
     eventId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateOnTimeSlots?: DateOnTimeSlotUncheckedUpdateManyWithoutDateSlotNestedInput
-  }
-
-  export type DateOnTimeSlotCreateManyDateSlotInput = {
-    id?: number
-    timeSlotId: number
-    status?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type DateOnTimeSlotUpdateWithoutDateSlotInput = {
@@ -20217,14 +21713,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type DateOnTimeSlotCreateManyTimeSlotInput = {
-    id?: number
-    dateSlotId: number
-    status?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type DateOnTimeSlotUpdateWithoutTimeSlotInput = {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20238,26 +21726,6 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type GroupMeetingCreateManyCustomerInput = {
-    id?: number
-    locationId: number
-    totalPrice: number
-    timezone: string
-    eventTypeId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type DateSlotCreateManyCustomerInput = {
-    id?: number
-    availabilityScheduleId?: number | null
-    name: Date | string
-    eventId: number
-    dayName: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type GroupMeetingUpdateWithoutCustomerInput = {
@@ -20281,7 +21749,7 @@ export namespace Prisma {
     userOnGroupMeetings?: UserOnGroupMeetingUncheckedUpdateManyWithoutGroupMeetingNestedInput
   }
 
-  export type DateSlotUpdateWithoutCustomerInput = {
+  export type DateSlotUpdateWithoutCustormerInput = {
     name?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20291,7 +21759,7 @@ export namespace Prisma {
     dateOnTimeSlots?: DateOnTimeSlotUpdateManyWithoutDateSlotNestedInput
   }
 
-  export type DateSlotUncheckedUpdateWithoutCustomerInput = {
+  export type DateSlotUncheckedUpdateWithoutCustormerInput = {
     id?: IntFieldUpdateOperationsInput | number
     availabilityScheduleId?: NullableIntFieldUpdateOperationsInput | number | null
     name?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20300,13 +21768,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateOnTimeSlots?: DateOnTimeSlotUncheckedUpdateManyWithoutDateSlotNestedInput
-  }
-
-  export type UserOnGroupMeetingCreateManyGroupMeetingInput = {
-    id?: number
-    userId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type UserOnGroupMeetingUpdateWithoutGroupMeetingInput = {
